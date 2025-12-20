@@ -1,0 +1,560 @@
+5-HTP,5-HTP,Blå,50 mg,200 mg,Serotonin-prekursor.,Passerar BBB. Kombinera ej med SSRI.,Hög. Serotonergt syndrom risk.,FALSE,5; 7
+5-HTP,5-HTP,Blå,100 mg,300 mg,Serotonin.,Går direkt till hjärnan.,Hög. Serotonergt syndrom.,FALSE,5; 7
+7-Keto DHEA,7-Keto DHEA,Grön,100 mg,400 mg,Metabolism (termogenes).,Omvandlas ej till könshormon.,Låg.,FALSE,6
+"7,8-DHF","7,8-Dihydroxyflavone",Blå,10 mg,30 mg,BDNF-mimetikum (TrkB-agonist).,Neuroplasticitet.,Låg.,FALSE,4
+A-vitamin,Vitamin A,Grön,3000 IU,10000 IU,Slemhinnor (barriär).,Infektionsskydd.,Medium.,TRUE,1
+A-vitamin (Retinol),Vitamin A (Retinol),Grön,700 mcg,900 mcg,"Syn, hud, immunförsvar.",Fettlöslig.,Medium. Teratogen vid graviditet (hög dos).,TRUE,1
+Acai,Acai Berry,Grön,500 mg,1000 mg,Antioxidant (antocyaniner).,Superfood.,Låg.,FALSE,1
+Acetyl-L-Karnitin,Acetyl-L-Carnitine (ALCAR),Grön,500 mg,1500 mg,"Mitokondriell energi, fokus.",Korsar BBB bättre än L-Karnitin.,Låg. Kan vara stimulerande.,FALSE,4; 6; 8
+Acetyl-L-Karnitin,ALCAR,Grön,500 mg,1500 mg,Mental energi.,Mitokondrier.,Låg.,FALSE,4; 8
+Adrafinil,Adrafinil,Blå,300 mg,600 mg,Vakenhet (Modafinil-prodrug).,Belastar levern (leverenzym).,Medium. Levervärden.,FALSE,4
+Agaricus Blazei,Agaricus Blazei,Blå,500 mg,1000 mg,Starkt immunstöd.,Mandel-svamp.,Låg.,FALSE,1
+Agmatin,Agmatine Sulfate,Blå,500 mg,1000 mg,"Pump, smärta, humör.",Hämmar NOS (kväveoxidsyntas)?,Låg.,FALSE,3; 4
+Agmatinsulfat,Agmatine Sulfate,Blå,500 mg,1000 mg,"Neuropati, humör, pump.",Arginin-metabolit.,Låg.,FALSE,4; 3; 5
+Aktivt Kol,Activated Charcoal,Grön,500 mg,1000 mg,"Akut detox, gaser.",Binder allt (även medicin/näring).,Medium. Ta ej med mat/medicin.,FALSE,1
+ALA,Alpha Lipoic Acid,Grön,300 mg,600 mg,"Insulin, nerver.",Neuropati.,Låg.,FALSE,6
+ALA (Alfa-Liponsyra),Alpha-Lipoic Acid (R-ALA),Grön,300 mg,600 mg,"Antioxidant, insulin, neuropati.",R-formen är naturlig/biotillgänglig.,Medium. Sänker blodsocker.,FALSE,6; 8; 4
+Alfa-GPC,Alpha-GPC,Grön,300 mg,600 mg,Acetylkolin.,Fokus/Minne.,Låg.,FALSE,4; 2
+Alfa-Liponsyra (ALA),Alpha Lipoic Acid,Grön,300 mg,600 mg,"Insulin, antioxidant.",Racemisk blandning (billigare än R).,Låg.,FALSE,6; 8
+Aloe Vera (Gel),Aloe Vera Gel,Grön,50 ml,100 ml,Tarmslemhinna.,Undvik latex-delen (laxerande).,Låg.,FALSE,1
+Aloe Vera (Juice),Aloe Vera Juice,Grön,30 ml,100 ml,"Matsmältning, lugnande.",Välj renad (utan aloin/latex).,Låg. Laxerande om ej renad.,FALSE,1
+Alpha-GPC,Alpha-GPC,Grön,300 mg,600 mg,Kolinkälla för hjärna och kraft.,Korsar BBB effektivt.,Låg.,FALSE,4; 2; 3
+Andrographis,Andrographis Paniculata,Grön,200 mg,400 mg,Övre luftvägsinfektion.,"""King of Bitters"".",Låg.,FALSE,1
+Aniracetam,Aniracetam,Blå,750 mg,1500 mg,"Kreativitet, ångest, fokus.",Fettlöslig racetam.,Låg.,FALSE,4
+Anis,Anise Seed,Blå,500 mg,1000 mg,Gaser.,Traditionell användning.,Låg.,FALSE,1
+Apigenin,Apigenin,Blå,50 mg,200 mg,"Sömn, CD38-hämmare (NAD+).",Från kamomill/persilja.,Låg.,FALSE,7; 8
+Apigenin (Kamomill),Chamomile Extract (Apigenin),Grön,200 mg,500 mg,"Sömn, NAD+ (CD38-hämmare).",Extrakt standardiserat för apigenin.,Låg.,FALSE,7; 8
+Arachidonsyra,Arachidonic Acid,Grön,1 g,1.5 g,Inflammation för muskeltillväxt.,"""Pro-inflammatorisk"" anabol signal.",Medium. Ej vid kronisk inflammation.,FALSE,2
+Arginin AKG,Arginine Alpha-Ketoglutarate,Blå,3 g,6 g,Pump (bättre än L-Arg?).,Tveksam biotillgänglighet.,Låg.,FALSE,3
+Ashwagandha,Ashwagandha,Grön,300 mg,600 mg,"Sömn, stress.","""Somnifera"" betyder sömnbärande.",Låg.,FALSE,7; 5
+Ashwagandha (KSM-66),Ashwagandha (KSM-66),Grön,300 mg,600 mg,"Cykla gärna (t.ex. 8 veckor på, 2 av).",Tas med mat eller på kvällen.,Medium. Kan påverka sköldkörtel/sederande.,FALSE,5; 2; 7
+Astaxanthin,Astaxanthin,Grön,4 mg,12 mg,"Solskydd inifrån, lyster.",Karotenoid.,Låg.,FALSE,1
+Astaxantin,Astaxanthin,Grön,4 mg,12 mg,"Potent antioxidant, hud, ögon.",Fettlöslig karotenoid.,Låg.,FALSE,8; 3; 1
+Astaxantin (Naturlig),Astaxanthin (Natural),Grön,4 mg,12 mg,"Hud, uthållighet, ögon.",Från mikroalger.,Låg.,FALSE,8; 3
+Astragalus,Astragalus Root,Grön,500 mg,2000 mg,Immunstärkande (långtids).,Ökar vita blodkroppar.,Låg.,FALSE,1
+B-Komplex,B-Complex,Grön,1 dos,1 dos,"Stress, nerver.",Kofaktorer för signalsubstanser.,Låg.,TRUE,5; 1
+B-vitaminer,B-Complex,Grön,-,-,"Homocystein, metylering.",Hjärnatrofi skydd.,Låg.,TRUE,4; 1
+Bacopa,Bacopa Monnieri,Grön,300 mg,600 mg,"Minne, inlärning.",Bacosider.,Låg.,FALSE,4
+Bacopa Monnieri (Synapsa),Bacopa Monnieri (Synapsa),Grön,320 mg,640 mg,Tar 4-6 veckor för full effekt på minne.,Tas med fett (fettlösliga bacosider).,Låg. Kan ge magbesvär/trötthet.,FALSE,4; 5
+Banabablad,Banaba Leaf,Grön,50 mg,100 mg,Blodsocker (insulin-mimic).,Korosolsyra.,Låg. Hypoglykemi risk?,FALSE,6
+BCAA (2:1:1),BCAA (Branched Chain Amino Acids),Grön,5 g,10 g,"Minskad trötthet, muskelsparande.",EAA ofta bättre för tillväxt.,Låg.,FALSE,2; 3
+Benfotiamin,Benfotiamine,Grön,150 mg,600 mg,Fettlöslig B1 för diabetisk neuropati/AGEs.,Mycket högre upptag än tiamin.,Låg.,FALSE,6; 8; 4
+Berberin,Berberine HCL,Grön,500 mg,1500 mg,"AMPK-aktivering, blodsocker.","Dåligt upptag, påverkar tarmflora.",Medium. Interagerar med CYP-enzym.,FALSE,6; 8
+Berberin,Berberine,Grön,500 mg,1500 mg,Blodsocker.,Metformin-liknande.,Medium.,FALSE,6
+Berberin (Fytosom),Berberine Phytosome,Grön,250 mg,500 mg,5-10x bättre upptag än HCL.,Snällare mot magen.,Medium.,FALSE,6; 8
+Beta-Alanine,Beta-Alanine,Grön,3.2 g,6.4 g,Buffrar mjölksyra. Stickningar ofarliga.,Kräver laddning över veckor.,Låg. Parestesi (stickningar).,FALSE,3; 2
+Betain (TMG),Betaine Anhydrous (TMG),Grön,1.5 g,2.5 g,"Metylgivare, ökar kraftutveckling.",Stödjer SAMe-produktion.,Låg.,FALSE,3; 6; 8
+Betain HCL,Betaine HCL,Blå,500 mg,1500 mg,Ökar magsyra.,Endast för de med låg magsyra.,Medium. Ej vid magsår.,FALSE,1; 6
+Betain HCL,Betaine HCL,Blå,500 mg,1500 mg,Magsyra-stöd.,Tas mitt i måltid. Ej vid sår.,Medium. Bränner om ej behov.,FALSE,1
+Betakaroten,Beta-Carotene,Grön,3 mg,15 mg,"Provitamin A, hudskydd.",Omvandlas till A vid behov (säkrare).,Låg. 'Smoker's paradox' risk?,TRUE,1; 8
+Betasitosterol,Beta-Sitosterol,Grön,300 mg,600 mg,"Prostata, kolesterol.",Växtsterol.,Låg.,FALSE,1; 6
+Bidrottninggelé,Royal Jelly,Blå,500 mg,1000 mg,"Vitalitet, immun.",Näringstät.,Låg. Allergi?,FALSE,1
+Bifidobacterium Longum,Bifidobacterium Longum,Grön,1 mdr,10 mdr,"Stress, mage.",Psykobiotika.,Låg.,FALSE,1; 5
+Bioperine (Svartpeppar),Bioperine (Black Pepper Extract),Grön,5 mg,10 mg,Ökar upptag av andra ämnen.,Hämmar glukuronidering i levern.,Medium. Påverkar medicinupptag.,FALSE,1; 9
+Biotin,Biotin (Vitamin B7),Grön,1000 mcg,5000 mcg,"Hår, hud, naglar.",Vattenlöslig.,Låg. Stör labbtester (sköldkörtel/hjärta).,TRUE,1
+Biotin,Biotin,Grön,2500 mcg,10000 mcg,"Hårväxt, naglar.",B-vitamin.,Låg. Labtest-interferens.,TRUE,1
+Bittermelon,Bitter Melon,Grön,500 mg,1000 mg,Blodsocker.,Innehåller charantin.,Låg.,FALSE,6
+Bittermelon,Bitter Melon,Blå,500 mg,1000 mg,Blodsocker.,Växtinsulin.,Låg.,FALSE,6
+Björkblad,Birch Leaf,Blå,500 mg,1000 mg,"Urinvägar, detox.",Diuretisk.,Låg.,FALSE,1
+Blåbärsextrakt,Blueberry Extract,Grön,500 mg,1000 mg,"Minne, antioxidant.",Antocyaniner.,Låg.,FALSE,4; 1
+Bockhornsklöver,Fenugreek,Grön,500 mg,1000 mg,"Libido, blodsocker.",Testofen-extrakt.,Låg.,FALSE,2; 6
+Bockhornsklöver,Fenugreek,Grön,500 mg,1000 mg,Blodsocker efter mat.,Fiber/Saponiner.,Låg.,FALSE,6
+Bor (Boron),Boron (Citrate/Glycinate),Grön,3 mg,9 mg,"Fritt testosteron, ben.",Sänker SHBG.,Låg.,FALSE,2; 9
+Boron,Boron,Grön,3 mg,10 mg,"Benhälsa, hormoner.",Sänker SHBG (ökar fritt testosteron).,Låg.,FALSE,9; 2; 1
+Boron,Boron,Grön,6 mg,12 mg,Fritt testosteron.,Sänker SHBG.,Låg.,FALSE,2; 9
+Boswellia,Boswellia Serrata,Grön,300 mg,500 mg,Inflammation (leder).,AKBA (5-LOX hämmare).,Låg.,FALSE,9
+Boswellia (ApresFlex),Boswellia (ApresFlex),Grön,100 mg,200 mg,"Leder, snabbverkande.",Hög biotillgänglighet av AKBA.,Låg.,FALSE,9
+Boswellia Serrata,Boswellia Serrata (AKBA),Grön,300 mg,500 mg,"5-LOX hämmare, ledsmärta.",Välj extrakt med hög AKBA-halt.,Låg.,FALSE,9; 1
+Broccoligroddar,Broccoli Sprout (Sulforaphane),Grön,20 mg,50 mg,"Detox, hormonbalans.",Potent antioxidant.,Låg.,FALSE,6; 8
+Bromelain,Bromelain (Pineapple),Grön,500 mg,1500 mg,"Protein, inflammation, skada.",Mäts i GDU (Gelatin Digesting Units),Låg.,FALSE,1; 9
+Bromelain,Bromelain,Grön,500 mg,1500 mg,"Skada, svullnad.",Tas på tom mage för inflammation.,Låg.,FALSE,9
+Brännässla,Stinging Nettle,Grön,300 mg,600 mg,"Hår, allergi, prostata.",Sänker SHBG.,Låg.,FALSE,1; 2
+Brännässlerot,Stinging Nettle Root,Grön,250 mg,500 mg,"Prostata, binder SHBG.",Roten (ej bladen) för prostata.,Låg.,FALSE,1; 2
+C-vitamin,Vitamin C,Grön,500 mg,1000 mg,Immunförsvar.,Antioxidant.,Låg.,TRUE,1
+C-vitamin (Liposomal),Vitamin C (Liposomal),Grön,1000 mg,3000 mg,"Högre upptag, stannar längre.","Dyrare, men effektivare.",Låg.,TRUE,1; 8
+Capsaicin (Cayenne),Capsaicin,Grön,40000 HU,100000 HU,"Termogenes, metabolism.",Kan irritera magen.,Låg.,FALSE,6
+Catuaba,Catuaba Bark,Blå,500 mg,1000 mg,"Libido, dopamin?",Brasiliansk bark.,Låg.,FALSE,2
+CBD (Fullspektrum),CBD Oil,Grön,10 mg,50 mg,"Sömn, smärta, ångest.",Endocannabinoid-systemet.,Låg. Pris?,FALSE,7; 5
+Celastrus Paniculatus,Celastrus Paniculatus,Blå,200 mg,500 mg,"""Intellect Tree"", minne.",Ayurvedisk nootropic.,Låg.,FALSE,4
+Chaga,Chaga Mushroom,Grön,1 g,2 g,"Antioxidant, immun.",Björk-svamp.,Låg.,FALSE,1
+Chaga,Chaga,Grön,1 g,2 g,Antioxidant/Immun.,Superoxid dismutas (SOD).,Låg.,FALSE,1
+Chlorella,Chlorella (Broken Cell Wall),Grön,3 g,6 g,"Klorofyll, detox.",Måste ha 'broken cell wall'.,Låg.,FALSE,1; 6
+Chrysin,Chrysin,Blå,500 mg,1000 mg,Aromatashämmare (teoretisk).,Mycket dåligt upptag oralt.,Låg.,FALSE,2
+Cissus,Cissus Quadrangularis,Blå,500 mg,1000 mg,"Benläkning, leder.",Ketosteroner.,Låg.,FALSE,9
+Citikolin,Citicoline,Grön,250 mg,500 mg,Acetylkolin/Dopamin.,Fokus/Energi.,Låg.,FALSE,4
+Citikolin (CDP-Choline),Citicoline (CDP-Choline),Grön,250 mg,500 mg,"Ökar dopaminreceptorer, fosfolipider.",Mycket bra biotillgänglighet.,Låg.,FALSE,4; 8
+Citronmeliss,Lemon Balm (Melissa officinalis),Grön,300 mg,600 mg,"Lugnande, GABA-transaminashämmare.",Kognition vid stress.,Låg.,FALSE,5; 7
+Citronmeliss,Lemon Balm,Grön,300 mg,600 mg,"Oro, mage.",GABA-T hämmare.,Låg.,FALSE,5; 7
+Citrulline Malate,L-Citrulline Malate (2:1),Grön,6000 mg,8000 mg,Pre-workout för pump/blodflöde.,Bättre än Arginin för att höja Arginin.,Låg.,FALSE,3; 2; 1
+CLA,Conjugated Linoleic Acid,Grön,3 g,6 g,Fettminskning (måttlig effekt).,Från safflorolja.,Låg.,FALSE,6
+CLA,CLA,Grön,3 g,6 g,Fettmassa?,Tveksam effekt människa.,Låg.,FALSE,6
+CoQ10,CoQ10,Grön,100 mg,200 mg,"Rynkreduktion, energi.",Ubiquinone/Ubiquinol.,Låg.,FALSE,1; 8
+Cordyceps (Sinensis),Cordyceps Sinensis (CS-4),Grön,1 g,3 g,"Syreupptag, ATP, energi.",Mycelium-extrakt (CS-4) vanligast.,Låg.,FALSE,3; 2
+Curcumin,Curcumin,Grön,500 mg,1000 mg,Inflammation.,Fytosom/Piperin krävs.,Medium. Blodförtunnande.,FALSE,9; 1
+Curcumin (Fytosom/Lipid),Curcumin (Phytosome/Lipid),Grön,500 mg,1000 mg,Potent antiinflammatorisk.,Vanligt curcumin tas upp dåligt.,Medium. Blodförtunnande.,FALSE,9; 8; 4
+Curcumin (Longvida),Curcumin (Longvida),Grön,400 mg,800 mg,"Hjärnhälsa, kognition.",Korsar BBB (fri curcumin).,Låg.,FALSE,4; 8
+Curcumin (Meriva),Curcumin Phytosome (Meriva),Grön,500 mg,1000 mg,"Ledvärk, inflammation.",Kliniskt studerad form.,Låg.,FALSE,9
+D-Asparaginsyra,D-Aspartic Acid (DAA),Grön,3 g,3 g,Testosteron (tillfällig boost).,LH-stimulering. Effekt avtar?,Låg.,FALSE,2
+D-Asparaginsyra,D-Aspartic Acid,Grön,3 g,3 g,Testosteron (kort sikt).,LH-puls.,Låg.,FALSE,2
+D-Chiro-Inositol,D-Chiro-Inositol,Blå,50 mg,100 mg,PCOS (40:1 ratio med Myo).,Sekundär budbärare insulin.,Låg.,FALSE,6
+D-Mannose,D-Mannose,Grön,1 g,2 g,Urinvägsinfektion (E. coli).,Binder bakterier i urinblåsan.,Låg.,FALSE,1
+D-Mannose,D-Mannose,Grön,2 g,4 g,Urinvägsinfektion.,Binder E.coli.,Låg.,FALSE,1
+D-Serin,D-Serine,Blå,1000 mg,2000 mg,NMDA-receptor (schizofreni-studier).,Kognition.,Låg.,FALSE,4
+D-vitamin,Vitamin D3,Grön,2000 IU,5000 IU,"Immunförsvar, ben.",Hormonell effekt.,Låg.,TRUE,1; 9
+D-vitamin,Vitamin D3,Grön,2000 IU,5000 IU,T-cellsaktivering.,Kritisk för immunförsvar.,Låg.,TRUE,1
+D-vitamin,Vitamin D,Grön,2000 IU,5000 IU,Säsongsdepression (SAD).,Serotoninsyntes.,Låg.,TRUE,5; 1
+D-vitamin,Vitamin D,Grön,2000 IU,5000 IU,Hjärnhälsa.,Receptorer i hjärnan.,Låg.,TRUE,4; 1
+D-vitamin,Vitamin D,Grön,2000 IU,5000 IU,Insulinsekretion.,Betacell-funktion.,Låg.,TRUE,6; 1
+Damiana,Damiana,Blå,400 mg,800 mg,Libido (båda könen).,Avslappnande.,Låg.,FALSE,2
+DGL Lakrits,DGL (Deglycyrrhizinated Licorice),Grön,380 mg,760 mg,"Magsår, halsbränna.",Utan glycyrrhizin (höjer ej blodtryck).,Låg.,FALSE,1
+DHEA,DHEA,Grön,25 mg,50 mg,Hormonprekursor.,Endast vid konstaterad brist (ålder).,Hög. Hormonella biverkningar.,FALSE,8; 2
+DHEA,DHEA,Grön,25 mg,50 mg,Hormonprekursor (äldre).,Ökar T och Östrogen.,Hög. Hormonell obalans.,FALSE,8; 2
+DIM,DIM (Diindolylmethane),Blå,100 mg,200 mg,Östrogenmetabolism.,Från kålväxter.,Låg. Kan ändra hormonbalans.,FALSE,6; 2
+DIM,DIM,Grön,100 mg,200 mg,Östrogenbalans.,"""Bra"" östrogenmetaboliter.",Låg.,FALSE,6
+DIM (Diindolylmethane),DIM (Diindolylmethane),Grön,100 mg,200 mg,Östrogenbalans (akne/PMS).,Från kål.,Låg.,FALSE,6
+Djävulsklo,Devil's Claw,Grön,500 mg,1000 mg,"Ryggvärk, artros.",Harpagosid.,Låg.,FALSE,9
+Dong Quai,Dong Quai,Blå,500 mg,1000 mg,Kvinnlig hälsa (PMS).,"""Kvinnlig ginseng"".",Medium. Blodförtunnande.,FALSE,1
+Druvkärneextrakt,Grape Seed Extract,Grön,100 mg,300 mg,"Blodtryck, cirkulation.",Rikt på OPC (proantocyanidiner).,Låg.,FALSE,1; 8
+Druvkärneextrakt,Grape Seed Extract,Grön,150 mg,300 mg,"Blodtryck, ödem.",Standardiserat för OPC.,Låg.,FALSE,1
+Druvkärneextrakt,Grape Seed Extract,Grön,100 mg,300 mg,"Kollagenskydd, kärl.",Antioxidant.,Låg.,FALSE,1
+Druvkärneextrakt,Grape Seed Extract,Grön,150 mg,300 mg,Blodtryck.,OPCs.,Låg.,FALSE,1
+Dynamine,Methylliberine (Dynamine),Blå,50 mg,100 mg,Snabb energi/fokus.,Snabbare än koffein/teakrin.,Låg.,FALSE,3; 4
+E-vitamin,Vitamin E,Grön,200 IU,400 IU,Immunfunktion (äldre).,T-cellsfunktion.,Låg.,TRUE,1
+E-vitamin (Gamma-tokoferol),Gamma-Tocopherol,Grön,100 mg,300 mg,Antiinflammatorisk form av E-vit.,Kompletterar Alfa-tokoferol.,Låg.,FALSE,1; 8
+EAA,EAA (Essential Amino Acids),Grön,10 g,20 g,Stimulerar proteinsyntes (mTOR).,Tas på tom mage kring träning.,Låg.,FALSE,2; 3; 7
+Ecdysterone,Ecdysterone (Spinach/Cyanotis),Grön,500 mg,1000 mg,"Muskelbyggande, anabol.",Binder ER-beta receptorn.,Låg.,FALSE,2
+Echinacea,Echinacea,Grön,300 mg,900 mg,Förkylning.,Ökar fagocytos.,Låg. Autoimmun risk?,FALSE,1
+Elektrolyter,Electrolytes (Na/K/Mg),Grön,Varierar,Varierar,Hydrering vid svettning.,Balans viktig.,Låg.,FALSE,3
+Enoki,Enoki Mushroom,Blå,500 mg,1000 mg,"Näring, immun.",Mat-svamp.,Låg.,FALSE,1
+Enzymer (DAO),DAO (Diamine Oxidase),Grön,4.2 mg,N/A,Histaminintolerans.,Bryter ner histamin i mat.,Låg.,FALSE,1
+Enzymer (Digestive),Digestive Enzymes,Grön,N/A,N/A,Matsmältningsstöd.,Tas med mat. Varierar stort.,Låg.,FALSE,1
+Enzymer (Gluten),Gluten Digesting Enzymes (DPP-IV),Blå,N/A,N/A,Vid glutenkänslighet (ej celiaki!).,Bryter ner prolin-rika proteiner.,Låg. Ej för Celiaki.,FALSE,1
+Enzymer (Laktas),Lactase Enzyme,Grön,3000 FCC,9000 FCC,Laktosintolerans.,Tas vid intag av mjölk.,Låg.,FALSE,1
+Epicatechin,Epicatechin,Blå,100 mg,300 mg,"Myostatinhämmare, NO, muskler.",Från kakao/te.,Låg.,FALSE,2; 3
+Exogena Ketoner (BHB),Exogenous Ketones (BHB Salts),Grön,3 g,12 g,"Omedelbar ketos, hjärnenergi.",Innehåller mycket salt (Na/Ca/Mg).,Låg. Magbesvär.,FALSE,6; 3; 4
+Fasoracetam,Fasoracetam,Blå,20 mg,80 mg,"Fokus, ADHD-forskning.",Uppreglerar GABA-B.,Låg.,FALSE,4
+Fenugreek (Bockhornsklöver),Fenugreek Extract,Grön,500 mg,1000 mg,"Libido, blodsocker, amning.",Kan blockera DHT.,Låg.,FALSE,2; 6
+Fenylalanin (DLPA),DL-Phenylalanine (DLPA),Grön,500 mg,1500 mg,"Smärta (endorfiner), humör.",Blandning av D- och L-form.,Låg.,FALSE,4; 5
+Fenyletylamin,PEA (Phenylethylamine),Blå,300 mg,500 mg,"""Kärleksmolekylen"", fokus.",Bryts ner snabbt (MAO-B).,Medium. Kortvarig effekt.,FALSE,4
+Fenylpiracetam,Phenylpiracetam,Blå,100 mg,200 mg,"Fysisk/mental energi, kyla.",Stimulerande. Dopingklassad (tävling).,Låg. Tolerans snabbt.,FALSE,4; 3
+Fiber (Glucomannan),Glucomannan,Grön,1 g,3 g,"Blodsocker, mättnad.",Gelbildande fiber.,Låg.,FALSE,6
+Fisetin,Fisetin,Blå,100 mg,1400 mg,Hög dos i korta intervall (senolytiskt).,Tas med fett. Låg biotillgänglighet.,Låg.,FALSE,8; 4
+Fiskolja,Fish Oil (Omega-3),Grön,2 g,4 g,Ledstelhet.,Antiinflammatorisk.,Låg.,TRUE,9; 1
+Fläderbär,Elderberry (Sambucus),Grön,500 mg,1000 mg,Förkylning/Influensa.,Antiviral effekt.,Låg.,FALSE,1
+Fo-Ti (He Shou Wu),Fo-Ti (He Shou Wu),Blå,500 mg,1000 mg,"Grått hår, vitalitet.",Leverpåverkan (var försiktig).,Medium. Levertoxicitet?,FALSE,1
+Folsyra,Folic Acid,Grön,400 mcg,800 mcg,"Graviditet, celldelning.","Syntetisk, kan maskera B12-brist.",Låg.,TRUE,1
+Folsyra (Metyl),Methylfolate,Grön,400 mcg,800 mcg,Graviditet (foster).,Aktivt folat.,Låg.,TRUE,1
+Forskolin,Forskolin (Coleus Forskohlii),Grön,25 mg,50 mg,"Fettförbränning, cAMP.",Standardiserad till 10-20%.,Låg. Mage (lös).,FALSE,6; 2
+Fosfatidsyra,Phosphatidic Acid (PA),Grön,750 mg,1500 mg,"mTOR-aktivering, muskelstyrka.",Direkt signal för muskeltillväxt.,Låg.,FALSE,2
+Fosfatidylserin,Phosphatidylserine,Grön,100 mg,300 mg,"Sänker kortisol, stödjer minne.",Soja- eller solroslecitin ursprung.,Låg.,FALSE,5; 4; 7
+Fosfatidylserin,Phosphatidylserine,Grön,300 mg,600 mg,Sömn (kortisol-driven).,Sänker kortisol på kvällen.,Låg.,FALSE,7; 5
+Fosfatidylserin,Phosphatidylserine,Grön,100 mg,300 mg,"Minne, stress.",Membranfluiditet.,Låg.,FALSE,4; 5
+Fukoxantin,Fucoxanthin,Blå,2.4 mg,8 mg,Fettförbränning (från tång).,Kräver lång tid för effekt (veckor).,Låg.,FALSE,6
+Fänkål,Fennel Seed,Blå,500 mg,1000 mg,"Gaser, matsmältning.",Kramp-dämpande.,Låg.,FALSE,1
+GABA,GABA,Blå,500 mg,750 mg,Lugnande.,Dåligt upptag över BBB (fysiologiskt).,Låg. Stickningar kan förekomma.,FALSE,5; 7
+GABA,GABA,Blå,500 mg,1000 mg,Ångest.,Dåligt upptag.,Låg.,FALSE,5
+GABA (PharmaGABA),PharmaGABA,Grön,100 mg,200 mg,"Fermenterad form, bättre upptag?","Stress, sömn.",Låg.,FALSE,5; 7
+GABA (Syntetisk),GABA,Blå,1 g,3 g,"Ökar GH (teoretiskt), sömn.",Dåligt upptag till hjärnan.,Låg.,FALSE,5; 7
+Galantamin,Galantamine,Grön,4 mg,12 mg,"Minne, drömmar (lucid dreaming).",Alzheimer-medicin (även tillskott).,Medium. Illamående.,FALSE,4
+Garcinia Cambogia,Garcinia Cambogia (HCA),Blå,500 mg,1500 mg,"Aptit, fettsyntes.",Effekt debatterad. 50-60% HCA.,Låg.,FALSE,6
+Ginkgo,Ginkgo Biloba,Grön,120 mg,240 mg,Cirkulation hjärna.,Minne äldre.,Medium. Blödning.,FALSE,4
+Ginkgo Biloba,Ginkgo Biloba,Grön,120 mg,240 mg,"Blodflöde hjärna, minne.",Standardiserat extrakt (EGb-761).,Medium. Blodförtunnande.,FALSE,4
+Ginkgo Biloba,Ginkgo Biloba,Grön,120 mg,240 mg,Blodflöde (sexuellt).,Mikrocirkulation.,Medium. Blödning.,FALSE,4; 2
+Ginseng,Panax Ginseng,Grön,200 mg,400 mg,"Erektion, energi.",Kväveoxid-mediator.,Låg.,FALSE,2; 3
+Ginseng (Amerikansk),American Ginseng,Grön,500 mg,1000 mg,"Lugnande energi, kognition.",Kylande (TCM).,Låg.,FALSE,4
+Ginseng (Panax),Panax Ginseng,Grön,200 mg,400 mg,"Energi, libido, kognition.",Standardisera ginsenosider (4-8%).,Låg. Kan höja blodtryck.,FALSE,3; 2; 4
+Ginseng (Sibirisk),Eleuthero (Siberian Ginseng),Grön,500 mg,1000 mg,"Uthållighet, immunförsvar.",Mildare än Panax.,Låg.,FALSE,3; 1
+GLA (Nattljusolja),GLA (Evening Primrose Oil),Grön,1 g,3 g,"Hudproblem (eksem), hormoner.",Omega-6 (antiinflammatorisk).,Låg.,FALSE,1; 6
+Glukomannan,Glucomannan (Konjac),Grön,1 g,3 g,"Fiber, mättnadskänsla.",Expanderar i magen (drick vatten!).,Låg. Kvävningsrisk utan vatten.,FALSE,6
+Glukosamin,Glucosamine Sulfate,Grön,1500 mg,1500 mg,Artros.,Sulfat > HCL.,Låg.,FALSE,9
+Glukosamin Sulfat,Glucosamine Sulfate,Grön,1500 mg,1500 mg,"Broskhälsa, artros.",Sulfatformen har bäst evidens.,Låg. Skaldjursallergi?,FALSE,9
+Glutathion (Reducerat),Glutathione (Reduced),Blå,250 mg,500 mg,Antioxidant.,Dåligt oralt upptag (Setria bättre).,Låg.,FALSE,1; 8
+Glutation,Glutathione,Blå,250 mg,500 mg,"Huduppljusning, detox.",Liposomalt bäst.,Låg.,FALSE,1; 8
+Glutation,Glutathione,Blå,250 mg,500 mg,Master antioxidant.,Immunförsvarets bränsle.,Låg.,FALSE,1
+Glycerol,Glycerol (Glycerpump),Grön,2 g,5 g,"Hyperhydrering, pump.",Binder vätska i muskeln.,Låg. Klumpar sig i pulver.,FALSE,3
+Glycin,Glycine,Grön,3 g,5 g,"Sömnkvalitet, kollagenbyggsten.","Söt smak, tas vid sänggående.",Låg.,FALSE,7; 8; 9
+Glycin,Glycine,Grön,3 g,5 g,Sömnkvalitet.,Sänker kroppstemp.,Låg.,FALSE,7
+Gojibär,Goji Berry (Lycium),Grön,10 g,30 g,"Ögon, immunförsvar.",Rik på zeaxantin.,Låg.,FALSE,1
+Gotu Kola,Gotu Kola (Centella Asiatica),Grön,300 mg,600 mg,"Hud, ångest, cirkulation.",Ökar kollagensyntes.,Låg.,FALSE,1; 5; 4
+Gotu Kola,Gotu Kola,Blå,500 mg,1000 mg,"Nerver, minne.",Neuroprotektiv.,Låg.,FALSE,4
+Grains of Paradise,Grains of Paradise (Aframomum),Grön,30 mg,80 mg,Aktiverar brunt fett (BAT).,Krydda från ingefärsfamiljen.,Låg.,FALSE,6
+Granatäppleextrakt,Pomegranate Extract,Grön,250 mg,500 mg,"Hjärta, blodflöde, ellagsyra.",Kan omvandlas till Urolithin A.,Låg.,FALSE,1; 8
+Grapefruktkärneextrakt,Grapefruit Seed Extract,Blå,100 mg,200 mg,Antimikrobiell.,Kontroversiell (konserveringsmedel?).,Medium. CYP3A4-hämmare.,FALSE,1
+Gröna Kaffebönor,Green Coffee Bean Extract,Grön,200 mg,400 mg,"Blodsocker, klorogensyra.",Lågt koffein.,Låg.,FALSE,6
+Grönt Kaffe,Green Coffee Extract,Grön,400 mg,800 mg,"Blodsocker, vikt.",Klorogensyra (50%).,Låg.,FALSE,6
+Grönt Kaffe,Green Coffee,Blå,200 mg,400 mg,Glukosupptag.,Klorogensyra.,Låg.,FALSE,6
+Grönt Te,Green Tea,Grön,250 mg,500 mg,Metabolism.,EGCG.,Låg.,FALSE,6
+Grönt Te (EGCG),Green Tea Extract (EGCG),Grön,250 mg,500 mg,"Fettförbränning, antioxidant.",Kan påverka levern i extrem dos.,Medium. Levertoxicitet (sällsynt).,FALSE,6; 8
+Grönt Te (Extrakt),Green Tea Extract,Grön,250 mg,500 mg,"Hudskydd, metabolism.",Polyfenoler (EGCG).,Låg.,FALSE,1; 6
+Guaraná,Guarana,Grön,200 mg,800 mg,Naturligt koffein (långsamt).,Frisläpps långsammare än syntetiskt.,Låg.,FALSE,3
+Gullris,Goldenrod,Blå,300 mg,600 mg,"Njurar, urinvägar.",Diuretisk/Antiinflammatorisk.,Låg.,FALSE,1
+Gurkmeja (Hel),Turmeric Root Powder,Blå,1 g,3 g,Mild antiinflammatorisk.,Svårupptagen utan svartpeppar/fett.,Låg.,TRUE,1; 9
+Gymnema,Gymnema Sylvestre,Blå,200 mg,400 mg,Sockerblockerare.,Regenerera betaceller?,Låg.,FALSE,6
+Gymnema Sylvestre,Gymnema Sylvestre,Grön,400 mg,800 mg,"Sockerbegär, blodsocker.","""Sugar destroyer"" (blockerar smak).",Låg.,FALSE,6
+Hagtorn,Hawthorn Berry,Grön,150 mg,600 mg,"Hjärtsvikt, blodtryck.",Ökar kontraktilitet.,Medium. Digoxin-interaktion.,FALSE,1
+Hallonblad,Raspberry Leaf,Blå,500 mg,1000 mg,Livmoderhälsa.,"Traditionell ""gravidte"".",Låg.,FALSE,1
+Hallonketoner,Raspberry Ketones,Blå,100 mg,500 mg,Fettförbränning.,Strukturellt lik synefrin/capsaicin.,Låg.,FALSE,6
+Hampaprotein,Hemp Protein,Grön,20 g,40 g,"Veganskt, fiberrikt, omega-3.",Lägre proteinhalt.,Låg.,FALSE,2
+Havtornsolja,Sea Buckthorn Oil,Grön,500 mg,1000 mg,Torra slemhinnor/hud. Omega-7.,Bra för ögon/underliv.,Låg.,FALSE,1
+Hesperidin,Hesperidin,Grön,500 mg,1000 mg,Cirkulation (vener).,Ofta i citrusbioflavonoider.,Låg.,FALSE,1
+Hibiskus,Hibiscus Tea/Extract,Grön,1000 mg,2000 mg,Blodtryck.,Fungerar som mild ACE-hämmare.,Låg. Lågt blodtryck?,FALSE,1
+Hibiskus,Hibiscus,Grön,2 koppar,3 koppar,Blodtryck.,ACE-hämmande effekt?,Låg.,FALSE,1
+Higenamin,Higenamine,Blå,20 mg,40 mg,"Beta-2 agonist, luftvägar.",WADA-förbjuden!,Medium. Hjärtklappning.,FALSE,3; 6
+HMB,HMB (Beta-Hydroxy Beta-Methylbutyrate),Grön,3 g,3 g,Antikatabolt. Bra vid diet/skada.,Kalciumsalt eller fri syra.,Låg.,FALSE,2; 7
+Holy Basil,Holy Basil (Tulsi),Grön,300 mg,600 mg,"Stress, sömn.",Adaptogen.,Låg.,FALSE,5; 7
+Hordenin,Hordenine,Blå,25 mg,50 mg,"MAO-B hämmare, fettförbränning.",Förlänger effekt av PEA/stimulanter.,Medium.,FALSE,6; 4
+Horny Goat Weed,Horny Goat Weed (Icariin),Grön,500 mg,1000 mg,"Libido, PDE5-hämmare (svag).",Standardisera för Icariin.,Låg.,FALSE,2
+Horny Goat Weed,Horny Goat Weed (Icariin),Blå,500 mg,1000 mg,Erektion (PDE5).,Icariin är aktivt ämne.,Låg.,FALSE,2
+Humle,Hops Extract,Grön,100 mg,300 mg,"Sömn, sedativ.",Ofta med Valeriana.,Låg.,FALSE,7
+Humle,Hops,Blå,200 mg,400 mg,Sömn.,Sedativ.,Låg.,FALSE,7
+Huperzin A,Huperzine A,Grön,50 mcg,200 mcg,"Minne, acetylkolinesterashämmare.",Cykla för att undvika tolerans.,Låg. Kolinerga biverkningar.,FALSE,4
+Huperzin A,Huperzine A,Grön,100 mcg,200 mcg,Minne.,AChE-hämmare.,Låg.,FALSE,4
+Hyaluronsyra,Hyaluronic Acid,Grön,100 mg,200 mg,"Hudfukt, leder.",Binder vatten.,Låg.,FALSE,1; 9
+Hyaluronsyra,Hyaluronic Acid,Grön,50 mg,200 mg,Ledvätska.,Oralt upptag fungerar.,Låg.,FALSE,9
+Hyaluronsyra (Oral),Hyaluronic Acid,Grön,100 mg,200 mg,"Hudfuktighet, ledvätska.",Hög molekylvikt kan vara svårabsorberad.,Låg.,FALSE,9; 1
+Indol-3-Karbinol,Indole-3-Carbinol (I3C),Grön,200 mg,400 mg,Prekursor till DIM.,Mindre stabil än DIM.,Låg.,FALSE,6
+Indol-3-Karbinol,I3C,Grön,200 mg,400 mg,Östrogenmetabolism.,Prekursor till DIM.,Låg.,FALSE,6
+Ingefära,Ginger Root,Grön,500 mg,1000 mg,"Illamående, matsmältning.",Prokinetisk (tömmer magen).,Låg.,FALSE,1
+Ingefära,Ginger,Grön,500 mg,2000 mg,Ledvärk.,Liknar NSAID (COX-hämmare).,Låg.,FALSE,9
+Ingefära (Extrakt),Ginger Root Extract,Grön,250 mg,1000 mg,"Illamående, inflammation, matsmältning.",Gingeroler är aktiva ämnet.,Låg. Blodförtunnande vid hög dos.,TRUE,1; 9; 6
+Inositol,Inositol,Grön,2 g,12 g,"Panikångest, OCD.",Höga doser krävs.,Låg. Mage.,FALSE,5
+Inositol,Myo-Inositol,Grön,2 g,4 g,Insulinkänslighet (PCOS).,Cellsignalering.,Låg.,FALSE,6
+Inositol (IP6),Inositol Hexaphosphate (IP6),Blå,500 mg,1000 mg,"Immunförsvar, cellhälsa.",Kelaterar mineraler (ta på tom mage).,Låg.,FALSE,1
+Inositol (Myo/D-chiro),Inositol (Myo/D-chiro 40:1),Grön,2 g,4 g,"PCOS, insulinkänslighet, ångest.",Pulverform ofta enklast.,Låg. Hög dos kan ge lös mage.,FALSE,6; 5
+Inulin (FOS),Inulin (FOS),Grön,3 g,10 g,Prebiotika (fiber).,Kan ge gaser (FODMAP).,Låg.,FALSE,1
+Jod,Iodine,Grön,150 mcg,300 mcg,IQ (vid brist).,Sköldkörtel -> Hjärna.,Medium.,TRUE,4; 1
+Jod (Kelp/Kaliumjodid),Iodine,Grön,150 mcg,300 mcg,Sköldkörtelfunktion.,Var försiktig vid autoimmun tyreoidit.,Medium. Sköldkörtelbalans.,TRUE,1; 6
+Johannesört,St. John's Wort,Grön,300 mg,900 mg,Mild depression.,Många läkemedelsinteraktioner (CYP3A4).,"Hög. P-piller, antidepressiva.",FALSE,5
+Johannesört,St John's Wort,Grön,300 mg,900 mg,Depression.,SSRI-liknande.,Hög. Läkemedelsinteraktion!,FALSE,5
+Jordbaserad Probiotika,Soil Based Organisms (SBO),Blå,2 Mrd,5 Mrd,Tålig probiotika (sporform).,Bacillus-stammar (subtilis etc).,Låg.,FALSE,1
+Järn,Iron,Grön,20 mg,50 mg,Menstruerande kvinnor.,Ersätter förlust.,Medium. Magen.,TRUE,1
+Järn,Iron,Grön,-,-,Kognition (vid brist).,Syretransport.,Medium.,TRUE,4; 1
+Järn (Bisglycinat),Iron Bisglycinate,Grön,14 mg,28 mg,"Blodvärde, energi.",Skonsam mot magen. Endast vid brist!,Hög. Oxidativ stress vid överskott.,FALSE,1; 3
+Järn (Heme),Iron (Heme),Grön,10 mg,20 mg,"Animaliskt järn, bäst upptag.",Färre magbiverkningar.,Medium. Överdosrisk.,FALSE,1
+Järn (Sulfat),Iron Sulfate,Grön,14 mg,65 mg,Anemi.,Hård mot magen.,Hög. Toxiskt för barn.,TRUE,1
+Jättenattljusolja,Evening Primrose Oil (GLA),Grön,1 g,3 g,"PMS, bröstömhet, hud.",Gamma-linolensyra.,Låg.,FALSE,1
+Kalcium,Calcium,Grön,500 mg,1000 mg,Benskörhet (kvinnor).,Kombinera med D3/K2.,Medium. Kärlrisk?,TRUE,9
+Kalcium (Citrat),Calcium Citrate,Grön,500 mg,1000 mg,Benhälsa.,Tas upp oberoende av magsyra.,Medium. Risk för kärlförkalkning utan K2.,TRUE,9; 1
+Kalcium (Karbonat),Calcium Carbonate,Grön,500 mg,1000 mg,Benhälsa.,Tas med mat (kräver syra).,Medium. Förstoppning.,TRUE,9; 1
+Kalcium Alfa-Ketoglutarat,Ca-AKG (Calcium Alpha-Ketoglutarate),Blå,1000 mg,2000 mg,"Förlänger 'healthspan', sänker biologisk ålder.",Fördröjd frisättning (sustained release) bäst.,Låg.,FALSE,8; 3
+Kalcium D-Glukarat,Calcium D-Glucarate,Blå,500 mg,1500 mg,Detox av östrogen/toxiner.,Hämmar beta-glukuronidas.,Låg. Kan öka utsöndring av medicin.,FALSE,6; 8
+Kalcium-D-Glukarat,Calcium-D-Glucarate,Blå,500 mg,1500 mg,Östrogen-detox.,Glukuronidering.,Låg.,FALSE,6; 8
+Kalium,Potassium,Grön,99 mg,400 mg,"Blodtryck, muskelfunktion.",Låg dos i tillskott pga säkerhetsrisk.,Medium. Hjärtrisk vid njursvikt.,TRUE,1; 3
+Kalium,Potassium,Grön,-,-,Blodtryck.,Via kost bäst (tillskott låg dos).,Medium. Njurproblem?,TRUE,1
+Kamomill,Chamomile,Grön,200 mg,400 mg,"Oro, sömn.",Apigenin.,Låg.,FALSE,5; 7
+Kamomill (Apigenin),Chamomile Extract (Apigenin),Grön,200 mg,400 mg,"Sömn, lugnande.",Standardiserad för apigenin.,Låg.,FALSE,7; 5
+Kanel,Cinnamon,Grön,1 g,3 g,Blodsocker.,Insulin-känslighet.,Låg.,FALSE,6
+Kanel (Ceylon),Cinnamon (Ceylon),Grön,1 g,3 g,Blodsocker.,Välj Ceylon för lågt kumarin.,Låg.,FALSE,6
+Kaprylsyra,Caprylic Acid,Blå,600 mg,1200 mg,"Candida, tarmhälsa.",Fettsyra från kokos.,Låg.,FALSE,1
+Karnitin,L-Carnitine,Grön,1 g,3 g,Hjärthälsa (angina).,Energiproduktion hjärta.,Låg. TMAO?,FALSE,1
+Karnitin,L-Carnitine,Grön,1 g,3 g,Fettförbränning.,Mitokondriell transport.,Låg.,FALSE,6; 3
+Kaseinprotein,Casein Protein,Grön,20 g,40 g,Långsamt protein (natt).,Antikatabolt.,Låg. Mjölkallergi?,FALSE,2
+Katalas,Catalase,Blå,250 mg,500 mg,Grått hår (H2O2-nedbrytning).,Tveksamt upptag.,Låg.,FALSE,1
+Kava Kava,Kava Kava,Grön,100 mg,250 mg,Stark ångestdämpning.,Kavalaktoner. Leverrisk vid missbruk.,Medium. Ej med alkohol.,FALSE,5
+Keratin (Solubiliserat),Solubilized Keratin,Blå,500 mg,500 mg,Hårstruktur.,Cynatine HNS är varumärke.,Låg.,FALSE,1
+Kisel (Bambu),Silica (Bamboo Extract),Grön,10 mg,50 mg,Hår/nagel-styrka.,Rikare än åkerfräken.,Låg.,FALSE,1
+Kisel (Silica),Silica (Bamboo/Horsetail),Grön,10 mg,50 mg,"Hår, hud, naglar, kollagen.",Orto-kisel är bäst upptag.,Låg.,FALSE,1; 9
+Klorofyll,Chlorophyll,Blå,50 mg,100 mg,"Detox, kroppslukt.",Från gröna växter/alger.,Låg.,FALSE,1
+Koffein,Caffeine Anhydrous,Grön,100 mg,400 mg,Prestationshöjande och fokus.,Snabb absorption. Toleransutveckling.,"Medium. Sömnstörning, ångest.",FALSE,3; 4; 6
+Koffein,Caffeine,Grön,50 mg,200 mg,Vakenhet.,Adenosin-antagonist.,Medium.,FALSE,4; 3
+Koffein + Theanin,Caffeine + Theanine (2:1),Grön,100/200,200/400,"Fokus utan ""jitters"".","Klassisk ""stack"".",Låg.,FALSE,4
+Kolanöt,Kola Nut,Blå,500 mg,1000 mg,Koffeinkälla.,Traditionell stimulant.,Låg.,FALSE,3
+Kolin (Bitartrat),Choline Bitartrate,Grön,250 mg,500 mg,"Lever, cellmembran.",Låg biotillgänglighet för hjärnan.,Låg. Kan öka TMAO.,TRUE,1; 4
+Kollagen (Hydrolyserat),Collagen Peptides (Hydrolyzed),Grön,10 g,20 g,"Hud, hår, leder.",Tas gärna med C-vitamin.,Låg.,FALSE,9; 1
+Kollagen (Typ 1 & 3),Collagen Types 1 & 3,Grön,10 g,20 g,"Hud, hår, naglar.",Bovint eller marint.,Låg.,FALSE,1; 9
+Kollagen II,Collagen Type II (UC-II),Grön,40 mg,40 mg,Ledvärk (autoimmun?).,Oral tolerans (liten dos).,Låg.,FALSE,9
+Kolostrum,Colostrum,Grön,1 g,3 g,"Antikroppar (IgG), tarm.",Råmjölk.,Låg. Mjölkprotein.,FALSE,1
+Kondroitin,Chondroitin,Grön,800 mg,1200 mg,Artros.,Synergi med Glukosamin.,Låg.,FALSE,9
+Kondroitin Sulfat,Chondroitin Sulfate,Grön,800 mg,1200 mg,Synergistisk med glukosamin.,"Lågt upptag, men klinisk effekt.",Låg. Blodförtunnande.,FALSE,9
+Koppar,Copper,Grön,1 mg,2 mg,"Kollagen, energi, pigment.",Balansera alltid med Zink.,Medium. Toxiskt i överskott.,TRUE,1; 9
+Korngräs,Barley Grass,Grön,3 g,10 g,"Näring, antioxidanter.",Liknar vetegräs.,Låg. Glutenrisk (om ej ren).,FALSE,1
+Kre-Alkalyn,Kre-Alkalyn (Buffered Creatine),Blå,1.5 g,3 g,pH-stabilt kreatin.,Ej bevisat bättre än monohydrat.,Låg.,FALSE,2
+Kreatin,Creatine,Grön,5 g,5 g,Hjärnhälsa (energi).,Kognitiv trötthet.,Låg.,FALSE,4; 2
+Kreatin HCL,Creatine HCL,Blå,1.5 g,3 g,"Samma effekt som mono, mindre dos?",Mindre vattenretention (teoretiskt).,Låg. Sur smak.,FALSE,2; 3
+Kreatin Monohydrat,Creatine Monohydrate,Grön,5 g,10 g,Underhållsdos 5g dagligen. Laddning valfri.,Tas bäst med kolhydrater/protein.,Låg. Drick extra vatten.,FALSE,2; 3; 4
+Krom,Chromium,Grön,200 mcg,1000 mcg,"Sötsug, insulin.",Picolinate bäst.,Låg.,FALSE,6
+Krom (Pikolinat),Chromium Picolinate,Grön,200 mcg,1000 mcg,Insulinkänslighet.,Pikolinat är stabilt och upptagbart.,Låg.,TRUE,6
+Kronärtskocka,Artichoke Leaf Extract,Grön,320 mg,640 mg,"Galla, matsmältning, lever.",Minskar gaser/uppblåsthet.,Låg. Gallsten?,FALSE,1; 6
+Kronärtskocka,Artichoke Extract,Grön,300 mg,600 mg,"Matsmältning, lever.",Cynarin ökar gallflöde.,Låg.,FALSE,1; 6
+Kurkumin,Curcumin,Grön,500 mg,1000 mg,Hjärninflammation.,Plack?,Låg.,FALSE,4; 9
+L-Arginin,L-Arginine,Blå,3 g,6 g,Kväveoxid (sämre än Citrulline).,Stor del bryts ner i levern.,Låg. Herpesutbrott?,FALSE,3; 2
+L-Arginin,L-Arginine,Blå,3 g,6 g,Erektion (blodflöde).,NO-prekursor (sämre än Cit).,Låg.,FALSE,2
+L-Citrullin,L-Citrulline,Grön,3 g,6 g,"Erektion, pump.",Bättre NO-boost.,Låg.,FALSE,2; 3
+L-Cystein,L-Cysteine,Grön,500 mg,1000 mg,Keratinbyggsten.,Svavelaminosyra.,Låg.,FALSE,1
+L-Fenylalanin,L-Phenylalanine,Grön,500 mg,1500 mg,Dopamin/Noradrenalin-prekursor.,"Aptitdämpning, fokus.",Låg. Ej vid PKU.,FALSE,4; 6
+L-Glutamin,L-Glutamine,Grön,5 g,15 g,"Tarmslemhinna, återhämtning.",Primärt bränsle för enterocyter.,Låg.,FALSE,7; 3; 1
+L-Glutamin,L-Glutamine,Grön,5 g,20 g,"Tarmvägg, muskelåterhämtning.",Bränsle för tarmceller.,Låg.,FALSE,1; 2
+L-Karnitin L-Tartrat,L-Carnitine L-Tartrate,Grön,2 g,4 g,"Androgenreceptorer, återhämtning.",Bäst upptag för muskelvävnad.,Låg. TMAO-risk vid hög dos?,FALSE,3; 7; 6
+L-Lysin,L-Lysine,Grön,500 mg,1500 mg,"Herpes (munsår), kollagen.",Antagonist till Arginin.,Låg.,FALSE,1; 9
+L-Metionin,L-Methionine,Grön,500 mg,1000 mg,Keratinbyggsten.,Essentiell aminosyra.,Låg.,FALSE,1
+L-Metylfolat,L-Methylfolate (5-MTHF),Grön,400 mcg,1000 mcg,För de med MTHFR-mutation.,"Aktiv form, kräver ej omvandling.",Låg.,TRUE,1; 4; 5
+L-Ornitin,L-Ornithine,Grön,2 g,6 g,"Ammoniak-detox, sömn, trötthet.",Synergi med Arginin.,Låg.,FALSE,3; 7
+L-Ornitin,L-Ornithine,Blå,400 mg,1000 mg,"Sömn, stress.",Sänker ammoniak/kortisol?,Låg.,FALSE,7
+L-Theanine,L-Theanine,Grön,100 mg,400 mg,2:1 ratio med koffein för fokus.,"Vattenlöslig, snabb effekt.",Låg. Sänker blodtryck milt.,FALSE,4; 5; 7
+L-THP,L-Tetrahydropalmatine,Blå,30 mg,90 mg,"Smärta, sömn (dopamin-antagonist).",Från Corydalis.,Medium. Sedering.,FALSE,7
+L-Tryptofan,L-Tryptophan,Grön,500 mg,1000 mg,Serotonin/Melatonin-prekursor.,Konkurrerar med BCAA om upptag.,Medium.,FALSE,7; 5
+L-Tyrosin,L-Tyrosine,Grön,1000 mg,2000 mg,Vid akut stress/kyla/sömnbrist.,Tas på tom mage. Dopamin-prekursor.,Medium. Sköldkörtelinteraktion.,FALSE,4; 5; 3
+Lactobacillus Rhamnosus GG,Lactobacillus Rhamnosus GG,Grön,10 mdr,20 mdr,"Immun, mage, allergi.",Välstuderad stam.,Låg.,FALSE,1
+Lakritsrot (DGL),Licorice Root (DGL),Grön,400 mg,800 mg,"Magsår, halsbränna.",Deglycyrrhizinerad (höjer ej tryck).,Låg.,FALSE,1
+Laktoferrin,Lactoferrin,Grön,100 mg,300 mg,"Järnbindande, antiviral.",Från mjölk.,Låg.,FALSE,1
+Lavendelolja,Lavender Oil (Oral),Grön,80 mg,160 mg,Ångest.,Silexan (studerat extrakt).,Låg. Rapar lavendel.,FALSE,5
+Laxogenin,5-Alpha-Hydroxy-Laxogenin,Blå,50 mg,100 mg,"Växtanabol, kortisolkontroll.",Smilax Sieboldii extrakt.,Låg.,FALSE,2
+Leucin,L-Leucine,Grön,2.5 g,5 g,mTOR-trigger (proteinsyntes).,Viktigaste aminosyran för anabolism.,Låg.,FALSE,2
+Lingonextrakt,Lingonberry Extract,Grön,200 mg,400 mg,"Urinvägar, antioxidant.",Resveratrol/Procyanidiner.,Låg.,FALSE,1
+Lion's Mane,Lion's Mane,Blå,1 g,3 g,NGF (Nervtillväxt).,Hjärnhälsa.,Låg.,FALSE,4; 8
+Lion's Mane (Extrakt),Lion's Mane Mushroom Extract,Grön,1000 mg,3000 mg,Välj extrakt från fruktkropp.,Varmvattens- eller alkoholextrakt bäst.,Låg.,FALSE,4; 8; 5
+Litiumorotat,Lithium Orotate,Blå,1 mg,5 mg,Humörsvängningar.,Mikrodos (ej läkemedelsdos).,Medium. Sköldkörtel?,FALSE,5; 4
+Lutein,Lutein,Grön,10 mg,20 mg,"Hudelasticitet, ögon.",Blått ljus-skydd.,Låg.,FALSE,1
+Lutein & Zeaxantin,Lutein & Zeaxanthin,Grön,10 mg,20 mg,Ögonhälsa (gula fläcken).,"Karotenoider, skyddar mot blått ljus.",Låg.,FALSE,1
+Luteolin,Luteolin,Blå,10 mg,50 mg,"Neuroprotektion, inflammation.",Hämmar mikroglia-aktivering.,Låg.,FALSE,4; 8
+Lykopen,Lycopene,Grön,10 mg,30 mg,"Prostatahälsa, antioxidant.","Från tomater, tas med fett.",Låg.,FALSE,1
+Lykopen,Lycopene,Grön,10 mg,20 mg,"Hudskydd (UV), prostata.",Från tomat.,Låg.,FALSE,1
+Lykopen,Lycopene,Grön,15 mg,30 mg,Prostata.,Tomatextrakt.,Låg.,FALSE,1
+Lysin,L-Lysine,Grön,1 g,3 g,"Motverkar herpes, kollagen.",Balansera med Arginin.,Låg.,FALSE,1; 9
+Lysin,L-Lysine,Grön,1 g,3 g,Motverkar arginin (virus).,Herpes-profylax.,Låg.,FALSE,1
+Läkemalva,Marshmallow Root,Grön,400 mg,1000 mg,"Slemhinnor, hosta, mage.",Liknar rödalm.,Låg.,FALSE,1
+Läkemalva,Marshmallow Root,Grön,500 mg,1500 mg,Irriterad tarm/hals.,Slemsubstans.,Låg.,FALSE,1
+Maca,Maca Root,Grön,1.5 g,3 g,"Libido, energi.",Adaptogen.,Låg.,FALSE,2; 5
+Maca (Gul),Maca Root (Yellow),Grön,1.5 g,3 g,"Hormonbalans, allmän hälsa.",Standardtypen. Gelatiniserad bäst.,Låg.,FALSE,1
+Maca (Röd),Maca Root (Red),Grön,1.5 g,3 g,"Prostata, benhälsa.",Påverkar ej hormoner direkt.,Låg.,FALSE,1; 2
+Maca (Svart),Maca Root (Black),Grön,1.5 g,3 g,"Libido, spermieproduktion, minne.",Gelatiniserad för magen.,Låg.,FALSE,2; 4
+Magnesium,Magnesium,Grön,300 mg,600 mg,"Ångest, spänning.",Lugnar nervsystemet.,Låg.,TRUE,5; 1
+Magnesium,Magnesium,Grön,300 mg,600 mg,"Blodtryck, arytmi.",Avslappnande kärl.,Låg.,TRUE,1
+Magnesium,Magnesium,Grön,300 mg,600 mg,Insulinresistens.,Kofaktor glykolys.,Låg.,TRUE,6; 1
+Magnesium L-Threonate,Magnesium L-Threonate,Grön,1.5 g,2 g,Dos avser totalförening (ca 144mg elementärt Mg).,Unik förmåga att passera blod-hjärnbarriären.,Låg.,FALSE,4; 7
+Magnesiumglycinat,Magnesium Glycinate,Grön,300 mg,500 mg,Tas med fördel på kvällen för sömn.,"Hög biotillgänglighet, snäll mot magen.",Låg.,TRUE,1; 5; 7
+Magnesiumglycinat,Magnesium Glycinate,Grön,400 mg,600 mg,Avslappning.,Glycin+Mg kombo.,Låg.,TRUE,7; 5
+Magnesiummalat,Magnesium Malate,Grön,300 mg,500 mg,Bra för energi och muskelsmärta (fibromyalgi).,Hög biotillgänglighet.,Låg.,TRUE,1; 2
+Magnesiumtaurat,Magnesium Taurate,Grön,300 mg,500 mg,Bra för hjärta och lugnande effekt.,Taurin ökar magnesiums intracellulära effekt.,Låg.,TRUE,1; 5
+Magnoliabark,Magnolia Bark (Honokiol),Grön,200 mg,400 mg,"Sänker kortisol, sömn.",Aktivt ämne: Honokiol/Magnolol.,Låg.,FALSE,5; 7
+Magnoliabark,Magnolia Bark,Blå,200 mg,400 mg,"Sömn, kortisol.",Honokiol (GABA-effekt).,Låg.,FALSE,7; 5
+Maitake,Maitake Mushroom,Grön,500 mg,1500 mg,"Blodsocker, immun.",D-fraktion är potent.,Låg.,FALSE,1; 6
+Maitake,Maitake,Grön,500 mg,1500 mg,Immunaktivering.,D-fraktion.,Låg.,FALSE,1
+Mangan,Manganese,Grön,2 mg,5 mg,"Antioxidant (SOD), ben.",Neurotoxiskt i mycket höga doser.,Låg.,TRUE,1; 9
+Manukahonung,Manuka Honey,Grön,1 tsk,2 tsk,Antibakteriell (MGO).,Lokal effekt hals/sår.,Låg. Socker.,FALSE,1
+Maskrosblad,Dandelion Leaf,Grön,500 mg,1500 mg,Vätskedrivande (kaliumsparande).,Bladen för njurarna.,Låg.,FALSE,1
+Maskrosrot,Dandelion Root,Blå,500 mg,1500 mg,"Lever, galla, diuretika.","Rot för lever, blad för njurar.",Låg.,FALSE,1; 6
+Maskrosrot,Dandelion Root,Blå,500 mg,1500 mg,"Lever, galla.",Roten för levern.,Låg.,FALSE,1
+MCT-olja,MCT Oil (C8/C10),Grön,5 ml,15 ml,"Ketontillverkning, energi.",C8 (Kaprylsyra) mest potent.,Låg. Magbesvär vid start.,FALSE,6; 4
+MCT-olja,MCT Oil,Grön,10 ml,30 ml,Hjärnenergi (ketoner).,Alzheimer-stöd?,Låg.,FALSE,4; 6
+MCT-olja,MCT Oil,Grön,10 ml,30 ml,"Termogenes, ketoner.",Ökar energiförbrukning.,Låg.,FALSE,6
+MCT-Olja (C8),MCT Oil (C8 Caprylic Acid),Grön,15 ml,30 ml,Snabb ketonenergi (hjärna).,Börja lågt (magras).,Låg.,FALSE,6; 4
+MCT-pulver,MCT Powder,Grön,5 g,10 g,"Energi, ketoner.",Snällare mot magen än olja.,Låg.,FALSE,6; 4
+Melatonin,Melatonin,Grön,0.3 mg,5 mg,"Insomning, dygnsrytm.",Låg dos ofta effektivare (0.3-1mg).,Låg. Kan ge mardrömmar.,FALSE,7; 8
+Melatonin,Melatonin,Grön,0.5 mg,5 mg,Insomning.,Hormon.,Låg. Drömmar.,FALSE,7
+Mjölkdistel,Milk Thistle (Silymarin),Grön,200 mg,500 mg,Leverhälsa.,Silymarin komplex.,Låg.,FALSE,1
+Mjölkdistel (Silymarin),Milk Thistle (Silymarin),Grön,150 mg,400 mg,"Leverhälsa, glutation.",Antioxidant för hepatocyter.,Låg. CYP-interaktioner?,FALSE,1
+Mjölon,Uva Ursi,Grön,500 mg,1000 mg,Urinvägsinfektion (akut).,Arbutin (bildar hydrokinon).,Medium. Korttidsbruk!,FALSE,1
+Molybden,Molybdenum,Grön,45 mcg,100 mcg,"Detox (sulfiter), urinsyra.",Essentiellt spårämne.,Låg.,TRUE,1; 6
+Monolaurin,Monolaurin,Blå,500 mg,1500 mg,Virus (höljeförsedda).,Från kokosolja/laurinsyra.,Låg.,FALSE,1
+MSM,MSM (Methylsulfonylmethane),Grön,1 g,3 g,"Svaveldonator, ledhälsa, antioxidat.",Tas upp väl.,Låg.,FALSE,9; 1
+MSM,MSM,Grön,1 g,3 g,Keratin/kollagen-stöd.,"""Skönhetsmineral"".",Låg.,FALSE,9; 1
+MSM,MSM,Grön,1 g,3 g,Ledvärk.,Svavel.,Låg.,FALSE,9
+Mucuna Pruriens,Mucuna Pruriens (L-Dopa),Grön,200 mg,400 mg,Dopamin (L-Dopa).,Motivations-boost.,Medium. Nedreglering?,FALSE,5; 4
+Muira Puama,Muira Puama,Blå,500 mg,1000 mg,Libido.,"""Potency wood"".",Låg.,FALSE,2
+Munkpeppar,Vitex (Chasteberry),Grön,20 mg,40 mg,"PMS, hormonbalans.",Ökar progesteron (sänker prolaktin).,Låg.,FALSE,1
+Myo-Inositol,Myo-Inositol,Grön,2 g,12 g,"PCOS, ångest, sömn.",B-vitamin släkting.,Låg.,FALSE,6; 5
+N-Acetyl L-Tyrosin,N-Acetyl L-Tyrosine (NALT),Blå,350 mg,700 mg,"Stress, dopamin.",Mer löslig men sämre omvandling än L-Tyr?,Låg.,FALSE,4; 5
+N-Acetyl-Tyrosin,N-Acetyl L-Tyrosine (NALT),Blå,350 mg,700 mg,Vattenlöslig Tyrosin.,Sämre omvandling än L-Tyrosin?,Låg.,FALSE,4
+N-Metyltyramin,N-Methyltyramine,Blå,50 mg,100 mg,"Energi, fettförbränning.",Ökar gastrin?,Låg.,FALSE,6
+NAC,N-Acetyl Cysteine,Grön,600 mg,1800 mg,"Slem, lever, OCD.",Glutation-prekursor.,Låg.,FALSE,1; 5
+NAC,NAC,Grön,600 mg,1200 mg,"Glutation-boost, hud.",Svavelkälla.,Låg.,FALSE,1; 8
+NAC,NAC,Grön,600 mg,1200 mg,"Slem, lungor, glutation.",Vid luftvägsproblem.,Låg.,FALSE,1
+NAC,NAC,Grön,1200 mg,2400 mg,"Tvångssyndrom (OCD), beroende.",Glutamat-modulering.,Låg.,FALSE,5
+NAC (N-Acetylcystein),N-Acetyl Cysteine,Grön,600 mg,1800 mg,"Glutation-prekursor, slemrösande.",Svaveldoft. Biotillgänglig.,Låg.,FALSE,8; 6; 5
+name_sv,name_en,research_status,dosing_base_g_mg,dosing_max_g_mg,dosing_notes,bioavailability_notes,interaction_risk,is_base_health,category_links
+Natriumbikarbonat,Sodium Bicarbonate,Grön,15 g,20 g,Mjölksyrabuffert (akut).,0.3g/kg kroppsvikt. Magsmärtor!,Medium. Magkramp/Diarré.,FALSE,3
+Nattokinase,Nattokinase,Grön,2000 FU,4000 FU,Blodcirkulation.,Fibrinolytisk.,Medium. Blodförtunnande.,FALSE,1
+Niacin,Niacin (Nicotinic Acid),Grön,500 mg,2000 mg,HDL/LDL-kvot.,Flush-varianten.,Medium. Lever?,FALSE,1
+Niacinamid,Niacinamide (Nicotinamide),Grön,50 mg,500 mg,"Hud, NAD+, ingen flush.",Bra för akne/hudbarriär.,Låg.,TRUE,1; 8
+Niacinamid (B3),Niacinamide,Grön,500 mg,1000 mg,"Akne, hudbarriär, rodnad.",Ingen flush.,Låg.,TRUE,1
+NMN,Nicotinamide Mononucleotide,Blå,500 mg,1000 mg,Tas på morgonen för NAD+ stöd.,Sublingualt eller liposomalt föredras.,Låg. Påverkar metylering (ta med TMG).,FALSE,8; 3; 4
+NMN,NMN,Blå,250 mg,1000 mg,"NAD+, metabolism.",Åldersrelaterad insulinresistens.,Låg.,FALSE,6; 8
+Noopept,Noopept,Blå,10 mg,30 mg,"Minne, BDNF/NGF.",Mycket potent (mg-dos).,Låg.,FALSE,4
+Nässla (Blad),Nettle Leaf,Grön,300 mg,600 mg,"Allergi, njurar.",Histaminhämmande.,Låg.,FALSE,1
+Nässla (Rot),Nettle Root,Grön,300 mg,600 mg,Prostata (BPH).,SHBG-bindning.,Låg.,FALSE,1; 2
+Odenaturerat Kollagen (Typ II),Undenatured Collagen Type II (UC-II),Grön,40 mg,40 mg,Immunmodulering för ledhälsa.,Verkar i tarmen (Peyer's patches).,Låg.,FALSE,9
+Oktopamin,Octopamine,Blå,100 mg,250 mg,Fettförbränning (Norepinefrin).,Svagare än synefrin.,Låg.,FALSE,6
+Oleamid,Oleamide,Blå,50 mg,100 mg,Sömninducering.,Ackumuleras vid sömnbrist.,Låg.,FALSE,7
+Olivbladsextrakt,Olive Leaf Extract,Grön,500 mg,1000 mg,"Blodtryck, immun, antiviral.",Oleuropein är aktivt ämne.,Låg. Herxheimer-reaktion?,FALSE,1
+Olivbladsextrakt,Olive Leaf Extract,Grön,500 mg,1000 mg,"Virus, blodtryck.",Oleuropein.,Låg.,FALSE,1
+Omega-3 (EPA/DHA),Omega-3 (EPA/DHA),Grön,2 g,4 g,Dos avser total mängd EPA+DHA.,Tas med fettrik måltid.,Låg. Blodförtunnande vid hög dos.,TRUE,1; 4; 9
+Omega-3 (Fiskolja),Fish Oil,Grön,2 g,4 g,"Hudfukt, inflammation.",EPA för inflammation.,Låg.,TRUE,1; 4
+Omega-3 (Hög EPA),Omega-3 (High EPA),Grön,1 g,3 g,"Depression, inflammation.",EPA viktigast för humör.,Låg.,TRUE,5; 1
+Oreganoolja,Oregano Oil,Blå,50 mg,200 mg,"Antimikrobiell, candida.","Starkt, kan irritera slemhinnor.",Medium. Slår ut goda bakterier?,FALSE,1
+Oreganoolja,Oregano Oil,Blå,100 mg,200 mg,Bakterier/Virus/Svamp.,Carvacrol.,Medium. Stark för magen.,FALSE,1
+Ornitin,L-Ornithine,Grön,2 g,6 g,"Minskar ammoniak, sömn.",Synergi med Arginin.,Låg.,FALSE,3; 7
+Ostronskivling,Oyster Mushroom,Blå,500 mg,1000 mg,Kolesterol (naturlig lovastatin).,Kan innehålla statin-liknande ämnen.,Låg.,FALSE,1
+Oxgalla,Ox Bile,Grön,100 mg,500 mg,Fettsmältning (utan gallblåsa).,Ersätter galla.,Låg.,FALSE,1
+Oxiracetam,Oxiracetam,Blå,750 mg,1500 mg,"Logik, minne, stimulans.",Vattenlöslig.,Låg.,FALSE,4
+P-5-P (Vitamin B6),P-5-P (Pyridoxal-5-Phosphate),Grön,20 mg,50 mg,"Aktiv B6, kofaktor för neurotransmittorer.",Kräver ej leveromvandling.,Låg. Höga doser kan ge neuropati.,TRUE,1; 5
+PABA,PABA,Blå,100 mg,400 mg,"Hud, hår, B-vitaminkofaktor.",Del av folsyra-molekylen.,Låg. Sulfamedicin-interaktion.,FALSE,1
+PABA,PABA,Blå,200 mg,500 mg,Grått hår (förr i tiden).,Del av folat.,Låg.,FALSE,1
+Pantetin,Pantethine,Blå,300 mg,900 mg,"Aktiv B5, kolesterol.",Bättre än pantotensyra för lipider.,Låg.,FALSE,6; 1
+Pantotensyra (B5),Pantothenic Acid (B5),Grön,500 mg,2000 mg,"Akne (hög dos), fettmetabolism.",Vattenlöslig.,Låg.,TRUE,1
+Papayaenzym,Papaya Enzyme (Papain),Grön,50 mg,100 mg,Protein-nedbrytning.,Tuggtabletter vanliga.,Låg.,FALSE,1
+Passionsblomma,Passion Flower,Grön,250 mg,500 mg,"Ångest, sömn.",Ökar GABA.,Låg. Dåsighet.,FALSE,5; 7
+Passionsblomma,Passion Flower,Grön,200 mg,500 mg,"Ångest, sömn.",GABA-effekt.,Låg.,FALSE,5; 7
+Pepparmynta,Peppermint Oil,Grön,0.2 ml,0.4 ml,"IBS, kramp i tarm.",Enterokapslar bäst.,Låg. Refluxrisk om ej kapslad.,FALSE,1
+Pepparmyntsolja,Peppermint Oil (Enteric),Grön,0.2 ml,0.4 ml,"IBS, kramplösande.",Enterokapslar för tarmen.,Låg. Halsbränna om ej kapslad.,FALSE,1
+Phenylalanine,L-Phenylalanine,Grön,500 mg,1500 mg,Humör (Dopamin).,"""Må bra"".",Låg. PKU-varning.,FALSE,5; 4
+PHGG,PHGG (Guar Gum),Grön,5 g,10 g,"IBS, prebiotika.",Väl tolererad fiber (ej gasbildande).,Låg.,FALSE,1
+Polygala Tenuifolia,Polygala Tenuifolia,Blå,100 mg,300 mg,"Humör, fokus, neuroplasticitet.",Unik verkningsmekanism.,Låg.,FALSE,4; 5
+Poria,Poria Cocos,Blå,500 mg,1000 mg,"Njurhälsa, lugnande.",Traditionell Kinesisk Medicin.,Låg.,FALSE,1
+PQQ,PQQ (Pyrroloquinoline Quinone),Blå,10 mg,20 mg,Mitokondriell biogenes.,Synergi med Q10.,Låg.,FALSE,8; 4
+PQQ,PQQ,Blå,10 mg,20 mg,Hudens mitokondrier.,Nytt inom hudvård.,Låg.,FALSE,8; 1
+PQQ,PQQ,Blå,10 mg,20 mg,Mitokondrier (Hjärna/Hjärta).,Nybildning av mitokondrier.,Låg.,FALSE,8
+Pramiracetam,Pramiracetam,Blå,300 mg,600 mg,"Starkt fokus, minne.","Fettlöslig, ""emotionell avtrubbning"".",Låg.,FALSE,4
+Prebiotika (GOS),Prebiotic (GOS),Grön,2 g,5 g,Galaktooligosackarider.,Snällare än inulin?,Låg.,FALSE,1
+Prebiotika (Inulin),Prebiotic (Inulin/FOS),Grön,3 g,10 g,Mat för bakterier.,Kan ge gaser (FODMAP).,Låg.,FALSE,1
+Pregnenolon,Pregnenolone,Grön,10 mg,30 mg,"""Master hormone"", minne.",Neurosteroid.,Medium. Hormonpåverkan.,FALSE,8; 4
+Probiotika (Allmän),Probiotics (Multi-strain),Grön,5 Mrd,50 Mrd,Tarm-immun-axel.,70% av immunförsvaret i tarmen.,Låg.,FALSE,1
+Probiotika (B. Longum),Probiotic (B. Longum),Grön,1 Mrd,10 Mrd,"Stressmage, ångest.",Psykobiotika.,Låg.,FALSE,1; 5
+Probiotika (L. Acidophilus),Probiotic (L. Acidophilus),Grön,1 Mrd,10 Mrd,"Allmän maghälsa, laktos.",Vanligaste stammen.,Låg.,FALSE,1
+Probiotika (L. Reuteri),Probiotic (L. Reuteri DSM 17938),Grön,100M CFU,1B CFU,"Kolik, maghälsa, D-vitaminupptag.",Stam-specifik effekt.,Låg.,FALSE,1; 6
+Probiotika (L. Rhamnosus),Probiotic (L. Rhamnosus GG),Grön,5 Mrd,20 Mrd,"Diarré, immun, allergi.",Välstuderad (LGG).,Låg.,FALSE,1
+Probiotika (S. Boulardii),Probiotic (Saccharomyces Boulardii),Grön,250 mg,500 mg,Mot antibiotika-diarré.,"Jästsvamp, dör ej av antibiotika.",Låg. Ej för immunsupprimerade.,FALSE,1
+Prolin,L-Proline,Blå,500 mg,1000 mg,"Kollagenstruktur, ledhälsa.",Icke-essentiell.,Låg.,FALSE,9
+Propolis,Bee Propolis,Grön,500 mg,1000 mg,"""Bikupa-antibiotika"".",Hals/Munhåla.,Låg.,FALSE,1
+Psyllium,Psyllium Husk,Grön,5 g,10 g,Blodsocker.,Fiber.,Låg.,FALSE,6
+Psylliumfröskal,Psyllium Husk,Grön,5 g,15 g,"Fiber, sänker kolesterol, mättnad.",Måste tas med mycket vatten.,Låg. Kan påverka medicinupptag.,FALSE,6; 1
+Pterostilben,Pterostilbene,Blå,50 mg,150 mg,Mer potent analog till resveratrol.,Bättre oral biotillgänglighet än resveratrol.,Låg.,FALSE,8; 4
+Pumpakärnolja,Pumpkin Seed Oil,Grön,1 g,2 g,"Håravfall, prostata.",Naturlig beta-sitosterol.,Låg.,FALSE,1
+Pumpakärnor,Pumpkin Seed Extract,Grön,500 mg,1000 mg,"Blåsa, prostata.",Betasitosterol.,Låg.,FALSE,1
+Pycnogenol,Pycnogenol (Pine Bark),Grön,50 mg,150 mg,"Cirkulation, hud, NO.",Patenterat extrakt.,Låg.,FALSE,3; 8
+Pycnogenol,Pycnogenol,Grön,50 mg,100 mg,"Hudelasticitet, pigmentering.",Tallbarksextrakt.,Låg.,FALSE,1
+Pycnogenol,Pycnogenol,Grön,50 mg,150 mg,Cirkulation.,Kväveoxid.,Låg.,FALSE,1
+Pygeum,Pygeum Africanum,Grön,50 mg,100 mg,Prostatahälsa.,Ofta kombinerat med Saw Palmetto.,Låg.,FALSE,1
+Pygeum,Pygeum,Grön,100 mg,200 mg,Prostata.,Afrikanskt plommon.,Låg.,FALSE,1
+Q10,CoQ10,Grön,100 mg,300 mg,"Hjärtsvikt, statin-biverkning.",Energi till hjärtat.,Låg.,FALSE,1; 3
+Q10 (Ubiquinol),CoQ10 (Ubiquinol),Grön,100 mg,300 mg,"Mitokondriell energi, hjärthälsa.","Ubiquinol är den reducerade, aktiva formen.",Låg. Interagerar med Waran.,FALSE,8; 1; 3
+Quercetin,Quercetin,Grön,500 mg,1000 mg,"Allergi, zink-jonofor, senolytisk.",Dåligt upptag (fytosom bättre).,Låg.,FALSE,1; 8
+Quercetin,Quercetin,Grön,500 mg,1000 mg,"Virusinträde, zink-jonofor.",Tas med zink.,Låg.,FALSE,1
+Quercetin (Fytosom),Quercetin Phytosome,Grön,250 mg,500 mg,"Allergi, senolytisk.",Mycket högre upptag än vanlig.,Låg.,FALSE,1; 8
+Rauwolscine,Rauwolscine (Alpha-Yohimbine),Blå,1 mg,3 mg,"Liknar yohimbin, mer potent.",Stereoisomer av yohimbin.,Hög. Stark stimulant.,FALSE,6
+Reishi,Reishi Mushroom,Grön,1 g,3 g,"Lugn, sömn, immun.","""Mushroom of Immortality"".",Låg.,FALSE,7; 1
+Reishi,Reishi,Grön,1 g,3 g,Immunmodulerande.,Beta-glukaner.,Låg.,FALSE,1
+Resistent Stärkelse,Resistant Starch,Grön,10 g,30 g,"Butyrat-produktion, tarmflora.","Potatismjöl, grön banan.",Låg.,FALSE,1
+Resistent Stärkelse,Resistant Starch,Grön,10 g,30 g,Butyrat-produktion.,"Potatismjöl, grön banan.",Låg.,FALSE,1
+Resveratrol,Resveratrol,Blå,250 mg,500 mg,Anti-aging hud.,Sirtuin-aktivering.,Låg.,FALSE,8; 1
+Resveratrol,Resveratrol,Blå,250 mg,500 mg,Hjärnblodflöde.,Sirtuiner.,Låg.,FALSE,8
+Resveratrol,Resveratrol,Blå,250 mg,500 mg,Metabol hälsa.,AMPK/Sirtuin.,Låg.,FALSE,6; 8
+Resveratrol (Trans),Resveratrol (Trans),Blå,500 mg,1000 mg,Aktiverar sirtuiner.,"Dåligt upptag, kräver fett/mikronisering.",Medium. CYP450-interaktioner.,FALSE,8; 6
+Rhodiola Rosea,Rhodiola Rosea,Grön,200 mg,600 mg,Standardiserad till 3% Rosavins.,Tas på morgonen (kan vara stimulerande).,Låg.,FALSE,5; 4; 3
+Risprotein,Rice Protein,Grön,20 g,40 g,Veganskt.,Kombinera med ärt för komplett.,Låg.,FALSE,2
+Rutin,Rutin,Grön,250 mg,500 mg,"Kärlhälsa, hemorrojder.",Glykosid av quercetin.,Låg.,FALSE,1
+Rödalm,Slippery Elm,Grön,500 mg,1500 mg,"Halsbränna, IBS.",Slemsubstans (mucilage).,Låg. Tas ej med medicin.,FALSE,1
+Rödalmsbark,Slippery Elm Bark,Grön,400 mg,1600 mg,"Halsbränna, tarmslemhinna.",Bildar slem (mucilage).,Låg. Kan hindra medicinupptag.,FALSE,1
+Rödbetsjuice,Beetroot,Grön,500 mg,1500 mg,Blodtryck (Nitrat).,Kväveoxid (vasodilatation).,Låg.,FALSE,1; 3
+Rödbetsjuice (Konc),Beet Root Juice Concentrate,Grön,70 ml,140 ml,Prestation (nitratladdning).,Dosering ca 400mg nitrat.,Låg.,FALSE,3
+Rödbetspulver (Nitrat),Beet Root Powder (Nitrates),Grön,5 g,10 g,"Kväveoxid, blodtryck, uthållighet.",Standardisera för nitratinnehåll.,Låg. Sänker blodtryck.,FALSE,3; 1
+Rödklöver,Red Clover,Grön,40 mg,80 mg,Klimakteriet.,Fytoöstrogen.,Medium.,FALSE,1
+Rödris,Red Yeast Rice,Grön,600 mg,1200 mg,Kolesterol.,Naturlig statin (Monacolin K).,Medium. Q10-brist?,FALSE,1
+S. Boulardii,Saccharomyces Boulardii,Grön,250 mg,500 mg,"Jäst-probiotika, antibiotika-mage.",Dör ej av antibiotika.,Låg. Ej för immunsupprimerade.,FALSE,1
+Sabroxy (Oroxylum),Sabroxy (Oroxylum indicum),Blå,100 mg,500 mg,"Fokus, dopaminåterupptag.",BDNF-stöd.,Låg.,FALSE,4
+Saccharomyces Boulardii,Saccharomyces Boulardii,Grön,5 mdr,10 mdr,"Jästprobiotika, diarré.",Motverkar antibiotika-biverkningar.,Låg.,FALSE,1
+Saffran,Saffron,Grön,30 mg,30 mg,"Depression, ångest.",Serotonin-effekt?,Låg.,FALSE,5
+Saffran (Affron),Saffron (Affron),Grön,14 mg,28 mg,"Humör, depression, sömn.",Kliniskt studerat extrakt.,Låg.,FALSE,5; 4
+Saffran (Extrakt),Saffron Extract (Affron/Satiereal),Grön,15 mg,30 mg,"Humör, ögonhälsa, aptitdämpning.",Påverkar serotonin/dopamin.,Låg.,FALSE,5; 4; 6
+SAMe,SAMe (S-Adenosyl Methionine),Grön,400 mg,1200 mg,"Depression, leder, lever.",Metylgivare.,Medium. Mani vid bipolär sjukdom.,FALSE,5; 9
+Sarcosin,Sarcosine,Blå,1000 mg,2000 mg,Glycin-transportörhämmare.,Schizofreni/kognition.,Låg.,FALSE,4
+Saw Palmetto,Saw Palmetto,Grön,160 mg,320 mg,"BPH, prostata, håravfall.",Hämmar 5-alfa-reduktas.,Låg.,FALSE,1
+Saw Palmetto,Saw Palmetto,Grön,320 mg,320 mg,Prostataförstoring.,Standardiserad fettsyra.,Låg.,FALSE,1
+Schisandra,Schisandra Berry,Grön,500 mg,1500 mg,"Lever, stress, fokus.",Fas 1 & 2 detox-stöd.,Låg.,FALSE,5; 1
+Scullcap,Skullcap (Baikal),Grön,200 mg,400 mg,"Lugnande, nervskydd.",Innehåller Baicalin.,Låg.,FALSE,5
+Selen,Selenium,Grön,100 mcg,200 mcg,"Antioxidant, virusförsvar.",Brist ökar virus-virulens.,Låg.,TRUE,1
+Selen (Selenometionin),Selenium (Selenomethionine),Grön,100 mcg,200 mcg,"Sköldkörtel, antioxidant.","Organisk form, lagras i vävnad.",Medium. Toxiskt vid överdos (>400mcg).,TRUE,1; 8
+Sellerifröextrakt,Celery Seed Extract,Grön,75 mg,150 mg,"Blodtryck (3nB), gikt.",Standardiserat för ftalider.,Låg.,FALSE,1
+Serrapeptase,Serrapeptase,Blå,40000 SPK,120000 SPK,"Ärrvävnad, inflammation.","Enzym, tom mage.",Låg.,FALSE,9
+Shiitake,Shiitake Mushroom,Grön,500 mg,1000 mg,"Hjärta, immun.",AHCC är ett extrakt från denna.,Låg.,FALSE,1
+Silverax,Black Cohosh,Grön,40 mg,80 mg,"Vallningar, klimakteriet.",Ej östrogen (serotonin?).,Låg. Leverrisk (sällsynt).,FALSE,1
+Smörsyra (Butyrat),Butyrate (Sodium/Calcium),Blå,300 mg,600 mg,"Tarmhälsa, inflammation.",Luktar illa (smör). Cellenergi.,Låg.,FALSE,1
+Sojaisoflavoner,Soy Isoflavones,Grön,40 mg,80 mg,"Klimakteriet, ben.",Fytoöstrogen.,Medium. Hormonkänslig cancer?,FALSE,1
+Sojaprotein,Soy Protein,Grön,20 g,40 g,"Veganskt, komplett.",Innehåller isoflavoner.,Låg.,FALSE,2
+Spermidine,Spermidine,Blå,1 mg,5 mg,Främjar autofagi. Vetegroddsextrakt.,Tas med mat.,Låg. Innehåller ofta gluten (från vete).,FALSE,8; 1
+Spirulina,Spirulina,Grön,3 g,10 g,"Näringstät, tungmetall-detox.",Kontrollera renhet (toxiner).,Låg.,FALSE,1; 6
+Sulbutiamin,Sulbutiamine,Blå,200 mg,400 mg,"Trötthet, motivation.","Syntetisk B1-dimer, fettlöslig.",Låg. Toleransutveckling.,FALSE,4
+Sulforafan,Sulforaphane (Broccoli Sprout),Grön,10 mg,30 mg,"Potent detox, Nrf2-aktivering.",Kräver myrosinas för aktivering.,Låg.,FALSE,8; 6; 1
+Svartkumminolja,Black Seed Oil (Nigella Sativa),Grön,1 g,3 g,"Immun, allergi, mage.",Innehåller Thymoquinone.,Låg.,FALSE,1
+Svartvinbärsolja,Black Currant Seed Oil,Grön,500 mg,1000 mg,GLA-källa.,"Hud, hår.",Låg.,FALSE,1
+Synefrin,Synephrine (Bitter Orange),Grön,10 mg,50 mg,"Metabolism, mild stimulant.",Liknar efedrin men svagare/säkrare.,Medium. Blodtryck.,FALSE,6; 3
+Synefrin,Bitter Orange (Synephrine),Grön,20 mg,50 mg,"Metabolism, fettförbränning.",P-synefrin är säkrast.,Medium.,FALSE,6
+Sågpalmetto,Saw Palmetto,Grön,160 mg,320 mg,Håravfall (manligt/kvinnligt).,Blockerar DHT.,Låg.,FALSE,1
+Tallbarksextrakt,Pine Bark Extract (Pycnogenol),Grön,50 mg,150 mg,"Blodflöde, NO, hud.",Liknar druvkärneextrakt.,Låg.,FALSE,3; 8
+Tart Cherry,Tart Cherry Extract,Grön,400 mg,1000 mg,"Melatonin, urinsyra (gikt).",Återhämtning idrott.,Låg.,FALSE,7; 3
+Tart Cherry,Tart Cherry,Grön,500 mg,1000 mg,Sömn (naturligt melatonin).,Också antiinflammatorisk.,Låg.,FALSE,7; 3
+Taurin,Taurine,Grön,1 g,3 g,"Cellvolym, hjärta, lugn.",Finns i energidryck (motverkar skak).,Låg.,FALSE,3; 1
+Taurin,Taurine,Grön,1 g,3 g,Hjärthälsa.,Osmoregulation.,Låg.,FALSE,1; 3
+Tauroursodeoxycholsyra,TUDCA,Grön,250 mg,1000 mg,"Leverhälsa, gallflöde.",Skyddar mot celldöd (ER-stress).,Låg.,FALSE,1; 6
+Tautin,Taurine,Grön,1 g,3 g,"Hjärthälsa, kramp, lugnande.",GABA-agonist.,Låg.,FALSE,3; 1; 5
+Teakrin,Theacrine (Teacrine),Grön,50 mg,200 mg,Energi utan krasch.,Liknar koffein men mindre tolerans.,Låg.,FALSE,3; 4
+Teanin,L-Theanine,Grön,200 mg,400 mg,"Avslappning, fokus.",Alfavågor.,Låg.,FALSE,5; 4
+Teanin,Theanine,Grön,100 mg,200 mg,"Fokus, lugn.",Alfavågor.,Låg.,FALSE,4; 5
+Teobromin,Theobromine,Grön,100 mg,400 mg,"Kakao-extrakt, mild energi.","Vidgar blodkärl, lång halveringstid.",Låg. Giftigt för hundar!,FALSE,3; 4
+Teobromin (Kakao),Cocoa Extract (Theobromine),Grön,300 mg,600 mg,"Cirkulation, humör.",Antioxidanter (flavanoler).,Låg.,FALSE,1; 3
+Tokotrienoler,Tocotrienols,Blå,50 mg,100 mg,"Potent E-vitaminform, kolesterol.",Bättre antioxidantskydd än tokoferoler.,Låg.,FALSE,8; 1
+Tongkat Ali,Tongkat Ali (Longjack),Grön,200 mg,400 mg,"Testosteron, stress, libido.",Extrakt (t.ex. 200:1).,Låg.,FALSE,2; 5
+Tongkat Ali,Tongkat Ali,Grön,200 mg,400 mg,"Testosteron, libido.",Sänker SHBG.,Låg.,FALSE,2
+Tranbär,Cranberry (PACs),Grön,36 mg,72 mg,Urinvägsinfektion.,Hindrar adhesion.,Låg.,FALSE,1
+Tranbär (PACs),Cranberry (Standardized PACs),Grön,36 mg,72 mg,Dosering avs proantocyanidiner.,Förhindrar E.coli-fäste.,Låg.,FALSE,1
+Tranbärsextrakt,Cranberry Extract,Grön,250 mg,500 mg,Urinvägshälsa.,Innehåller PACs (proantocyanidiner).,Låg.,FALSE,1
+Tremella,Tremella Mushroom,Blå,500 mg,1000 mg,"Hud, fukt, skönhet.","""Snow fungus"".",Låg.,FALSE,1; 9
+Tribulus,Tribulus Terrestris,Blå,750 mg,1500 mg,Libido (ej Testo).,"Ökar lust, ej muskel.",Låg.,FALSE,2
+Tribulus Terrestris,Tribulus Terrestris,Grön,500 mg,1500 mg,Libido (ej testosteron i män).,Protodioscin är aktivt ämne.,Låg.,FALSE,2
+Tryptofan,L-Tryptophan,Grön,500 mg,2000 mg,"Serotonin, sömn.",Säkrare än 5-HTP (rate-limited).,Låg.,FALSE,7; 5
+Turkesterone,Turkesterone (Ajuga),Blå,500 mg,1000 mg,Muskelbyggande (ekdysteroid).,"Växtsterol, ej androgen.",Låg.,FALSE,2
+Turkey Tail,Turkey Tail Mushroom,Grön,2 g,3 g,"Cancer-stöd, immun.",PSK/PSP polysackarider.,Låg.,FALSE,1
+Turkey Tail,Turkey Tail,Grön,2 g,3 g,Immunstöd (cellgifter).,PSK.,Låg.,FALSE,1
+Tyrosin,L-Tyrosine,Grön,1 g,3 g,"Dopamin, fokus vid stress.",Krävs för sköldkörtelhormon.,Låg.,FALSE,4; 3
+Tyrosin,L-Tyrosine,Grön,1 g,3 g,"Stress, dopamin.","""Drive"".",Låg.,FALSE,5; 3
+Tyrosin,Tyrosine,Grön,1 g,3 g,Kognitiv stress.,Arbetsminne under press.,Låg.,FALSE,4
+Uridinmonofosfat,Uridine Monophosphate,Blå,250 mg,500 mg,"Dopaminreceptorer, synapser.",Synergi med DHA/Kolin.,Låg.,FALSE,4
+Valeriana,Valerian,Grön,300 mg,600 mg,"Sömn, oro.",Valerensyra.,Låg.,FALSE,7; 5
+Valerianarot,Valerian Root,Grön,300 mg,600 mg,"Sömn, lugnande.",Ökar GABA-aktivitet.,Medium. Dåsighet.,FALSE,7; 5
+Vanadin,Vanadium (Vanadyl Sulfate),Blå,10 mcg,100 mcg,Blodsocker (insulin-mimic).,Spårelement.,Medium. Toxiskt i hög dos.,FALSE,6
+Vassleprotein,Whey Protein,Grön,20 g,50 g,Snabbt protein (post-workout).,Högt i Leucin. Anabolt.,Låg.,FALSE,2
+Vetegroddsextrakt,Wheat Germ Extract (Spermidine),Blå,800 mg,1600 mg,Källa till Spermidine.,Cellförnyelse.,Låg. Gluten?,FALSE,8
+Vetegräs,Wheatgrass,Grön,3 g,10 g,"Näring, pH-balans.",Innehåller enzymer och vitaminer.,Låg.,FALSE,1
+Vinpocetin,Vinpocetine,Grön,10 mg,30 mg,Hjärnans blodflöde.,Syntetisk från Periwinkle.,Låg.,FALSE,4
+Vinpocetin,Vinpocetine,Grön,10 mg,30 mg,Blodflöde hjärna.,Vasodilator.,Låg.,FALSE,4
+Vit Kidneyböna,White Kidney Bean Extract,Grön,445 mg,1500 mg,Kolhydratblockerare (amylashämmare).,Tas före stärkelserik mat.,Låg. Gas/uppblåsthet.,FALSE,6
+Vit Njur-böna,White Kidney Bean,Grön,1000 mg,2000 mg,Kolhydratblockerare.,Hämmar alfa-amylas.,Låg. Gaser.,FALSE,6
+Vitamin A,Vitamin A,Grön,3000 IU,10000 IU,"Hudcell-omsättning, akne.",Retinol (animaliskt) bäst.,Medium. Graviditet (maxdos).,TRUE,1
+Vitamin B1 (Tiamin),Vitamin B1 (Thiamine),Grön,1.1 mg,100 mg,"Kolhydratmetabolism, nerver.",Vattenlöslig.,Låg.,TRUE,1; 6
+Vitamin B12 (Adenosyl),Vitamin B12 (Adenosylcobalamin),Blå,1000 mcg,3000 mcg,Mitokondriell B12.,Bra för energi/Krebs-cykeln.,Låg.,FALSE,4; 6
+Vitamin B12 (Cyanokobalamin),Vitamin B12 (Cyanocobalamin),Grön,2.4 mcg,1000 mcg,Standardform B12.,Sämre upptag än metyl/adeno.,Låg.,TRUE,1
+Vitamin B12 (Metylkobalamin),Vitamin B12 (Methylcobalamin),Grön,1000 mcg,5000 mcg,"Aktiv form, bra för nervhälsa.",Sublingualt upptag är effektivt.,Låg.,TRUE,1; 4
+Vitamin B2 (Riboflavin),Vitamin B2 (Riboflavin),Grön,1.4 mg,100 mg,"Energi, migrän (hög dos).",Färgar urin neongul.,Låg.,TRUE,1; 5
+Vitamin B3 (Niacin),Vitamin B3 (Niacin - Nicotinic Acid),Grön,16 mg,500 mg,"Kolesterol, NAD+.",Orsakar hudrodnad (flush).,Medium. Leverpåverkan vid extrem dos.,TRUE,1; 6; 8
+Vitamin B5 (Pantotensyra),Vitamin B5 (Pantothenic Acid),Grön,5 mg,500 mg,"Binjurar, coenzym A, akne.",Vattenlöslig.,Låg.,TRUE,1; 5
+Vitamin C,Vitamin C (Ascorbic Acid),Grön,500 mg,2000 mg,"Immunförsvar, kortisol, kollagen.","Vattenlöslig, överskott kissas ut.",Låg. Diarré vid hög dos.,TRUE,1; 5; 9
+Vitamin C,Vitamin C,Grön,500 mg,2000 mg,"Kollagensyntes, lyster.",Askorbinsyra.,Låg.,TRUE,1; 9
+Vitamin D3,Vitamin D3 (Cholecalciferol),Grön,2000 IU,5000 IU,Tas med K2 vid högre doser.,"Fettlösligt, tas med mat.",Låg. Överdos kan ge hyperkalcemi.,TRUE,1; 2; 5
+Vitamin E,Vitamin E,Grön,200 IU,400 IU,"Hudskydd, antioxidant.",Blandade tokoferoler.,Låg.,TRUE,1
+Vitamin E (Tokoferoler),Vitamin E (Mixed Tocopherols),Grön,15 mg,268 mg,"Antioxidant, cellmembran.",Välj blandade tokoferoler (ej bara alfa).,Medium. Blodförtunnande.,TRUE,1; 8
+Vitamin K2,Vitamin K2,Grön,100 mcg,200 mcg,Artärstelhet.,Förhindrar kalcium i kärl.,Medium. Waran.,TRUE,1; 9
+Vitamin K2 (MK-7),Vitamin K2 (MK-7),Grön,90 mcg,200 mcg,Viktig för att rikta kalcium till skelettet.,Fettlösligt. Lång halveringstid.,Medium. Interagerar med Waran.,TRUE,1; 8; 9
+Vitlök,Garlic (Aged/Allicin),Grön,600 mg,1200 mg,"Immun, hjärta.",Allicin är aktivt.,Låg.,TRUE,1
+Vitlök (Allicin),Garlic Extract (Allicin),Grön,300 mg,1000 mg,"Blodtryck, immunförsvar.",Standardiserad för Allicin-innehåll.,Låg. Blodförtunnande.,TRUE,1
+Vitlök (Kyolic),Aged Garlic Extract,Grön,600 mg,1200 mg,"Blodtryck, plack.",AGE (Aged Garlic Extract).,Låg.,FALSE,1
+Vitpilbark,White Willow Bark,Grön,240 mg,480 mg,Smärta (Salicin).,Naturlig aspirin.,Medium. Magsår? Salicylat.,FALSE,9
+Växtsteroler,Plant Sterols,Grön,2 g,3 g,Kolesterol.,Blockerar upptag.,Låg.,FALSE,1
+Wild Yam,Wild Yam,Blå,500 mg,1000 mg,Hormonbalans?,Diosgenin (kräver labbomvandling).,Låg. Placebo?,FALSE,1
+Yerba Mate,Yerba Mate,Grön,1 g,3 g,"Energi, fokus, GLP-1?",Innehåller koffein/teobromin.,Låg.,FALSE,3; 6
+Yohimbin,Yohimbine HCL,Grön,2.5 mg,15 mg,Fettförbränning (alfa-2 antagonist).,Kan ge ångest/hjärtklappning.,Hög. Dosera försiktigt!,FALSE,6; 3
+Yohimbin,Yohimbine,Grön,5 mg,15 mg,"Erektion, fettförbränning.",Alfa-2 blockerare.,Hög. Ångest/Hjärta.,FALSE,2; 6
+Zink,Zinc,Grön,15 mg,30 mg,"Hudläkning, akne, hormoner.",Pikolinat/Glycinat bäst.,Låg. Kopparbalans.,TRUE,1; 2
+Zink,Zinc,Grön,15 mg,30 mg,"Immun, testosteron.",Kelaterad form.,Låg.,TRUE,1; 2
+Zink,Zinc Lozenges,Grön,15 mg,30 mg,Halsont (lokal effekt).,Sugtabletter (Acetat/Glukonat).,Låg.,FALSE,1
+Zink,Zinc,Grön,30 mg,50 mg,"Testosteron, prostata.",Viktig för mannens hälsa.,Medium. Kopparbrist.,TRUE,2; 1
+Zink,Zinc,Grön,15 mg,30 mg,Depression.,Modulerar NMDA/BDNF.,Låg.,TRUE,5; 1
+Zink,Zinc,Grön,15 mg,30 mg,Synaptisk plasticitet.,Neurotransmittor-modulering.,Låg.,TRUE,4; 1
+Zink,Zinc,Grön,15 mg,30 mg,Insulinlagring.,Insulin-hexamerer.,Låg.,TRUE,6; 1
+Zink L-Carnosine,Zinc L-Carnosine,Grön,75 mg,150 mg,Specifikt för maghälsa/slemhinnor.,Löses långsamt i magen för lokal effekt.,Låg.,FALSE,6; 1
+Zinkpikolinat,Zinc Picolinate,Grön,15 mg,30 mg,Balansera med koppar vid långtidsbruk.,Pikolinat har utmärkt upptag.,Medium. Kan hämma kopparupptag.,TRUE,1; 2
+ZMA,ZMA (Zinc/Mg/B6),Grön,1 dos,1 dos,"Sömn, återhämtning.",Populär stack.,Låg.,FALSE,7; 2
+Åkerfräken,Horsetail Extract,Grön,300 mg,600 mg,Kiselkälla.,Ofta i hårkomplex.,Låg.,FALSE,1
+Äggprotein,Egg White Protein,Grön,20 g,40 g,"Medelsnabbt, hög BV.",Laktosfritt alternativ.,Låg.,FALSE,2
+Äppelcidervinäger,Apple Cider Vinegar (ACV),Grön,500 mg,1500 mg,"Blodsocker, matsmältning.",Kapslar skonar tandemaljen.,Låg.,FALSE,6; 1
+Äppelcidervinäger,Apple Cider Vinegar,Grön,15 ml,30 ml,Insulinsvar mat.,Ättiksyra.,Låg.,FALSE,6
+Ärtprotein,Pea Protein,Grön,20 g,40 g,"Veganskt, bra aminosyraprofil.",Högt i Arginin.,Låg.,FALSE,2
