@@ -29,49 +29,130 @@ interface GenerateStackOptions {
 /**
  * Find supplement in database by name (with fallback to alternatives)
  */
-async function findSupplementByName(
+export async function findSupplementByName(
   supplementName: string,
   alternatives?: string[]
 ): Promise<{ id: number; name_en: string; dosing_base_val: number | null; unit: string | null } | null> {
-  // Try exact match first
-  const { data: exactMatch } = await supabase
+  // Try exact match on name_en first
+  const { data: exactMatch, error: exactError } = await supabase
     .from('supplements')
     .select('id, name_en, dosing_base_val, unit')
     .eq('is_parent', true)
     .ilike('name_en', supplementName)
     .limit(1)
-    .single()
+    .maybeSingle()
 
-  if (exactMatch) {
+  if (exactMatch && !exactError) {
     return exactMatch
   }
 
-  // Try partial match
-  const { data: partialMatch } = await supabase
+  // Try exact match on name_sv
+  const { data: exactMatchSv, error: exactErrorSv } = await supabase
+    .from('supplements')
+    .select('id, name_en, dosing_base_val, unit')
+    .eq('is_parent', true)
+    .ilike('name_sv', supplementName)
+    .limit(1)
+    .maybeSingle()
+
+  if (exactMatchSv && !exactErrorSv) {
+    return exactMatchSv
+  }
+
+  // Try partial match on name_en
+  const { data: partialMatch, error: partialError } = await supabase
     .from('supplements')
     .select('id, name_en, dosing_base_val, unit')
     .eq('is_parent', true)
     .ilike('name_en', `%${supplementName}%`)
     .limit(1)
-    .single()
+    .maybeSingle()
 
-  if (partialMatch) {
+  if (partialMatch && !partialError) {
     return partialMatch
   }
 
-  // Try alternatives
+  // Try partial match on name_sv
+  const { data: partialMatchSv, error: partialErrorSv } = await supabase
+    .from('supplements')
+    .select('id, name_en, dosing_base_val, unit')
+    .eq('is_parent', true)
+    .ilike('name_sv', `%${supplementName}%`)
+    .limit(1)
+    .maybeSingle()
+
+  if (partialMatchSv && !partialErrorSv) {
+    return partialMatchSv
+  }
+
+  // Strategy 5: Try alternatives with is_parent = true
   if (alternatives && alternatives.length > 0) {
     for (const alt of alternatives) {
-      const { data: altMatch } = await supabase
+      // Try name_en
+      const { data: altMatch, error: altError } = await supabase
         .from('supplements')
         .select('id, name_en, dosing_base_val, unit')
         .eq('is_parent', true)
         .ilike('name_en', `%${alt}%`)
         .limit(1)
-        .single()
+        .maybeSingle()
 
-      if (altMatch) {
+      if (altMatch && !altError) {
         return altMatch
+      }
+
+      // Try name_sv
+      const { data: altMatchSv, error: altErrorSv } = await supabase
+        .from('supplements')
+        .select('id, name_en, dosing_base_val, unit')
+        .eq('is_parent', true)
+        .ilike('name_sv', `%${alt}%`)
+        .limit(1)
+        .maybeSingle()
+
+      if (altMatchSv && !altErrorSv) {
+        return altMatchSv
+      }
+    }
+  }
+
+  // Strategy 6: Fallback - Try without is_parent constraint (in case supplement isn't marked as parent)
+  // This handles cases where supplements might not be properly marked as parents yet
+  const { data: fallbackMatch, error: fallbackError } = await supabase
+    .from('supplements')
+    .select('id, name_en, dosing_base_val, unit, is_parent')
+    .ilike('name_en', `%${supplementName}%`)
+    .order('is_parent', { ascending: false }) // Prefer parents, but accept non-parents if needed
+    .limit(1)
+    .maybeSingle()
+
+  if (fallbackMatch && !fallbackError) {
+    return {
+      id: fallbackMatch.id,
+      name_en: fallbackMatch.name_en,
+      dosing_base_val: fallbackMatch.dosing_base_val,
+      unit: fallbackMatch.unit
+    }
+  }
+
+  // Strategy 7: Try alternatives without is_parent constraint
+  if (alternatives && alternatives.length > 0) {
+    for (const alt of alternatives) {
+      const { data: altFallback, error: altFallbackError } = await supabase
+        .from('supplements')
+        .select('id, name_en, dosing_base_val, unit, is_parent')
+        .ilike('name_en', `%${alt}%`)
+        .order('is_parent', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+
+      if (altFallback && !altFallbackError) {
+        return {
+          id: altFallback.id,
+          name_en: altFallback.name_en,
+          dosing_base_val: altFallback.dosing_base_val,
+          unit: altFallback.unit
+        }
       }
     }
   }

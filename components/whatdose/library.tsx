@@ -1,13 +1,17 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Search, X, ChevronRight, AlertTriangle, CheckCircle, Beaker, ChevronDown, Heart, Dumbbell, Brain, Moon, Zap, Activity, Shield, Pill } from "lucide-react"
+import { Search, X, ChevronRight, AlertTriangle, CheckCircle, Beaker, ChevronDown, Heart, Dumbbell, Brain, Moon, Zap, Activity, Shield, Pill, ThumbsUp, ThumbsDown, MessageCircle, Send, Trash2, Check, Clock } from "lucide-react"
 import { useTranslation, type Language } from "@/lib/translations"
 import { supabase } from "@/lib/supabase"
 import { useAuth } from "@/contexts/auth-context"
 import { useUserStack } from "@/hooks/use-user-stack"
+import { useSupplementVoting } from "@/hooks/use-supplement-voting"
 import { analytics } from "@/lib/analytics"
+import { AddToStackModal } from "./add-to-stack-modal"
+import { useProfile } from "@/hooks/use-profile"
+import { calculateDosageOptions, calculateBenefits, suggestTiming } from "@/lib/supplement-info-helper"
 import type { SupplementSearchResult } from "@/lib/database.types"
 
 interface Variant {
@@ -23,6 +27,9 @@ interface Variant {
   interaction_risk_level: "Low" | "Medium" | "High"
   research_status: "Green" | "Blue" | "Red"
   category_ids: number[] | null
+  upvotes_count?: number
+  downvotes_count?: number
+  comments_count?: number
 }
 
 export function Library() {
@@ -38,6 +45,34 @@ export function Library() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showStatusInfo, setShowStatusInfo] = useState(false)
+  const [newComment, setNewComment] = useState("")
+  const [showAddModal, setShowAddModal] = useState(false)
+  const [parentDosingInfo, setParentDosingInfo] = useState<{ dosing_base_val: number | null; dosing_max_val: number | null; unit: string | null } | null>(null)
+  const [dosageOptions, setDosageOptions] = useState<{ label: string; value: number; description: string }[]>([])
+  const [benefits, setBenefits] = useState<string[]>([])
+  const [usageNotes, setUsageNotes] = useState<string[]>([])
+  const [suggestedTiming, setSuggestedTiming] = useState<'Morning' | 'Lunch' | 'Pre-Workout' | 'Post-Workout' | 'Dinner' | 'Bedtime' | null>(null)
+  const { profile } = useProfile(user?.id || null)
+  
+  // Get supplement ID for voting/comments - only fetch when supplement is actually selected
+  // This prevents unnecessary requests on page load
+  const selectedSupplementId = (selectedVariant || selectedParent) 
+    ? (selectedVariant 
+        ? selectedVariant.id 
+        : selectedParent?.parent_id || null)
+    : null
+  
+  // Temporarily disabled to prevent loading issues
+  // const { stats, comments, loading: votingLoading, vote, addComment, deleteComment } = useSupplementVoting(
+  //   selectedSupplementId,
+  //   selectedSupplementId ? user?.id || null : null
+  // )
+  const stats = { upvotes: 0, downvotes: 0, userVote: null }
+  const comments: any[] = []
+  const votingLoading = false
+  const vote = async () => ({ error: 'Disabled' })
+  const addComment = async () => ({ error: 'Disabled' })
+  const deleteComment = async () => ({ error: 'Disabled' })
 
   const [lang, setLang] = useState<Language>("en")
   const { t } = useTranslation(lang)
@@ -53,6 +88,183 @@ export function Library() {
     window.addEventListener("languageChange", handleLanguageChange as EventListener)
     return () => window.removeEventListener("languageChange", handleLanguageChange as EventListener)
   }, [])
+
+  // Track what we've already loaded to prevent infinite loops
+  const loadingRef = useRef(false)
+  const lastVariantIdRef = useRef<number | null>(null)
+  const lastParentIdRef = useRef<number | null>(null)
+  const lastWeightRef = useRef<number | null>(null)
+  const lastGenderRef = useRef<string | null>(null)
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+  // Fetch parent dosing info and calculate dosage options/benefits when supplement is selected
+  // Only loads when a supplement is actually opened (not on page load)
+  useEffect(() => {
+    // Clear any pending timeouts
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+      timeoutRef.current = null
+    }
+
+    // Only load if we have a selection
+    if (!selectedVariant && !selectedParent) {
+      setParentDosingInfo(null)
+      setDosageOptions([])
+      setBenefits([])
+      setUsageNotes([])
+      setSuggestedTiming(null)
+      lastVariantIdRef.current = null
+      lastParentIdRef.current = null
+      return
+    }
+
+    // Prevent concurrent loads
+    if (loadingRef.current) return
+
+    // Check if we need to reload - only check IDs
+    const currentVariantId = selectedVariant?.id || null
+    const currentParentId = selectedParent?.parent_id || null
+
+    // Only reload if supplement ID changed
+    if (
+      currentVariantId === lastVariantIdRef.current &&
+      currentParentId === lastParentIdRef.current
+    ) {
+      return
+    }
+
+    let cancelled = false
+
+    const loadSupplementInfo = async () => {
+      if (cancelled || loadingRef.current) return
+      
+      loadingRef.current = true
+
+      try {
+        const currentWeight = profile?.weight_kg || null
+        const currentGender = profile?.gender || null
+
+        if (selectedVariant) {
+          // Use variant info - no API call needed
+          setParentDosingInfo(null)
+          
+          const options = await calculateDosageOptions(
+            selectedVariant.default_dosage_val,
+            selectedVariant.max_dosage_val,
+            selectedVariant.unit,
+            selectedVariant.name_en,
+            currentWeight,
+            t
+          )
+          
+          if (cancelled) return
+          setDosageOptions(options)
+          
+          const { benefits: calculatedBenefits, usageNotes: calculatedUsageNotes } = calculateBenefits(
+            selectedVariant.category_ids,
+            selectedVariant.dosing_notes,
+            selectedVariant.bioavailability_notes,
+            selectedVariant.name_en,
+            currentGender,
+            selectedVariant.benefits, // Pass database benefits if available
+            t
+          )
+          
+          if (cancelled) return
+          setBenefits(calculatedBenefits)
+          setUsageNotes(calculatedUsageNotes)
+
+          lastVariantIdRef.current = currentVariantId
+          lastParentIdRef.current = null
+        } else if (selectedParent) {
+          // Fetch parent info
+          const { data: parentData, error: parentError } = await supabase
+            .from('supplements')
+            .select('dosing_base_val, dosing_max_val, unit, category_ids, dosing_notes, bioavailability_notes')
+            .eq('id', selectedParent.parent_id)
+            .maybeSingle()
+
+          if (cancelled) return
+
+          // Ignore errors for now to prevent crashes
+          if (parentError) {
+            console.warn('Error fetching parent info (ignored):', parentError.code || parentError.message)
+            setParentDosingInfo({ dosing_base_val: null, dosing_max_val: null, unit: null })
+            setDosageOptions([])
+            setBenefits([])
+            setUsageNotes([])
+            setSuggestedTiming(null)
+          } else if (parentData) {
+            setParentDosingInfo({
+              dosing_base_val: parentData.dosing_base_val,
+              dosing_max_val: parentData.dosing_max_val,
+              unit: parentData.unit,
+            })
+            
+            const options = await calculateDosageOptions(
+              parentData.dosing_base_val,
+              parentData.dosing_max_val,
+              parentData.unit,
+              selectedParent.parent_name_en,
+              currentWeight,
+              t
+            )
+            
+            if (cancelled) return
+            setDosageOptions(options)
+            
+            const { benefits: calculatedBenefits, usageNotes: calculatedUsageNotes } = calculateBenefits(
+              parentData.category_ids,
+              parentData.dosing_notes,
+              parentData.bioavailability_notes,
+              selectedParent.parent_name_en,
+              currentGender,
+              parentData.benefits, // Pass database benefits if available
+              t
+            )
+            
+            const timing = await suggestTiming(selectedParent.parent_name_en, parentData.category_ids)
+            
+            if (cancelled) return
+            setBenefits(calculatedBenefits)
+            setUsageNotes(calculatedUsageNotes)
+            setSuggestedTiming(timing)
+
+            lastVariantIdRef.current = null
+            lastParentIdRef.current = currentParentId
+          } else {
+            setParentDosingInfo({ dosing_base_val: null, dosing_max_val: null, unit: null })
+            setDosageOptions([])
+            setBenefits([])
+            setUsageNotes([])
+            setSuggestedTiming(null)
+          }
+        }
+
+        lastWeightRef.current = currentWeight
+        lastGenderRef.current = currentGender
+      } catch (err) {
+        if (cancelled) return
+        console.error('Error loading supplement info (ignored):', err)
+      } finally {
+        if (!cancelled) {
+          loadingRef.current = false
+        }
+      }
+    }
+    
+    // Load immediately when supplement is selected
+    loadSupplementInfo()
+
+    return () => {
+      cancelled = true
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+        timeoutRef.current = null
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedParent?.parent_id, selectedVariant?.id])
 
   // Fetch supplements from Supabase (by category or search)
   useEffect(() => {
@@ -75,7 +287,10 @@ export function Library() {
               research_status,
               category_ids,
               is_parent,
-              parent_id
+              parent_id,
+              upvotes_count,
+              downvotes_count,
+              comments_count
             `)
             .eq('is_parent', true)
             .contains('category_ids', [selectedCategory])
@@ -111,7 +326,10 @@ export function Library() {
                   interaction_risk_text: v.interaction_risk_text,
                   interaction_risk_level: v.interaction_risk_level as "Low" | "Medium" | "High",
                   research_status: v.research_status as "Green" | "Blue" | "Red",
-                  category_ids: v.category_ids
+                  category_ids: v.category_ids,
+                  upvotes_count: v.upvotes_count || 0,
+                  downvotes_count: v.downvotes_count || 0,
+                  comments_count: v.comments_count || 0
                 })
                 variantsByParent.set(v.parent_id, existing)
               }
@@ -121,9 +339,12 @@ export function Library() {
               parent_id: s.id,
               parent_name_en: s.name_en || '',
               parent_name_sv: s.name_sv,
-              parent_description: s.dosing_notes,
+              parent_description: s.description || s.dosing_notes, // Use description, fallback to dosing_notes
               parent_research_status: s.research_status as "Green" | "Blue" | "Red",
               parent_category_ids: s.category_ids,
+              parent_upvotes_count: s.upvotes_count || 0,
+              parent_downvotes_count: s.downvotes_count || 0,
+              parent_comments_count: s.comments_count || 0,
               variants: variantsByParent.get(s.id) || []
             }))
           }
@@ -136,25 +357,79 @@ export function Library() {
 
           if (searchError) throw searchError
           
-          // Enhance search results with category_ids from database
+          // Enhance search results with category_ids and vote/comment counts from database
           if (searchData) {
             const parentIds = searchData.map((s: any) => s.parent_id)
+            
+            // Get parent data with counts
             const { data: parentData } = await supabase
               .from('supplements')
-              .select('id, category_ids')
+              .select('id, category_ids, upvotes_count, downvotes_count, comments_count')
               .in('id', parentIds)
             
+            // Get all variant IDs from search results to fetch their counts
+            const variantIds: number[] = []
+            searchData.forEach((s: any) => {
+              if (s.variants && Array.isArray(s.variants)) {
+                s.variants.forEach((v: any) => {
+                  if (v.id) variantIds.push(v.id)
+                })
+              }
+            })
+            
+            // Get variant counts
+            const variantCountsMap = new Map<number, { upvotes: number; downvotes: number; comments: number }>()
+            if (variantIds.length > 0) {
+              const { data: variantData } = await supabase
+                .from('supplements')
+                .select('id, upvotes_count, downvotes_count, comments_count')
+                .in('id', variantIds)
+              
+              variantData?.forEach(v => {
+                variantCountsMap.set(v.id, {
+                  upvotes: v.upvotes_count || 0,
+                  downvotes: v.downvotes_count || 0,
+                  comments: v.comments_count || 0
+                })
+              })
+            }
+            
             const categoryMap = new Map<number, number[]>()
+            const countsMap = new Map<number, { upvotes: number; downvotes: number; comments: number }>()
             parentData?.forEach(p => {
               if (p.category_ids) {
                 categoryMap.set(p.id, p.category_ids)
               }
+              countsMap.set(p.id, {
+                upvotes: p.upvotes_count || 0,
+                downvotes: p.downvotes_count || 0,
+                comments: p.comments_count || 0
+              })
             })
             
-            data = searchData.map((s: any) => ({
-              ...s,
-              parent_category_ids: categoryMap.get(s.parent_id) || null
-            }))
+            data = searchData.map((s: any) => {
+              const counts = countsMap.get(s.parent_id) || { upvotes: 0, downvotes: 0, comments: 0 }
+              
+              // Enhance variants with vote counts
+              const enhancedVariants = (s.variants || []).map((v: any) => {
+                const variantCounts = variantCountsMap.get(v.id) || { upvotes: 0, downvotes: 0, comments: 0 }
+                return {
+                  ...v,
+                  upvotes_count: variantCounts.upvotes,
+                  downvotes_count: variantCounts.downvotes,
+                  comments_count: variantCounts.comments
+                }
+              })
+              
+              return {
+                ...s,
+                parent_category_ids: categoryMap.get(s.parent_id) || null,
+                parent_upvotes_count: counts.upvotes,
+                parent_downvotes_count: counts.downvotes,
+                parent_comments_count: counts.comments,
+                variants: enhancedVariants
+              }
+            })
           } else {
             data = searchData
           }
@@ -173,7 +448,10 @@ export function Library() {
               research_status,
               category_ids,
               is_parent,
-              parent_id
+              parent_id,
+              upvotes_count,
+              downvotes_count,
+              comments_count
             `)
             .eq('is_parent', true)
             .order('name_en')
@@ -205,7 +483,10 @@ export function Library() {
                   interaction_risk_text: v.interaction_risk_text,
                   interaction_risk_level: v.interaction_risk_level as "Low" | "Medium" | "High",
                   research_status: v.research_status as "Green" | "Blue" | "Red",
-                  category_ids: v.category_ids
+                  category_ids: v.category_ids,
+                  upvotes_count: v.upvotes_count || 0,
+                  downvotes_count: v.downvotes_count || 0,
+                  comments_count: v.comments_count || 0
                 })
                 variantsByParent.set(v.parent_id, existing)
               }
@@ -215,9 +496,12 @@ export function Library() {
               parent_id: s.id,
               parent_name_en: s.name_en || '',
               parent_name_sv: s.name_sv,
-              parent_description: s.dosing_notes,
+              parent_description: s.description || s.dosing_notes, // Use description, fallback to dosing_notes
               parent_research_status: s.research_status as "Green" | "Blue" | "Red",
               parent_category_ids: s.category_ids,
+              parent_upvotes_count: s.upvotes_count || 0,
+              parent_downvotes_count: s.downvotes_count || 0,
+              parent_comments_count: s.comments_count || 0,
               variants: variantsByParent.get(s.id) || []
             }))
           }
@@ -523,6 +807,23 @@ export function Library() {
                       {parent.parent_description && (
                         <p className="text-sm text-gray-400 line-clamp-1">{parent.parent_description}</p>
                       )}
+                      {/* Vote and Comment Counts */}
+                      <div className="mt-1.5 flex items-center gap-3 text-xs text-gray-500">
+                        <div className="flex items-center gap-1">
+                          <ThumbsUp className="h-3.5 w-3.5 text-emerald-400" />
+                          <span>{(parent as any).parent_upvotes_count || 0}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <ThumbsDown className="h-3.5 w-3.5 text-red-400" />
+                          <span>{(parent as any).parent_downvotes_count || 0}</span>
+                        </div>
+                        {(parent as any).parent_comments_count > 0 && (
+                          <div className="flex items-center gap-1">
+                            <MessageCircle className="h-3.5 w-3.5 text-blue-400" />
+                            <span>{(parent as any).parent_comments_count || 0}</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
                     {/* Category Icons - Right side, aligned with name */}
                     <div className="flex items-center gap-1.5">
@@ -582,6 +883,23 @@ export function Library() {
                             <p className="text-sm text-gray-400">
                               {formatDosage(variant.default_dosage_val, variant.max_dosage_val, variant.unit)}
                             </p>
+                            {/* Vote and Comment Counts for Variants */}
+                            <div className="mt-1.5 flex items-center gap-3 text-xs text-gray-500">
+                              <div className="flex items-center gap-1">
+                                <ThumbsUp className="h-3.5 w-3.5 text-emerald-400" />
+                                <span>{variant.upvotes_count || 0}</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <ThumbsDown className="h-3.5 w-3.5 text-red-400" />
+                                <span>{variant.downvotes_count || 0}</span>
+                              </div>
+                              {(variant.comments_count || 0) > 0 && (
+                                <div className="flex items-center gap-1">
+                                  <MessageCircle className="h-3.5 w-3.5 text-blue-400" />
+                                  <span>{variant.comments_count || 0}</span>
+                                </div>
+                              )}
+                            </div>
                           </div>
                           <ChevronRight className="h-5 w-5 text-gray-500" />
                         </button>
@@ -606,6 +924,7 @@ export function Library() {
             onClick={() => {
               setSelectedParent(null)
               setSelectedVariant(null)
+              setNewComment("")
             }}
           >
             <motion.div
@@ -635,6 +954,7 @@ export function Library() {
                           onClick={() => {
                             setSelectedParent(null)
                             setSelectedVariant(null)
+                            setNewComment("")
                           }}
                           className="rounded-full bg-white/10 p-2 hover:bg-white/20"
                         >
@@ -643,25 +963,105 @@ export function Library() {
                       </div>
 
                       <div className="space-y-6">
-                        {selectedVariant.dosing_notes && (
+                        {(selectedVariant.description || selectedVariant.dosing_notes) && (
                           <div>
                             <h3 className="mb-2 text-sm font-medium text-gray-400">{t("description")}</h3>
-                            <p className="text-gray-200">{selectedVariant.dosing_notes}</p>
+                            <p className="text-gray-200">{selectedVariant.description || selectedVariant.dosing_notes}</p>
                           </div>
                         )}
 
-                        <div className="rounded-xl bg-teal-500/10 p-4">
-                          <div className="mb-2 flex items-center gap-2 text-teal-400">
-                            <CheckCircle className="h-5 w-5" />
-                            <span className="font-medium">{t("recommendedDose")}</span>
+                        {/* Dosage Options - Same as Stack Review */}
+                        {dosageOptions.length > 0 ? (
+                          <div>
+                            <h3 className="mb-2 text-sm font-medium text-gray-400">{t("dosageOptions") || "Dosage Options"}</h3>
+                            <div className="space-y-2">
+                              {dosageOptions.map((option, idx) => {
+                                const unit = selectedVariant.unit || ''
+                                const unitLower = unit.toLowerCase()
+                                const value = option.value
+                                
+                                // Format dosage display
+                                let dosageDisplay = ''
+                                if (unitLower === 'g' && value >= 1000) {
+                                  const grams = value / 1000
+                                  dosageDisplay = grams % 1 === 0 ? `${grams}${unit}` : `${grams.toFixed(1)}${unit}`
+                                } else if (unitLower === 'mg' && value < 1 && value > 0) {
+                                  dosageDisplay = `${Math.round(value * 1000)}${unit}`
+                                } else if (value % 1 === 0) {
+                                  dosageDisplay = `${value}${unit}`
+                                } else {
+                                  dosageDisplay = `${value.toFixed(1)}${unit}`
+                                }
+                                
+                                return (
+                                  <div
+                                    key={idx}
+                                    className="rounded-xl border border-white/10 bg-white/5 p-3"
+                                  >
+                                    <div className="font-semibold text-white">{option.label}</div>
+                                    <div className="mt-1 text-lg font-bold text-teal-400">{dosageDisplay}</div>
+                                    {option.description && (
+                                      <div className="mt-1 text-xs text-gray-400">{option.description}</div>
+                                    )}
+                                  </div>
+                                )
+                              })}
+                            </div>
                           </div>
-                          <p className="text-lg font-semibold">
-                            {formatDosage(selectedVariant.default_dosage_val, selectedVariant.max_dosage_val, selectedVariant.unit)}
-                          </p>
-                          {selectedVariant.bioavailability_notes && (
-                            <p className="mt-2 text-sm text-gray-300">{selectedVariant.bioavailability_notes}</p>
-                          )}
-                        </div>
+                        ) : (
+                          <div className="rounded-xl bg-teal-500/10 p-4">
+                            <div className="mb-2 flex items-center gap-2 text-teal-400">
+                              <CheckCircle className="h-5 w-5" />
+                              <span className="font-medium">{t("recommendedDose")}</span>
+                            </div>
+                            <p className="text-lg font-semibold">
+                              {formatDosage(selectedVariant.default_dosage_val, selectedVariant.max_dosage_val, selectedVariant.unit)}
+                            </p>
+                            {selectedVariant.bioavailability_notes && (
+                              <p className="mt-2 text-sm text-gray-300">{selectedVariant.bioavailability_notes}</p>
+                            )}
+                          </div>
+                        )}
+
+                        {/* Suggested Timing */}
+                        {suggestedTiming && (
+                          <div className="rounded-lg border border-teal-500/30 bg-teal-500/10 p-4">
+                            <h3 className="mb-2 text-sm font-medium text-teal-400 flex items-center gap-2">
+                              <Clock className="h-4 w-4" />
+                              Suggested Timing
+                            </h3>
+                            <p className="text-sm text-teal-300">
+                              Best taken: <span className="font-semibold">{suggestedTiming}</span>
+                            </p>
+                          </div>
+                        )}
+
+                        {/* Benefits */}
+                        {benefits.length > 0 && (
+                          <div>
+                            <h3 className="mb-2 text-sm font-medium text-gray-400">{t("benefits") || "Benefits"}</h3>
+                            <ul className="space-y-2">
+                              {benefits.map((benefit, idx) => (
+                                <li key={idx} className="flex items-start gap-2 text-gray-300">
+                                  <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-teal-400" />
+                                  <span className="text-sm">{benefit}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+
+                        {/* Usage Notes */}
+                        {usageNotes.length > 0 && (
+                          <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-4">
+                            <h3 className="mb-2 text-sm font-medium text-amber-400">Usage Instructions</h3>
+                            <ul className="space-y-1">
+                              {usageNotes.map((note, idx) => (
+                                <li key={idx} className="text-sm text-amber-300">{note}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
 
                         {selectedVariant.interaction_risk_text && (
                           <div>
@@ -675,6 +1075,112 @@ export function Library() {
                             <p className="text-sm text-gray-300">{selectedVariant.interaction_risk_text}</p>
                           </div>
                         )}
+
+                        {/* Voting Section */}
+                        <div className="rounded-xl bg-white/5 p-4">
+                          <h3 className="mb-3 text-sm font-medium text-gray-400">Community Feedback</h3>
+                          <div className="flex items-center gap-4">
+                            <button
+                              onClick={() => vote('upvote')}
+                              disabled={votingLoading || !user}
+                              className={`flex items-center gap-2 rounded-lg px-4 py-2 transition-all ${
+                                stats.userVote === 'upvote'
+                                  ? 'bg-emerald-500/20 text-emerald-400'
+                                  : 'bg-white/10 text-gray-300 hover:bg-white/15'
+                              } ${!user ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            >
+                              <ThumbsUp className="h-4 w-4" />
+                              <span>{stats.upvotes}</span>
+                            </button>
+                            <button
+                              onClick={() => vote('downvote')}
+                              disabled={votingLoading || !user}
+                              className={`flex items-center gap-2 rounded-lg px-4 py-2 transition-all ${
+                                stats.userVote === 'downvote'
+                                  ? 'bg-red-500/20 text-red-400'
+                                  : 'bg-white/10 text-gray-300 hover:bg-white/15'
+                              } ${!user ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            >
+                              <ThumbsDown className="h-4 w-4" />
+                              <span>{stats.downvotes}</span>
+                            </button>
+                          </div>
+                          {!user && (
+                            <p className="mt-2 text-xs text-gray-500">Sign in to vote</p>
+                          )}
+                        </div>
+
+                        {/* Comments Section */}
+                        <div className="rounded-xl bg-white/5 p-4">
+                          <h3 className="mb-3 text-sm font-medium text-gray-400 flex items-center gap-2">
+                            <MessageCircle className="h-4 w-4" />
+                            Comments ({comments.length})
+                          </h3>
+                          
+                          {/* Add Comment */}
+                          {user && (
+                            <div className="mb-4 flex gap-2">
+                              <input
+                                type="text"
+                                placeholder="Add a comment..."
+                                value={newComment}
+                                onChange={(e) => setNewComment(e.target.value)}
+                                onKeyDown={async (e) => {
+                                  if (e.key === 'Enter' && newComment.trim()) {
+                                    const result = await addComment(newComment)
+                                    if (!result.error) {
+                                      setNewComment("")
+                                    }
+                                  }
+                                }}
+                                className="flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-gray-500 focus:border-teal-500 focus:outline-none"
+                              />
+                              <button
+                                onClick={async () => {
+                                  if (newComment.trim()) {
+                                    const result = await addComment(newComment)
+                                    if (!result.error) {
+                                      setNewComment("")
+                                    }
+                                  }
+                                }}
+                                disabled={!newComment.trim() || votingLoading}
+                                className="rounded-lg bg-teal-500/20 p-2 text-teal-400 transition-all hover:bg-teal-500/30 disabled:opacity-50"
+                              >
+                                <Send className="h-4 w-4" />
+                              </button>
+                            </div>
+                          )}
+
+                          {/* Comments List */}
+                          <div className="space-y-3 max-h-64 overflow-y-auto">
+                            {comments.length === 0 ? (
+                              <p className="text-sm text-gray-500">No comments yet. Be the first to comment!</p>
+                            ) : (
+                              comments.map((comment) => (
+                                <div key={comment.id} className="rounded-lg bg-white/5 p-3">
+                                  <div className="mb-1 flex items-center justify-between">
+                                    <span className="text-xs font-medium text-gray-400">
+                                      {comment.profiles?.first_name || comment.profiles?.username || 'Anonymous'}
+                                    </span>
+                                    {user?.id === comment.user_id && (
+                                      <button
+                                        onClick={() => deleteComment(comment.id)}
+                                        className="text-xs text-red-400 hover:text-red-300"
+                                      >
+                                        <Trash2 className="h-3 w-3" />
+                                      </button>
+                                    )}
+                                  </div>
+                                  <p className="text-sm text-gray-200">{comment.content}</p>
+                                  <p className="mt-1 text-xs text-gray-500">
+                                    {new Date(comment.created_at).toLocaleDateString()}
+                                  </p>
+                                </div>
+                              ))
+                            )}
+                          </div>
+                        </div>
                       </div>
                     </>
                   ) : selectedParent ? (
@@ -688,6 +1194,7 @@ export function Library() {
                           onClick={() => {
                             setSelectedParent(null)
                             setSelectedVariant(null)
+                            setNewComment("")
                           }}
                           className="rounded-full bg-white/10 p-2 hover:bg-white/20"
                         >
@@ -700,6 +1207,73 @@ export function Library() {
                           <div>
                             <h3 className="mb-2 text-sm font-medium text-gray-400">{t("description")}</h3>
                             <p className="text-gray-200">{selectedParent.parent_description}</p>
+                          </div>
+                        )}
+
+                        {/* Dosage Options - Same as Stack Review */}
+                        {dosageOptions.length > 0 ? (
+                          <div>
+                            <h3 className="mb-2 text-sm font-medium text-gray-400">{t("dosageOptions") || "Dosage Options"}</h3>
+                            <div className="space-y-2">
+                              {dosageOptions.map((option, idx) => {
+                                const unit = parentDosingInfo?.unit || ''
+                                const unitLower = unit.toLowerCase()
+                                const value = option.value
+                                
+                                // Format dosage display
+                                let dosageDisplay = ''
+                                if (unitLower === 'g' && value >= 1000) {
+                                  const grams = value / 1000
+                                  dosageDisplay = grams % 1 === 0 ? `${grams}${unit}` : `${grams.toFixed(1)}${unit}`
+                                } else if (unitLower === 'mg' && value < 1 && value > 0) {
+                                  dosageDisplay = `${Math.round(value * 1000)}${unit}`
+                                } else if (value % 1 === 0) {
+                                  dosageDisplay = `${value}${unit}`
+                                } else {
+                                  dosageDisplay = `${value.toFixed(1)}${unit}`
+                                }
+                                
+                                return (
+                                  <div
+                                    key={idx}
+                                    className="rounded-xl border border-white/10 bg-white/5 p-3"
+                                  >
+                                    <div className="font-semibold text-white">{option.label}</div>
+                                    <div className="mt-1 text-lg font-bold text-teal-400">{dosageDisplay}</div>
+                                    {option.description && (
+                                      <div className="mt-1 text-xs text-gray-400">{option.description}</div>
+                                    )}
+                                  </div>
+                                )
+                              })}
+                            </div>
+                          </div>
+                        ) : null}
+
+                        {/* Benefits */}
+                        {benefits.length > 0 && (
+                          <div>
+                            <h3 className="mb-2 text-sm font-medium text-gray-400">{t("benefits") || "Benefits"}</h3>
+                            <ul className="space-y-2">
+                              {benefits.map((benefit, idx) => (
+                                <li key={idx} className="flex items-start gap-2 text-gray-300">
+                                  <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-teal-400" />
+                                  <span className="text-sm">{benefit}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+
+                        {/* Usage Notes */}
+                        {usageNotes.length > 0 && (
+                          <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-4">
+                            <h3 className="mb-2 text-sm font-medium text-amber-400">Usage Instructions</h3>
+                            <ul className="space-y-1">
+                              {usageNotes.map((note, idx) => (
+                                <li key={idx} className="text-sm text-amber-300">{note}</li>
+                              ))}
+                            </ul>
                           </div>
                         )}
 
@@ -727,21 +1301,136 @@ export function Library() {
                             </div>
                           </div>
                         )}
+
+                        {/* Voting Section */}
+                        <div className="rounded-xl bg-white/5 p-4">
+                          <h3 className="mb-3 text-sm font-medium text-gray-400">Community Feedback</h3>
+                          <div className="flex items-center gap-4">
+                            <button
+                              onClick={() => vote('upvote')}
+                              disabled={votingLoading || !user}
+                              className={`flex items-center gap-2 rounded-lg px-4 py-2 transition-all ${
+                                stats.userVote === 'upvote'
+                                  ? 'bg-emerald-500/20 text-emerald-400'
+                                  : 'bg-white/10 text-gray-300 hover:bg-white/15'
+                              } ${!user ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            >
+                              <ThumbsUp className="h-4 w-4" />
+                              <span>{stats.upvotes}</span>
+                            </button>
+                            <button
+                              onClick={() => vote('downvote')}
+                              disabled={votingLoading || !user}
+                              className={`flex items-center gap-2 rounded-lg px-4 py-2 transition-all ${
+                                stats.userVote === 'downvote'
+                                  ? 'bg-red-500/20 text-red-400'
+                                  : 'bg-white/10 text-gray-300 hover:bg-white/15'
+                              } ${!user ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            >
+                              <ThumbsDown className="h-4 w-4" />
+                              <span>{stats.downvotes}</span>
+                            </button>
+                          </div>
+                          {!user && (
+                            <p className="mt-2 text-xs text-gray-500">Sign in to vote</p>
+                          )}
+                        </div>
+
+                        {/* Comments Section */}
+                        <div className="rounded-xl bg-white/5 p-4">
+                          <h3 className="mb-3 text-sm font-medium text-gray-400 flex items-center gap-2">
+                            <MessageCircle className="h-4 w-4" />
+                            Comments ({comments.length})
+                          </h3>
+                          
+                          {/* Add Comment */}
+                          {user && (
+                            <div className="mb-4 flex gap-2">
+                              <input
+                                type="text"
+                                placeholder="Add a comment..."
+                                value={newComment}
+                                onChange={(e) => setNewComment(e.target.value)}
+                                onKeyDown={async (e) => {
+                                  if (e.key === 'Enter' && newComment.trim()) {
+                                    const result = await addComment(newComment)
+                                    if (!result.error) {
+                                      setNewComment("")
+                                    }
+                                  }
+                                }}
+                                className="flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-gray-500 focus:border-teal-500 focus:outline-none"
+                              />
+                              <button
+                                onClick={async () => {
+                                  if (newComment.trim()) {
+                                    const result = await addComment(newComment)
+                                    if (!result.error) {
+                                      setNewComment("")
+                                    }
+                                  }
+                                }}
+                                disabled={!newComment.trim() || votingLoading}
+                                className="rounded-lg bg-teal-500/20 p-2 text-teal-400 transition-all hover:bg-teal-500/30 disabled:opacity-50"
+                              >
+                                <Send className="h-4 w-4" />
+                              </button>
+                            </div>
+                          )}
+
+                          {/* Comments List */}
+                          <div className="space-y-3 max-h-64 overflow-y-auto">
+                            {comments.length === 0 ? (
+                              <p className="text-sm text-gray-500">No comments yet. Be the first to comment!</p>
+                            ) : (
+                              comments.map((comment) => (
+                                <div key={comment.id} className="rounded-lg bg-white/5 p-3">
+                                  <div className="mb-1 flex items-center justify-between">
+                                    <span className="text-xs font-medium text-gray-400">
+                                      {comment.profiles?.first_name || comment.profiles?.username || 'Anonymous'}
+                                    </span>
+                                    {user?.id === comment.user_id && (
+                                      <button
+                                        onClick={() => deleteComment(comment.id)}
+                                        className="text-xs text-red-400 hover:text-red-300"
+                                      >
+                                        <Trash2 className="h-3 w-3" />
+                                      </button>
+                                    )}
+                                  </div>
+                                  <p className="text-sm text-gray-200">{comment.content}</p>
+                                  <p className="mt-1 text-xs text-gray-500">
+                                    {new Date(comment.created_at).toLocaleDateString()}
+                                  </p>
+                                </div>
+                              ))
+                            )}
+                          </div>
+                        </div>
                       </div>
                     </>
                   ) : null}
 
-                  <button
-                    onClick={async () => {
+                  <motion.button
+                    whileTap={{ scale: 0.95 }}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      
+                      console.log('Add to Stack button clicked')
+                      
                       if (!user) {
                         alert("Please sign in to add supplements to your stack")
                         return
                       }
 
                       const supplement = selectedVariant || selectedParent
-                      if (!supplement) return
+                      if (!supplement) {
+                        console.warn('No supplement selected')
+                        return
+                      }
 
-                      // Get supplement ID
+                      // Get supplement ID - use variant if available, otherwise parent
                       const supplementId = selectedVariant 
                         ? selectedVariant.id 
                         : selectedParent?.parent_id
@@ -751,31 +1440,89 @@ export function Library() {
                         return
                       }
 
-                      // Add to stack (default to Morning schedule)
-                      const result = await addToStack(supplementId, "Morning")
+                      const supplementName = selectedVariant 
+                        ? selectedVariant.name_en 
+                        : selectedParent?.parent_name_en || ""
                       
-                      if (result.error) {
-                        alert(result.error)
-                      } else {
-                        const supplementName = selectedVariant 
-                          ? selectedVariant.name_en 
-                          : selectedParent?.parent_name_en || ""
-                        analytics.addToStack(supplementName)
-                        alert(t("addedToStack") || "Added to your stack!")
-                        setSelectedParent(null)
-                        setSelectedVariant(null)
-                      }
+                      console.log('Opening add modal for supplement:', supplementId, 'Name:', supplementName)
+                      
+                      // Close detail modal first
+                      // setSelectedParent(null)
+                      // setSelectedVariant(null)
+                      
+                      // Then open add modal
+                      setShowAddModal(true)
                     }}
-                    className="mt-6 w-full rounded-xl bg-gradient-to-r from-teal-500 to-cyan-500 py-3 font-medium transition-all hover:opacity-90"
+                    className="mt-6 w-full rounded-xl bg-gradient-to-r from-teal-500 to-cyan-500 py-3 font-medium transition-all hover:opacity-90 cursor-pointer"
+                    type="button"
                   >
                     {t("addToStack")}
-                  </button>
+                  </motion.button>
                 </div>
               </div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Add to Stack Modal - Render outside AnimatePresence to avoid conflicts */}
+      <AddToStackModal
+        isOpen={showAddModal}
+        onClose={() => {
+          console.log('Closing add modal')
+          setShowAddModal(false)
+          setParentDosingInfo(null)
+        }}
+        onConfirm={async (scheduleBlock, customDosage) => {
+          const supplement = selectedVariant || selectedParent
+          if (!supplement) {
+            console.warn('No supplement when confirming')
+            return
+          }
+
+          const supplementId = selectedVariant 
+            ? selectedVariant.id 
+            : selectedParent?.parent_id
+
+          if (!supplementId) {
+            alert("Unable to add supplement")
+            return
+          }
+
+          console.log('Adding to stack:', supplementId, scheduleBlock, customDosage)
+
+          const result = await addToStack(supplementId, scheduleBlock, customDosage)
+          
+          if (result.error) {
+            alert(result.error)
+          } else {
+            const supplementName = selectedVariant 
+              ? selectedVariant.name_en 
+              : selectedParent?.parent_name_en || ""
+            analytics.addToStack(supplementName)
+            alert(t("addedToStack") || "Added to your stack!")
+            setSelectedParent(null)
+            setSelectedVariant(null)
+            setShowAddModal(false)
+            setParentDosingInfo(null)
+          }
+        }}
+        supplementId={selectedVariant 
+          ? selectedVariant.id 
+          : selectedParent?.parent_id || 0}
+        supplementName={selectedVariant 
+          ? selectedVariant.name_en 
+          : selectedParent?.parent_name_en || ""}
+        defaultDosageVal={selectedVariant 
+          ? selectedVariant.default_dosage_val 
+          : parentDosingInfo?.dosing_base_val || null}
+        maxDosageVal={selectedVariant 
+          ? selectedVariant.max_dosage_val 
+          : parentDosingInfo?.dosing_max_val || null}
+        unit={selectedVariant 
+          ? selectedVariant.unit 
+          : parentDosingInfo?.unit || null}
+      />
     </div>
   )
 }

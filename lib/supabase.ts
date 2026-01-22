@@ -6,26 +6,26 @@ if (typeof window === 'undefined' && (!process.env.NEXT_PUBLIC_SUPABASE_URL || !
   try {
     const fs = require('fs')
     const path = require('path')
-    const envPath = path.join(process.cwd(), '.env.local')
-    if (fs.existsSync(envPath)) {
-      const envFile = fs.readFileSync(envPath, 'utf-8')
-      envFile.split('\n').forEach(line => {
-        const trimmed = line.trim()
-        if (trimmed && !trimmed.startsWith('#')) {
-          const match = trimmed.match(/^([^=:#]+)=(.*)$/)
-          if (match) {
-            const key = match[1].trim()
-            let value = match[2].trim()
-            if ((value.startsWith('"') && value.endsWith('"')) || 
-                (value.startsWith("'") && value.endsWith("'"))) {
-              value = value.slice(1, -1)
-            }
-            if (key && !process.env[key]) {
-              process.env[key] = value
-            }
+  const envPath = path.join(process.cwd(), '.env.local')
+  if (fs.existsSync(envPath)) {
+    const envFile = fs.readFileSync(envPath, 'utf-8')
+    envFile.split('\n').forEach(line => {
+      const trimmed = line.trim()
+      if (trimmed && !trimmed.startsWith('#')) {
+        const match = trimmed.match(/^([^=:#]+)=(.*)$/)
+        if (match) {
+          const key = match[1].trim()
+          let value = match[2].trim()
+          if ((value.startsWith('"') && value.endsWith('"')) || 
+              (value.startsWith("'") && value.endsWith("'"))) {
+            value = value.slice(1, -1)
+          }
+          if (key && !process.env[key]) {
+            process.env[key] = value
           }
         }
-      })
+      }
+    })
     }
   } catch (error) {
     // Silently fail if fs is not available (e.g., in browser)

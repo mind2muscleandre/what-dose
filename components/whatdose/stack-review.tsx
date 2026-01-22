@@ -29,6 +29,7 @@ interface SupplementInfo {
   stack_item_id: number
   whySelected?: string
   benefits?: string[]
+  usageNotes?: string[] // Loading, cycling, or other usage instructions
   alternativeDoses?: { label: string; value: number; description: string }[]
 }
 
@@ -115,7 +116,10 @@ export function StackReview({ userId, onComplete }: StackReviewProps) {
             dosing_notes,
             bioavailability_notes,
             category_ids,
-            research_status
+            research_status,
+            cycling_required,
+            cycling_instruction_key,
+            i18n_key
           )
         `)
         .eq('user_id', userId)
@@ -327,14 +331,19 @@ export function StackReview({ userId, onComplete }: StackReviewProps) {
         // Generate why selected and benefits based on supplement name, goals, and categories
         // Use currentGender from loadStackSupplements scope, fallback to userGender state
         const genderToUse = currentGender || userGender
-        const { whySelected, benefits } = getSupplementInfo(
+        const { whySelected, benefits, usageNotes } = getSupplementInfo(
           supplement?.name_en || '',
           supplement?.category_ids || [],
           userGoals,
           supplement?.dosing_notes || null,
           supplement?.bioavailability_notes || null,
           isBasicHealth,
-          genderToUse
+          genderToUse,
+          supplement?.cycling_required || false,
+          supplement?.cycling_instruction_key || null,
+          supplement?.i18n_key || null,
+          supplement?.benefits || null, // Pass database benefits if available
+          supplement?.description || null // Pass database description if available
         )
         
         // Add Creatine cognitive dose option if applicable
@@ -358,6 +367,7 @@ export function StackReview({ userId, onComplete }: StackReviewProps) {
           stack_item_id: item.id,
           whySelected,
           benefits,
+          usageNotes,
           alternativeDoses
         }
       })
@@ -401,12 +411,100 @@ export function StackReview({ userId, onComplete }: StackReviewProps) {
     dosingNotes: string | null,
     bioavailabilityNotes: string | null,
     isBasicHealth: boolean = false,
-    userGender: string | null = null
+    userGender: string | null = null,
+    cyclingRequired: boolean = false,
+    cyclingInstructionKey: string | null = null,
+    i18nKey: string | null = null,
+    dbBenefits: string[] | null = null, // Database benefits (if available)
+    dbDescription: string | null = null // Database description (if available)
   ): {
     whySelected: string
     benefits: string[]
-    alternativeDoses?: { label: string; value: number; description: string }[]
+    usageNotes: string[]
   } => {
+    // PRIORITY: Use database benefits if available (exactly 3)
+    if (dbBenefits && Array.isArray(dbBenefits) && dbBenefits.length === 3) {
+      const usageNotes: string[] = []
+      
+      // Still check for usage notes from dosing/bioavailability
+      const isLoadingOrCyclingInfo = (text: string): boolean => {
+        if (!text) return false
+        const lowerText = text.toLowerCase()
+        const loadingPatterns = [
+          'requires loading',
+          'loading over',
+          'loading phase',
+          'loading period',
+          'requires cycling',
+          'cycle',
+          'cycling',
+          'take in phases',
+          'use in phases',
+          'phase',
+          'weeks',
+          'days on',
+          'days off',
+          'on/off',
+          'break',
+          'rest period'
+        ]
+        return loadingPatterns.some(pattern => lowerText.includes(pattern))
+      }
+      
+      if (dosingNotes && isLoadingOrCyclingInfo(dosingNotes)) {
+        usageNotes.push(dosingNotes)
+      }
+      
+      if (bioavailabilityNotes && isLoadingOrCyclingInfo(bioavailabilityNotes)) {
+        usageNotes.push(bioavailabilityNotes)
+      }
+      
+      // Generate whySelected (still needed)
+      const normalizedName = name.toLowerCase()
+      const categoryToGoalMap: Record<number, string> = {
+        1: 'health',
+        2: 'fitness',
+        3: 'fitness',
+        4: 'cognitive',
+        5: 'cognitive',
+        6: 'longevity',
+        7: 'sleep',
+        8: 'longevity',
+        9: 'fitness',
+      }
+      
+      const matchingGoals = categoryIds
+        .map(catId => categoryToGoalMap[catId])
+        .filter((goal, index, self) => goal && self.indexOf(goal) === index)
+        .filter(goal => goals.includes(goal))
+      
+      const goalNames = matchingGoals.map(goal => {
+        const goalMap: Record<string, string> = {
+          fitness: t("fitnessPerformance"),
+          cognitive: t("cognitiveFocus"),
+          longevity: t("longevity"),
+          sleep: t("sleep"),
+          health: t("health"),
+        }
+        return goalMap[goal] || goal
+      })
+      
+      let goalText = goalNames.length > 0 
+        ? goalNames.join(language === 'sv' ? ' och ' : ' and ')
+        : t("yourGoals")
+      
+      const whyText = isBasicHealth
+        ? t("whySelectedForGoals").replace(/{goals}/g, goalText).replace(/{name}/g, name) + ` ${t("whyBasicHealthStack")}`
+        : t("whySelectedForGoals").replace(/{goals}/g, goalText).replace(/{name}/g, name)
+      
+      return {
+        whySelected: whyText,
+        benefits: dbBenefits,
+        usageNotes: usageNotes.filter(Boolean)
+      }
+    }
+    
+    // Fallback to existing logic for whySelected and calculated benefits
     const normalizedName = name.toLowerCase()
     
     // Map category IDs to goal names
@@ -459,6 +557,134 @@ export function StackReview({ userId, onComplete }: StackReviewProps) {
       goalText = t("yourGoals")
     }
     
+    // Vitamin D3
+    if (normalizedName.includes('vitamin d') || normalizedName.includes('vit d') || normalizedName.includes('d3')) {
+      const whyText = goals.includes('health') || isBasicHealth
+        ? t("whySelectedForGoals").replace(/{goals}/g, goalText || t("health")).replace(/{name}/g, name) + (isBasicHealth ? ` ${t("whyBasicHealthStack")}` : '')
+        : t("whySelectedForGoals").replace(/{goals}/g, goalText).replace(/{name}/g, name)
+      return {
+        whySelected: whyText,
+        benefits: [
+          "Supports immune system function and bone health",
+          "Regulates mood and may reduce risk of depression",
+          "Critical for calcium absorption and muscle function"
+        ],
+        usageNotes: [],
+      }
+    }
+    
+    // Omega-3
+    if (normalizedName.includes('omega-3') || normalizedName.includes('omega 3') || normalizedName.includes('fish oil') || normalizedName.includes('epa') || normalizedName.includes('dha')) {
+      const whyText = goals.includes('health') || goals.includes('cognitive') || isBasicHealth
+        ? t("whySelectedForGoals").replace(/{goals}/g, goalText || t("health")).replace(/{name}/g, name) + (isBasicHealth ? ` ${t("whyBasicHealthStack")}` : '')
+        : t("whySelectedForGoals").replace(/{goals}/g, goalText).replace(/{name}/g, name)
+      return {
+        whySelected: whyText,
+        benefits: [
+          "Supports heart health and reduces inflammation",
+          "Essential for brain function and cognitive performance",
+          "May improve joint health and reduce stiffness"
+        ],
+        usageNotes: [],
+      }
+    }
+    
+    // Magnesium
+    if (normalizedName.includes('magnesium')) {
+      const whyText = goals.includes('health') || goals.includes('sleep') || isBasicHealth
+        ? t("whySelectedForGoals").replace(/{goals}/g, goalText || t("health")).replace(/{name}/g, name) + (isBasicHealth ? ` ${t("whyBasicHealthStack")}` : '')
+        : t("whySelectedForGoals").replace(/{goals}/g, goalText).replace(/{name}/g, name)
+      return {
+        whySelected: whyText,
+        benefits: [
+          "Supports muscle relaxation and recovery",
+          "Helps regulate blood sugar and insulin sensitivity",
+          "Promotes better sleep quality and stress management"
+        ],
+        usageNotes: [],
+      }
+    }
+    
+    // Zinc
+    if (normalizedName.includes('zinc')) {
+      const whyText = goals.includes('health') || goals.includes('cognitive')
+        ? t("whySelectedForGoals").replace(/{goals}/g, goalText || t("health")).replace(/{name}/g, name)
+        : t("whySelectedForGoals").replace(/{goals}/g, goalText).replace(/{name}/g, name)
+      return {
+        whySelected: whyText,
+        benefits: [
+          "Essential for immune system function",
+          "Supports cognitive function and memory",
+          "Important for wound healing and skin health"
+        ],
+        usageNotes: [],
+      }
+    }
+    
+    // Choline / Choline Bitartrate
+    if (normalizedName.includes('choline')) {
+      const whyText = goals.includes('cognitive') || goals.includes('fitness')
+        ? t("whySelectedForGoals").replace(/{goals}/g, goalText).replace(/{name}/g, name)
+        : t("whySelectedForGoals").replace(/{goals}/g, goalText).replace(/{name}/g, name)
+      return {
+        whySelected: whyText,
+        benefits: [
+          "Supports brain health and cognitive function",
+          "Essential for cell membrane integrity",
+          "May enhance focus and mental clarity"
+        ],
+        usageNotes: [],
+      }
+    }
+    
+    // Theanine / L-Theanine
+    if (normalizedName.includes('theanine') || normalizedName.includes('l-theanine')) {
+      const whyText = goals.includes('cognitive') || goals.includes('sleep')
+        ? t("whySelectedForGoals").replace(/{goals}/g, goalText).replace(/{name}/g, name)
+        : t("whySelectedForGoals").replace(/{goals}/g, goalText).replace(/{name}/g, name)
+      return {
+        whySelected: whyText,
+        benefits: [
+          "Promotes relaxation without drowsiness",
+          "Enhances focus and attention when combined with caffeine",
+          "Supports better sleep quality and stress management"
+        ],
+        usageNotes: [],
+      }
+    }
+    
+    // Tyrosine / L-Tyrosine
+    if (normalizedName.includes('tyrosine') || normalizedName.includes('l-tyrosine')) {
+      const whyText = goals.includes('cognitive') || goals.includes('fitness')
+        ? t("whySelectedForGoals").replace(/{goals}/g, goalText).replace(/{name}/g, name)
+        : t("whySelectedForGoals").replace(/{goals}/g, goalText).replace(/{name}/g, name)
+      return {
+        whySelected: whyText,
+        benefits: [
+          "Supports dopamine production and mental focus",
+          "May enhance cognitive performance under stress",
+          "Helps maintain alertness and motivation"
+        ],
+        usageNotes: [],
+      }
+    }
+    
+    // Whey Protein
+    if (normalizedName.includes('whey') || normalizedName.includes('whey protein')) {
+      const whyText = goals.includes('fitness')
+        ? t("whySelectedForGoals").replace(/{goals}/g, goalText).replace(/{name}/g, name)
+        : t("whySelectedForGoals").replace(/{goals}/g, goalText).replace(/{name}/g, name)
+      return {
+        whySelected: whyText,
+        benefits: [
+          "Promotes muscle protein synthesis and recovery",
+          "Provides essential amino acids for muscle growth",
+          "Fast-absorbing protein ideal for post-workout"
+        ],
+        usageNotes: [],
+      }
+    }
+    
     // Creatine
     if (normalizedName.includes('creatine')) {
       const whyText = goals.includes('fitness')
@@ -467,6 +693,7 @@ export function StackReview({ userId, onComplete }: StackReviewProps) {
       return {
         whySelected: whyText,
         benefits: [t("benefitCreatine1"), t("benefitCreatine2"), t("benefitCreatine3")],
+        usageNotes: ["Can be taken with or without a loading phase. Loading phase: 20g/day for 5-7 days, then 5g/day"],
       }
     }
     
@@ -478,6 +705,7 @@ export function StackReview({ userId, onComplete }: StackReviewProps) {
       return {
         whySelected: whyText,
         benefits: [t("benefitEAA1"), t("benefitEAA2"), t("benefitEAA3")],
+        usageNotes: [],
       }
     }
     
@@ -489,6 +717,7 @@ export function StackReview({ userId, onComplete }: StackReviewProps) {
       return {
         whySelected: whyText,
         benefits: [t("benefitCaffeine1"), t("benefitCaffeine2"), t("benefitCaffeine3")],
+        usageNotes: [],
       }
     }
     
@@ -500,6 +729,7 @@ export function StackReview({ userId, onComplete }: StackReviewProps) {
       return {
         whySelected: whyText,
         benefits: [t("benefitBCAA1"), t("benefitBCAA2")],
+        usageNotes: [],
       }
     }
     
@@ -511,6 +741,7 @@ export function StackReview({ userId, onComplete }: StackReviewProps) {
       return {
         whySelected: whyText,
         benefits: [t("benefitALCAR1"), t("benefitALCAR2")],
+        usageNotes: [],
       }
     }
     
@@ -522,6 +753,7 @@ export function StackReview({ userId, onComplete }: StackReviewProps) {
       return {
         whySelected: whyText,
         benefits: [t("benefitBacopa1"), t("benefitBacopa2")],
+        usageNotes: [],
       }
     }
     
@@ -533,6 +765,7 @@ export function StackReview({ userId, onComplete }: StackReviewProps) {
       return {
         whySelected: whyText,
         benefits: [t("benefitDHF1"), t("benefitDHF2"), t("benefitDHF3")],
+        usageNotes: [],
       }
     }
     
@@ -571,9 +804,72 @@ export function StackReview({ userId, onComplete }: StackReviewProps) {
       whyText = t("whyDefaultGeneric").replace(/{name}/g, name) + basicHealthText
     }
     
-    // Build benefits from dosing notes and bioavailability if available
-    // Filter out gender-specific benefits
+    // Build benefits - prioritize category-based benefits over technical notes
+    // All benefits must be in English and user-friendly
     const benefits: string[] = []
+    
+    // Helper function to check if text is in Swedish (should be filtered out)
+    const isSwedish = (text: string): boolean => {
+      if (!text) return false
+      const lowerText = text.toLowerCase()
+      // Common Swedish words/patterns
+      const swedishPatterns = [
+        /\b(och|eller|med|för|är|ska|kan|måste|bör|efter|innan|under|över)\b/i,
+        /\b(kvinnor|män|gravid|menstruerande|ersätter|förlust|kofaktor|insulinresistens)\b/i,
+        /\b(lever|cellmembran|synaptisk|neurotransmittor)\b/i,
+        /[åäöÅÄÖ]/ // Swedish characters
+      ]
+      return swedishPatterns.some(pattern => pattern.test(lowerText))
+    }
+    
+    // Helper function to check if text is too technical (should be filtered out)
+    const isTooTechnical = (text: string): boolean => {
+      if (!text) return false
+      const lowerText = text.toLowerCase()
+      // Technical terms that aren't user-friendly benefits
+      const technicalTerms = [
+        'synaptic plasticity',
+        'neurotransmitter modulation',
+        'kofaktor',
+        'glykolys',
+        'insulinresistens',
+        'bioavailability',
+        'dose refers to',
+        'taken with',
+        'target blood levels',
+        'fat-soluble',
+        'must be taken',
+        'mmol/l',
+        'nmol/l'
+      ]
+      return technicalTerms.some(term => lowerText.includes(term))
+    }
+    
+    // Helper function to check if text is about loading/cycling (should be moved to usage notes)
+    const isLoadingOrCyclingInfo = (text: string): boolean => {
+      if (!text) return false
+      const lowerText = text.toLowerCase()
+      // Patterns that indicate loading/cycling information
+      const loadingPatterns = [
+        'requires loading',
+        'loading over',
+        'loading phase',
+        'loading period',
+        'requires cycling',
+        'cycle',
+        'cycling',
+        'take in phases',
+        'use in phases',
+        'phase',
+        'weeks',
+        'days on',
+        'days off',
+        'on/off',
+        'break',
+        'rest period'
+      ]
+      return loadingPatterns.some(pattern => lowerText.includes(pattern))
+    }
     
     // Helper function to check if text is gender-specific and should be filtered
     const shouldFilterGenderSpecific = (text: string, gender: string | null): boolean => {
@@ -596,41 +892,115 @@ export function StackReview({ userId, onComplete }: StackReviewProps) {
       return false
     }
     
-    // Add dosing notes and bioavailability notes as benefits
-    if (dosingNotes && !shouldFilterGenderSpecific(dosingNotes, userGender)) {
-      benefits.push(dosingNotes)
-    }
-    if (bioavailabilityNotes && !shouldFilterGenderSpecific(bioavailabilityNotes, userGender)) {
-      benefits.push(bioavailabilityNotes)
+    // Helper function to clean and format a benefit text
+    const cleanBenefit = (text: string): string | null => {
+      if (!text) return null
+      
+      // Filter out Swedish, technical, and gender-specific content
+      if (isSwedish(text) || isTooTechnical(text) || shouldFilterGenderSpecific(text, userGender)) {
+        return null
+      }
+      
+      // Clean up the text (remove periods at end, capitalize first letter)
+      let cleaned = text.trim()
+      if (cleaned.endsWith('.')) {
+        cleaned = cleaned.slice(0, -1)
+      }
+      if (cleaned.length > 0) {
+        cleaned = cleaned.charAt(0).toUpperCase() + cleaned.slice(1)
+      }
+      
+      return cleaned.length > 0 ? cleaned : null
     }
     
-    // Ensure we have at least 2-3 benefits for all supplements (like Creatine)
-    // If we have notes, use them. Otherwise, add generic benefits based on categories
+    // First, try to get category-based benefits (always in English, user-friendly)
+    const categoryBenefits: string[] = []
+    if (categoryIds.includes(1)) categoryBenefits.push(t("benefitHealth1"))
+    if (categoryIds.includes(2)) categoryBenefits.push(t("benefitMuscle1"))
+    if (categoryIds.includes(3)) categoryBenefits.push(t("benefitPerformance1"))
+    if (categoryIds.includes(4)) categoryBenefits.push(t("benefitFocus1"))
+    if (categoryIds.includes(5)) categoryBenefits.push(t("benefitStress1"))
+    if (categoryIds.includes(6)) categoryBenefits.push(t("benefitMetabolic1"))
+    if (categoryIds.includes(7)) categoryBenefits.push(t("benefitSleep1"))
+    if (categoryIds.includes(8)) categoryBenefits.push(t("benefitAntiAging1"))
+    if (categoryIds.includes(9)) categoryBenefits.push(t("benefitJoints1"))
+    
+    // Add category-based benefits first (these are always good)
+    if (categoryBenefits.length > 0) {
+      benefits.push(...categoryBenefits.slice(0, 2)) // Add up to 2 category benefits
+    }
+    
+    // Build usage notes (loading, cycling, etc.)
+    const usageNotes: string[] = []
+    
+    // Check for cycling requirements from database
+    if (cyclingRequired && cyclingInstructionKey) {
+      // Try to get cycling instruction from translations
+      // For now, use generic message - can be enhanced with i18n later
+      usageNotes.push("This supplement requires cycling. Follow recommended on/off periods.")
+    }
+    
+    // Check for loading/cycling info in dosing notes
+    if (dosingNotes && isLoadingOrCyclingInfo(dosingNotes)) {
+      const cleaned = cleanBenefit(dosingNotes)
+      if (cleaned && !usageNotes.includes(cleaned)) {
+        usageNotes.push(cleaned)
+      }
+    }
+    
+    // Check for loading/cycling info in bioavailability notes
+    if (bioavailabilityNotes && isLoadingOrCyclingInfo(bioavailabilityNotes)) {
+      const cleaned = cleanBenefit(bioavailabilityNotes)
+      if (cleaned && !usageNotes.includes(cleaned)) {
+        usageNotes.push(cleaned)
+      }
+    }
+    
+    // Add specific usage notes for known supplements that require loading/cycling
+    if (normalizedName.includes('beta-alanine') || normalizedName.includes('beta alanine')) {
+      if (!usageNotes.some(note => note.toLowerCase().includes('loading'))) {
+        usageNotes.push("Requires loading phase over several weeks for optimal results")
+      }
+    }
+    
+    if (normalizedName.includes('creatine')) {
+      if (!usageNotes.some(note => note.toLowerCase().includes('loading'))) {
+        usageNotes.push("Can be taken with or without a loading phase. Loading phase: 20g/day for 5-7 days, then 5g/day")
+      }
+    }
+    
+    // Then, try to add cleaned dosing/bioavailability notes (only if they're good benefits, not loading info)
+    // IMPORTANT: Only add if they're NOT Swedish and NOT technical
+    const cleanedDosingNote = dosingNotes && !isLoadingOrCyclingInfo(dosingNotes) && !isSwedish(dosingNotes) && !isTooTechnical(dosingNotes) ? cleanBenefit(dosingNotes) : null
+    if (cleanedDosingNote && !benefits.includes(cleanedDosingNote)) {
+      benefits.push(cleanedDosingNote)
+    }
+    
+    const cleanedBioavailabilityNote = bioavailabilityNotes && !isLoadingOrCyclingInfo(bioavailabilityNotes) && !isSwedish(bioavailabilityNotes) && !isTooTechnical(bioavailabilityNotes) ? cleanBenefit(bioavailabilityNotes) : null
+    if (cleanedBioavailabilityNote && !benefits.includes(cleanedBioavailabilityNote)) {
+      benefits.push(cleanedBioavailabilityNote)
+    }
+    
+    // Ensure we have at least 2-3 benefits
     if (benefits.length === 0) {
-      // Generate category-based benefits
-      const categoryBenefits: string[] = []
-      if (categoryIds.includes(1)) categoryBenefits.push(t("benefitHealth1"))
-      if (categoryIds.includes(2)) categoryBenefits.push(t("benefitMuscle1"))
-      if (categoryIds.includes(3)) categoryBenefits.push(t("benefitPerformance1"))
-      if (categoryIds.includes(4)) categoryBenefits.push(t("benefitFocus1"))
-      if (categoryIds.includes(5)) categoryBenefits.push(t("benefitStress1"))
-      if (categoryIds.includes(6)) categoryBenefits.push(t("benefitMetabolic1"))
-      if (categoryIds.includes(7)) categoryBenefits.push(t("benefitSleep1"))
-      if (categoryIds.includes(8)) categoryBenefits.push(t("benefitAntiAging1"))
-      if (categoryIds.includes(9)) categoryBenefits.push(t("benefitJoints1"))
-      
-      // Use category-specific benefits if available, otherwise use defaults
+      // Use category benefits if available, otherwise use defaults
       if (categoryBenefits.length > 0) {
         benefits.push(...categoryBenefits.slice(0, 3))
       } else {
         benefits.push(t("benefitDefault1"), t("benefitDefault2"), t("benefitDefault3"))
       }
     } else if (benefits.length < 2) {
-      // If we only have 1 benefit, add a default one
-      benefits.push(t("benefitDefault1"))
+      // If we only have 1 benefit, add more category-based ones
+      if (categoryBenefits.length > benefits.length) {
+        const remaining = categoryBenefits.filter(b => !benefits.includes(b))
+        benefits.push(...remaining.slice(0, 2 - benefits.length))
+      }
+      if (benefits.length < 2) {
+        benefits.push(t("benefitDefault1"))
+      }
     }
     
-    // Ensure we have at least 2 benefits, max 4 (like Creatine)
+    // Ensure we have at least 2 benefits, max 4
     if (benefits.length < 2) {
       benefits.push(t("benefitDefault2"))
     }
@@ -638,6 +1008,7 @@ export function StackReview({ userId, onComplete }: StackReviewProps) {
     return {
       whySelected: whyText,
       benefits: benefits.slice(0, 4), // Limit to 4 benefits
+      usageNotes: usageNotes.filter(Boolean), // Remove any empty strings
     }
   }
 
@@ -742,9 +1113,7 @@ export function StackReview({ userId, onComplete }: StackReviewProps) {
             >
               {/* Supplement Name */}
               <h2 className="text-3xl font-bold text-white">{currentSupplement.name_en}</h2>
-              {currentSupplement.name_sv && (
-                <p className="mt-1 text-lg text-gray-400">{currentSupplement.name_sv}</p>
-              )}
+              {/* Removed name_sv display - all text should be in English */}
 
               {/* Schedule Block */}
               <div className="mt-4 inline-block rounded-full bg-purple-500/20 px-4 py-1 text-sm text-purple-300">
@@ -769,6 +1138,21 @@ export function StackReview({ userId, onComplete }: StackReviewProps) {
                   ))}
                 </ul>
               </div>
+
+              {/* Usage Notes (Loading, Cycling, etc.) */}
+              {currentSupplement.usageNotes && currentSupplement.usageNotes.length > 0 && (
+                <div className="mt-6 rounded-lg border border-amber-500/30 bg-amber-500/10 p-4">
+                  <h3 className="text-lg font-semibold text-amber-300">Usage Instructions</h3>
+                  <ul className="mt-2 space-y-2">
+                    {currentSupplement.usageNotes.map((note, idx) => (
+                      <li key={idx} className="flex items-start gap-2 text-amber-200">
+                        <span className="mt-0.5 text-amber-400">•</span>
+                        <span>{note}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
               {/* Dosage Options - Only show if we have dosing information */}
               {currentSupplement.alternativeDoses && currentSupplement.alternativeDoses.length > 0 ? (

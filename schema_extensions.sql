@@ -52,7 +52,7 @@ BEGIN
     s.id as parent_id,
     s.name_en as parent_name_en,
     s.name_sv as parent_name_sv,
-    s.dosing_notes as parent_description,
+    COALESCE(s.description, s.dosing_notes) as parent_description,
     s.research_status as parent_research_status,
     -- Aggregate variants as JSONB array
     COALESCE(
@@ -113,6 +113,7 @@ CREATE INDEX IF NOT EXISTS idx_supplement_import_unprocessed ON supplement_impor
 
 -- RLS for supplement_import_staging
 ALTER TABLE supplement_import_staging ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Import staging is service-only" ON supplement_import_staging;
 CREATE POLICY "Import staging is service-only" ON supplement_import_staging FOR ALL 
   USING (auth.jwt() ->> 'role' = 'service_role');
 
@@ -325,8 +326,11 @@ ALTER TABLE substances ENABLE ROW LEVEL SECURITY;
 ALTER TABLE interactions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE supplement_substances ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Substances are public" ON substances;
 CREATE POLICY "Substances are public" ON substances FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Interactions are public" ON interactions;
 CREATE POLICY "Interactions are public" ON interactions FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Supplement substances are public" ON supplement_substances;
 CREATE POLICY "Supplement substances are public" ON supplement_substances FOR SELECT USING (true);
 
 -- ==========================================
@@ -375,9 +379,13 @@ CREATE INDEX IF NOT EXISTS idx_health_metrics_recorded_at ON health_metrics(reco
 
 -- RLS for health_metrics
 ALTER TABLE health_metrics ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users view own health metrics" ON health_metrics;
 CREATE POLICY "Users view own health metrics" ON health_metrics FOR SELECT USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users insert own health metrics" ON health_metrics;
 CREATE POLICY "Users insert own health metrics" ON health_metrics FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users update own health metrics" ON health_metrics;
 CREATE POLICY "Users update own health metrics" ON health_metrics FOR UPDATE USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users delete own health metrics" ON health_metrics;
 CREATE POLICY "Users delete own health metrics" ON health_metrics FOR DELETE USING (auth.uid() = user_id);
 
 -- ==========================================
@@ -436,6 +444,7 @@ ALTER TABLE protocols ENABLE ROW LEVEL SECURITY;
 ALTER TABLE protocol_access ENABLE ROW LEVEL SECURITY;
 ALTER TABLE protocol_likes ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "View protocols" ON protocols;
 CREATE POLICY "View protocols" ON protocols FOR SELECT
   USING (
     is_public = true 
@@ -446,16 +455,22 @@ CREATE POLICY "View protocols" ON protocols FOR SELECT
     )
   );
 
+DROP POLICY IF EXISTS "Users create own protocols" ON protocols;
 CREATE POLICY "Users create own protocols" ON protocols FOR INSERT WITH CHECK (auth.uid() = creator_id);
+DROP POLICY IF EXISTS "Users update own protocols" ON protocols;
 CREATE POLICY "Users update own protocols" ON protocols FOR UPDATE USING (auth.uid() = creator_id);
+DROP POLICY IF EXISTS "Users delete own protocols" ON protocols;
 CREATE POLICY "Users delete own protocols" ON protocols FOR DELETE USING (auth.uid() = creator_id);
 
+DROP POLICY IF EXISTS "Users manage own protocol access" ON protocol_access;
 CREATE POLICY "Users manage own protocol access" ON protocol_access FOR ALL
   USING (auth.uid() = user_id OR EXISTS (
     SELECT 1 FROM protocols WHERE protocols.id = protocol_access.protocol_id AND protocols.creator_id = auth.uid()
   ));
 
+DROP POLICY IF EXISTS "Protocol likes are public" ON protocol_likes;
 CREATE POLICY "Protocol likes are public" ON protocol_likes FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Users manage own likes" ON protocol_likes;
 CREATE POLICY "Users manage own likes" ON protocol_likes FOR ALL USING (auth.uid() = user_id);
 
 -- 5.4: Triggers for protocol fork_count and like_count
@@ -469,6 +484,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS protocol_fork_count_trigger ON protocols;
 CREATE TRIGGER protocol_fork_count_trigger
   AFTER INSERT ON protocols
   FOR EACH ROW EXECUTE FUNCTION update_protocol_fork_count();
@@ -487,6 +503,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS protocol_like_count_trigger ON protocol_likes;
 CREATE TRIGGER protocol_like_count_trigger
   AFTER INSERT OR DELETE ON protocol_likes
   FOR EACH ROW EXECUTE FUNCTION update_protocol_like_count();
@@ -521,6 +538,7 @@ CREATE INDEX IF NOT EXISTS idx_experiments_protocol ON experiments(protocol_id) 
 
 -- RLS for experiments
 ALTER TABLE experiments ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users manage own experiments" ON experiments;
 CREATE POLICY "Users manage own experiments" ON experiments FOR ALL USING (auth.uid() = user_id);
 
 -- ==========================================
@@ -561,7 +579,9 @@ CREATE INDEX IF NOT EXISTS idx_terra_webhook_unprocessed ON terra_webhook_stagin
 ALTER TABLE terra_connections ENABLE ROW LEVEL SECURITY;
 ALTER TABLE terra_webhook_staging ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users manage own Terra connections" ON terra_connections;
 CREATE POLICY "Users manage own Terra connections" ON terra_connections FOR ALL USING (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Webhook staging is service-only" ON terra_webhook_staging;
 CREATE POLICY "Webhook staging is service-only" ON terra_webhook_staging FOR ALL 
   USING (auth.jwt() ->> 'role' = 'service_role');
 
@@ -585,6 +605,7 @@ CREATE INDEX IF NOT EXISTS idx_substance_import_unprocessed ON substance_import_
 
 -- RLS for substance_import_staging
 ALTER TABLE substance_import_staging ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Import staging is service-only" ON substance_import_staging;
 CREATE POLICY "Import staging is service-only" ON substance_import_staging FOR ALL 
   USING (auth.jwt() ->> 'role' = 'service_role');
 
@@ -655,6 +676,7 @@ $$ LANGUAGE plpgsql;
 
 -- Create triggers for XP updates
 DROP TRIGGER IF EXISTS xp_on_task_completion ON daily_task_completions;
+DROP TRIGGER IF EXISTS xp_on_task_completion ON daily_task_completions;
 CREATE TRIGGER xp_on_task_completion 
   AFTER INSERT OR UPDATE ON daily_task_completions
   FOR EACH ROW 
@@ -662,11 +684,13 @@ CREATE TRIGGER xp_on_task_completion
   EXECUTE FUNCTION update_user_xp();
 
 DROP TRIGGER IF EXISTS xp_on_checkin ON daily_checkins;
+DROP TRIGGER IF EXISTS xp_on_checkin ON daily_checkins;
 CREATE TRIGGER xp_on_checkin 
   AFTER INSERT ON daily_checkins
   FOR EACH ROW 
   EXECUTE FUNCTION update_user_xp();
 
+DROP TRIGGER IF EXISTS xp_on_daily_log ON daily_logs;
 DROP TRIGGER IF EXISTS xp_on_daily_log ON daily_logs;
 CREATE TRIGGER xp_on_daily_log 
   AFTER INSERT ON daily_logs
@@ -700,6 +724,7 @@ $$ LANGUAGE plpgsql;
 
 -- Create triggers for streak updates (same events as XP)
 DROP TRIGGER IF EXISTS streak_on_task_completion ON daily_task_completions;
+DROP TRIGGER IF EXISTS streak_on_task_completion ON daily_task_completions;
 CREATE TRIGGER streak_on_task_completion 
   AFTER INSERT OR UPDATE ON daily_task_completions
   FOR EACH ROW 
@@ -707,11 +732,13 @@ CREATE TRIGGER streak_on_task_completion
   EXECUTE FUNCTION update_user_streak();
 
 DROP TRIGGER IF EXISTS streak_on_checkin ON daily_checkins;
+DROP TRIGGER IF EXISTS streak_on_checkin ON daily_checkins;
 CREATE TRIGGER streak_on_checkin 
   AFTER INSERT ON daily_checkins
   FOR EACH ROW 
   EXECUTE FUNCTION update_user_streak();
 
+DROP TRIGGER IF EXISTS streak_on_daily_log ON daily_logs;
 DROP TRIGGER IF EXISTS streak_on_daily_log ON daily_logs;
 CREATE TRIGGER streak_on_daily_log 
   AFTER INSERT ON daily_logs
@@ -730,18 +757,23 @@ CREATE INDEX IF NOT EXISTS idx_user_stacks_user_active ON user_stacks(user_id, i
 -- (Recursive queries will benefit from existing index on forked_from_id)
 
 -- Update triggers for updated_at on new tables
+DROP TRIGGER IF EXISTS update_substances_updated_at ON substances;
 CREATE TRIGGER update_substances_updated_at BEFORE UPDATE ON substances
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_interactions_updated_at ON interactions;
 CREATE TRIGGER update_interactions_updated_at BEFORE UPDATE ON interactions
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_protocols_updated_at ON protocols;
 CREATE TRIGGER update_protocols_updated_at BEFORE UPDATE ON protocols
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_experiments_updated_at ON experiments;
 CREATE TRIGGER update_experiments_updated_at BEFORE UPDATE ON experiments
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_terra_connections_updated_at ON terra_connections;
 CREATE TRIGGER update_terra_connections_updated_at BEFORE UPDATE ON terra_connections
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 

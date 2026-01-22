@@ -248,24 +248,35 @@ export function DNAHelix3D({ fillProgress = 0, autoRotate = true, rotationSpeed 
     // Use ResizeObserver to ensure Canvas knows about container position changes
     if (!containerRef.current) return
     
+    let resizeTimeout: NodeJS.Timeout | null = null
+    
     const resizeObserver = new ResizeObserver(() => {
-      // Trigger resize event to update Canvas position
-      window.dispatchEvent(new Event('resize'))
+      // Debounce resize events to prevent infinite loops
+      if (resizeTimeout) {
+        clearTimeout(resizeTimeout)
+      }
+      resizeTimeout = setTimeout(() => {
+        window.dispatchEvent(new Event('resize'))
+      }, 100)
     })
     
     resizeObserver.observe(containerRef.current)
     
-    // Also trigger resize after mount to ensure initial positioning
+    // Trigger resize after mount to ensure initial positioning (only once)
     const triggerResize = () => {
-      window.dispatchEvent(new Event('resize'))
+      requestAnimationFrame(() => {
+        window.dispatchEvent(new Event('resize'))
+      })
     }
     
-    // Trigger with delays to ensure DOM is ready
-    setTimeout(triggerResize, 0)
-    setTimeout(triggerResize, 100)
-    setTimeout(triggerResize, 300)
+    // Trigger with a single delay to ensure DOM is ready
+    const initialTimeout = setTimeout(triggerResize, 100)
     
     return () => {
+      if (resizeTimeout) {
+        clearTimeout(resizeTimeout)
+      }
+      clearTimeout(initialTimeout)
       resizeObserver.disconnect()
     }
   }, [])
@@ -274,12 +285,6 @@ export function DNAHelix3D({ fillProgress = 0, autoRotate = true, rotationSpeed 
     <div ref={containerRef} style={{ width: size, height: size, position: 'relative' }}>
       <Canvas 
         gl={{ alpha: true, antialias: true }}
-        onCreated={() => {
-          // Trigger resize when canvas is created to ensure correct positioning
-          requestAnimationFrame(() => {
-            window.dispatchEvent(new Event('resize'))
-          })
-        }}
       >
         <PerspectiveCamera makeDefault position={[0, 0, 6]} fov={50} />
         <ambientLight intensity={0.3} />

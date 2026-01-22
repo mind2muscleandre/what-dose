@@ -4,15 +4,26 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Dumbbell, Brain, Heart, Moon, ArrowRight, ArrowLeft, Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { DNAProgress } from "./dna-progress"
+import dynamic from "next/dynamic"
 import { useTranslation, type Language } from "@/lib/translations"
 import { useAuth } from "@/contexts/auth-context"
+import { useProfile } from "@/hooks/use-profile"
 import { supabase } from "@/lib/supabase"
 import { getSupplementsForSubcategories } from "@/lib/subcategory-supplements"
 import { generateTimelineFromStack } from "@/lib/generate-timeline-from-stack"
 import { getSupplementPriority, isCommonSupplement } from "@/lib/common-supplements"
 import { StackReview } from "./stack-review"
-import { generateStackFromPredefined, getPredefinedStacksForGoals } from "@/lib/generate-stack-from-predefined"
+import { buildUserStack, saveStackToDatabase, type UserProfile } from "@/lib/stack-builder"
+
+// Dynamic import with no SSR for better performance
+const DNAHelix3D = dynamic(() => import("./dna-helix-3d").then((mod) => ({ default: mod.DNAHelix3D })), {
+  ssr: false,
+  loading: () => (
+    <div className="flex h-full w-full items-center justify-center">
+      <div className="h-16 w-16 animate-spin rounded-full border-4 border-teal-500/30 border-t-teal-500" />
+    </div>
+  ),
+})
 
 const goals = [
   { 
@@ -68,6 +79,7 @@ const goals = [
 export function Onboarding() {
   const router = useRouter()
   const { user } = useAuth()
+  const { profile: existingProfile } = useProfile(user?.id || null)
   const [language, setLanguage] = useState<Language>("en")
   const { t } = useTranslation(language)
   const [isCreatingNewStack, setIsCreatingNewStack] = useState(false)
@@ -104,10 +116,35 @@ export function Onboarding() {
   const [experience, setExperience] = useState(1)
   const [showStackReview, setShowStackReview] = useState(false)
   const [includeBasicHealth, setIncludeBasicHealth] = useState(true) // Default to including basic health
+  const [fillProgress, setFillProgress] = useState(0)
   
-  // For quick stack creation, skip biometrics and experience steps
+  // For quick stack creation, skip biometrics but include experience level
   const isQuickStack = isCreatingNewStack && !useFullOnboarding
-  const totalSteps = isQuickStack ? 1 : 3 // Only goal selection for quick stack
+  const totalSteps = isQuickStack ? 2 : 3 // Goal selection + Experience for quick stack, all 3 for full onboarding
+
+  // Animate fill progress when analyzing
+  useEffect(() => {
+    if (isAnalyzing) {
+      // Reset and animate fill progress from 0 to 100
+      setFillProgress(0)
+      const duration = 3000 // 3 seconds
+      const steps = 60
+      const stepDuration = duration / steps
+      let currentStep = 0
+
+      const interval = setInterval(() => {
+        currentStep++
+        const progress = Math.min((currentStep / steps) * 100, 100)
+        setFillProgress(progress)
+
+        if (currentStep >= steps) {
+          clearInterval(interval)
+        }
+      }, stepDuration)
+
+      return () => clearInterval(interval)
+    }
+  }, [isAnalyzing])
 
   const handleGoalToggle = (goalId: string) => {
     setSelectedGoals((prev) => {
@@ -338,7 +375,7 @@ export function Onboarding() {
   }
 
   const handleNext = async () => {
-    const maxStep = isQuickStack ? 0 : 2 // Only step 0 for quick stack, steps 0-2 for full onboarding
+    const maxStep = isQuickStack ? 1 : 2 // Step 0-1 for quick stack (goals + experience), steps 0-2 for full onboarding
     
     if (step < maxStep) {
       setStep(step + 1)
@@ -348,16 +385,22 @@ export function Onboarding() {
       // Save onboarding data to profile and create initial stack
       if (user?.id) {
         try {
+          // Map experience level
+          const experienceLevels = ["beginner", "intermediate", "advanced", "biohacker"]
+          const experienceLevel = experienceLevels[experience] || "intermediate"
+          
           // Save profile data (only update goals for quick stack, full update for onboarding)
           const updateData: any = {
             selected_goals: selectedGoals,
             updated_at: new Date().toISOString()
           }
           
-          // Only update biometrics and experience for full onboarding
-          if (!isQuickStack) {
-            const experienceLevels = ["beginner", "intermediate", "advanced", "biohacker"]
-            const experienceLevel = experienceLevels[experience] || "intermediate"
+          // For quick stack, use existing profile data but update experience level
+          if (isQuickStack) {
+            updateData.experience_level = experienceLevel
+            // Use existing profile data for age, weight, gender, health_conditions
+          } else {
+            // Full onboarding: update all fields
             updateData.first_name = biometrics.name?.trim() || null
             updateData.username = biometrics.username?.trim() || null
             updateData.age = biometrics.age ? parseInt(biometrics.age) : null
@@ -367,78 +410,109 @@ export function Onboarding() {
             updateData.onboarding_completed = true
           }
           
-          const { error: profileError } = await supabase
+          const { error: profileError, data: updatedProfile } = await supabase
             .from('profiles')
             .update(updateData)
             .eq('id', user.id)
+            .select()
+            .single()
 
           if (profileError) {
             console.error('Error saving onboarding data:', profileError)
+            setIsAnalyzing(false)
+            return
+          }
+
+          // If creating new stack, remove old stack items first
+          if (isCreatingNewStack) {
+            const { error: deleteError } = await supabase
+              .from('user_stacks')
+              .delete()
+              .eq('user_id', user.id)
+            
+            if (deleteError) {
+              console.error('Error removing old stack:', deleteError)
+            }
+          }
+          
+          // Prepare user profile for stack builder
+          // Use updated profile data or existing profile data
+          const finalProfile: UserProfile = {
+            id: user.id,
+            age: isQuickStack ? (existingProfile?.age || updatedProfile?.age || null) : (biometrics.age ? parseInt(biometrics.age) : null),
+            weight_kg: isQuickStack ? (existingProfile?.weight_kg || updatedProfile?.weight_kg || null) : (biometrics.weight ? parseFloat(biometrics.weight) : null),
+            gender: isQuickStack ? (existingProfile?.gender || updatedProfile?.gender || null) : (biometrics.gender || null) as 'male' | 'female' | 'other' | null,
+            experience_level: experienceLevel,
+            health_conditions: isQuickStack ? (existingProfile?.health_conditions || updatedProfile?.health_conditions || null) : null,
+            selected_goals: selectedGoals
+          }
+
+          // Build stack using new stack builder with ALL selected goals
+          const stackResult = await buildUserStack(
+            user.id,
+            finalProfile,
+            undefined, // goalCategory - not used when selectedGoals is provided
+            null, // goalSubcategory - not used when selectedGoals is provided
+            experienceLevel,
+            includeBasicHealth,
+            selectedGoals, // Pass all selected goals
+            selectedSubcategories // Pass all selected subcategories
+          )
+
+          // Log errors and warnings, but don't block stack creation
+          if (stackResult.errors.length > 0) {
+            console.error('Stack generation errors:', stackResult.errors)
+            // Errors are non-critical - they just mean some supplements weren't found
+            // The stack will still be created with the supplements that were found
+          }
+
+          if (stackResult.warnings.length > 0) {
+            console.warn('Stack generation warnings:', stackResult.warnings)
+          }
+
+          // Combine basic health and goal stacks
+          const allStackItems = includeBasicHealth 
+            ? [...stackResult.basicHealthStack, ...stackResult.goalStack]
+            : stackResult.goalStack
+
+          // If no items were created, show helpful error
+          if (allStackItems.length === 0) {
+            console.error('No supplements were added to stack. This might mean:')
+            console.error('1. Supplements are not in the database')
+            console.error('2. Supplements are not marked as parent (is_parent = true)')
+            console.error('3. Run scripts/fix-vitamin-d3.sql or scripts/check-supplement-exists.sql to debug')
+            alert('Could not create stack. Please check console for details and ensure supplements are in the database.')
+            setIsAnalyzing(false)
+            return
+          }
+
+          // Save stack to database
+          if (allStackItems.length > 0) {
+            const saveResult = await saveStackToDatabase(user.id, allStackItems)
+            
+            if (saveResult.error) {
+              console.error('Error saving stack:', saveResult.error)
+              alert(t("errorSavingStack") || `Error saving stack: ${saveResult.error}`)
+              setIsAnalyzing(false)
+              return
+            }
+          }
+
+          // Show stack review if stack was created
+          if (allStackItems.length > 0) {
+            setIsAnalyzing(false)
+            setShowStackReview(true)
           } else {
-            // If creating new stack, remove old stack items first
-            if (isCreatingNewStack) {
-              const { error: deleteError } = await supabase
-                .from('user_stacks')
-                .delete()
-                .eq('user_id', user.id)
-              
-              if (deleteError) {
-                console.error('Error removing old stack:', deleteError)
-              }
+            // If no stack items, redirect anyway
+            setIsAnalyzing(false)
+            if (stackResult.errors.length > 0) {
+              alert(t("errorGeneratingStack") || `Error generating stack: ${stackResult.errors.join(', ')}`)
             }
-            
-            // Create initial stack using predefined stacks
-            const age = biometrics.age ? parseInt(biometrics.age) : null
-            const gender = biometrics.gender || null
-            const weight = biometrics.weight ? parseFloat(biometrics.weight) : null
-            
-            // Map experience level
-            const experienceLevels = ["beginner", "intermediate", "advanced", "biohacker"]
-            const experienceLevel = experienceLevels[experience] || "intermediate"
-            
-            // Determine activity level (can be enhanced with user input later)
-            // For now, assume moderate for most users, active for advanced/biohackers
-            const activityLevel = experienceLevel === 'advanced' || experienceLevel === 'biohacker' 
-              ? 'active' 
-              : 'moderate'
-            
-            // Get predefined stacks for selected goals
-            const predefinedStacks = getPredefinedStacksForGoals(
-              selectedGoals,
-              selectedSubcategories,
-              includeBasicHealth
-            )
-
-            // Generate stack from predefined templates
-            const { success, created, errors } = await generateStackFromPredefined({
-              userId: user.id,
-              stacks: predefinedStacks,
-              age,
-              gender: gender as 'male' | 'female' | null,
-              weight,
-              activityLevel: activityLevel as 'sedentary' | 'moderate' | 'active' | 'veryActive',
-              experienceLevel: experienceLevel as 'beginner' | 'intermediate' | 'advanced' | 'biohacker',
-              includeBasicHealth
-            })
-
-            if (errors.length > 0) {
-              console.warn('Stack generation warnings:', errors)
-            }
-
-            const stackCreated = success && created > 0
-            
-            if (stackCreated) {
-              // Show stack review instead of redirecting immediately
-              setIsAnalyzing(false)
-              setShowStackReview(true)
-            } else {
-              // If stack creation failed, redirect to stack page anyway
-              setIsAnalyzing(false)
-              router.push("/stack")
-            }
+            router.push("/stack")
           }
         } catch (error) {
           console.error('Error saving onboarding data:', error)
+          alert(t("errorSavingOnboarding") || `Error: ${error instanceof Error ? error.message : 'Unknown error'}`)
           setIsAnalyzing(false)
         }
       }
@@ -480,12 +554,12 @@ export function Onboarding() {
           animate={{ scale: 1, opacity: 1 }}
           className="flex flex-col items-center gap-8"
         >
-          <div className="relative">
-            <DNAProgress progress={100} size={120} />
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-              className="absolute -inset-4 rounded-full border-2 border-teal-500/30 border-t-teal-500"
+          <div className="relative h-[300px] w-[300px]">
+            <DNAHelix3D 
+              fillProgress={fillProgress}
+              autoRotate={true}
+              rotationSpeed={1}
+              size={300}
             />
           </div>
           <div className="text-center">
@@ -619,7 +693,68 @@ export function Onboarding() {
                 })}
               </div>
 
-              {/* Basic Health Stack Option - Show for both quick stack and full onboarding */}
+              {/* Basic Health Stack Option - Only show in step 0 for full onboarding, step 1 for quick stack */}
+              {!isQuickStack && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="mt-6 rounded-2xl border-2 border-white/10 bg-white/5 p-4"
+                >
+                  <label className="flex cursor-pointer items-center gap-3">
+                    <input
+                      type="checkbox"
+                      checked={includeBasicHealth}
+                      onChange={(e) => setIncludeBasicHealth(e.target.checked)}
+                      className="h-5 w-5 rounded border-white/20 bg-white/5 text-teal-500 focus:ring-2 focus:ring-teal-500"
+                    />
+                    <div className="flex-1">
+                      <div className="font-medium text-white">{t("includeBasicHealthStack")}</div>
+                      <div className="text-sm text-gray-400">{t("includeBasicHealthStackDescription")}</div>
+                    </div>
+                  </label>
+                </motion.div>
+              )}
+            </motion.div>
+          )}
+
+          {/* Step 2: Experience Level (for quick stack) or Biometrics (for full onboarding) */}
+          {step === 1 && isQuickStack && (
+            <motion.div
+              key="step2-experience"
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -50 }}
+              className="space-y-6"
+            >
+              <div>
+                <h1 className="mb-2 text-2xl font-bold">{t("experienceTitle")}</h1>
+                <p className="text-gray-400">{t("experienceDescription")}</p>
+              </div>
+
+              <div className="space-y-4">
+                <input
+                  type="range"
+                  min="0"
+                  max="3"
+                  value={experience}
+                  onChange={(e) => setExperience(Number(e.target.value))}
+                  className="w-full accent-teal-500"
+                />
+                <div className="flex justify-between text-sm text-gray-400">
+                  {experienceLevels.map((level, i) => (
+                    <span key={level} className={experience === i ? "font-medium text-teal-400" : ""}>
+                      {level}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-2xl bg-white/5 p-4">
+                <p className="text-sm text-gray-300">{t("experienceDescriptions")[experience]}</p>
+              </div>
+
+              {/* Basic Health Stack Option */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -641,9 +776,9 @@ export function Onboarding() {
               </motion.div>
             </motion.div>
           )}
-
-          {/* Step 2: Biometrics */}
-          {step === 1 && (
+          
+          {step === 1 && !isQuickStack && (
+            /* Step 2: Biometrics (for full onboarding) */
             <motion.div
               key="step2"
               initial={{ opacity: 0, x: 50 }}
@@ -759,6 +894,29 @@ export function Onboarding() {
               <div className="rounded-2xl bg-white/5 p-4">
                 <p className="text-sm text-gray-300">{t("experienceDescriptions")[experience]}</p>
               </div>
+
+              {/* Basic Health Stack Option - Show in step 2 for full onboarding */}
+              {!isQuickStack && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="mt-6 rounded-2xl border-2 border-white/10 bg-white/5 p-4"
+                >
+                  <label className="flex cursor-pointer items-center gap-3">
+                    <input
+                      type="checkbox"
+                      checked={includeBasicHealth}
+                      onChange={(e) => setIncludeBasicHealth(e.target.checked)}
+                      className="h-5 w-5 rounded border-white/20 bg-white/5 text-teal-500 focus:ring-2 focus:ring-teal-500"
+                    />
+                    <div className="flex-1">
+                      <div className="font-medium text-white">{t("includeBasicHealthStack")}</div>
+                      <div className="text-sm text-gray-400">{t("includeBasicHealthStackDescription")}</div>
+                    </div>
+                  </label>
+                </motion.div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>
@@ -780,11 +938,20 @@ export function Onboarding() {
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={handleNext}
-            disabled={step === 0 && selectedGoals.length === 0}
+            disabled={(step === 0 && selectedGoals.length === 0) || isAnalyzing}
             className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-teal-500 to-cyan-500 py-3 font-medium transition-all hover:opacity-90 disabled:opacity-50"
           >
-            {step === 2 ? t("startAnalysis") : t("continue")}
-            <ArrowRight className="h-4 w-4" />
+            {isAnalyzing ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                {t("analyzing") || "Analyzing..."}
+              </>
+            ) : (
+              <>
+                {(isQuickStack && step === 1) || (!isQuickStack && step === 2) ? t("startAnalysis") : t("continue")}
+                <ArrowRight className="h-4 w-4" />
+              </>
+            )}
           </motion.button>
         </div>
       </div>

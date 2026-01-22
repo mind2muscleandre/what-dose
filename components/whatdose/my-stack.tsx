@@ -12,6 +12,8 @@ import { SafetyWarnings } from "./safety-warnings"
 import { analytics } from "@/lib/analytics"
 import { useProfile } from "@/hooks/use-profile"
 import { generateTimelineFromStack } from "@/lib/generate-timeline-from-stack"
+import { StackBlocks } from "./stack-blocks"
+import type { TimelineBlock } from "@/lib/whatdose-data"
 
 export function MyStack() {
   const router = useRouter()
@@ -19,7 +21,7 @@ export function MyStack() {
   const [language, setLanguage] = useState<Language>("en")
   const { t } = useTranslation(language)
   const { stackItems, loading, error, removeFromStack, updateStackItem } = useUserStack(user?.id || null)
-  const { warnings, checkInteractions } = useSafetyEngine(user?.id || null)
+  const { warnings, dosageWarnings, checkInteractions, checkDosages } = useSafetyEngine(user?.id || null)
   const { profile } = useProfile(user?.id || null)
   const [editingId, setEditingId] = useState<number | null>(null)
   const [editForm, setEditForm] = useState<{ schedule_block?: string; custom_dosage_val?: number }>({})
@@ -47,13 +49,23 @@ export function MyStack() {
     }
   }
 
-  // Check interactions when stack changes
+  // Check interactions and dosages when stack changes
   useEffect(() => {
     if (stackItems.length > 0) {
       const supplementIds = stackItems.map(item => item.supplement_id)
       checkInteractions(supplementIds)
+      
+      // Check for high dosages
+      checkDosages(stackItems.map(item => ({
+        supplement_id: item.supplement_id,
+        custom_dosage_val: item.custom_dosage_val,
+        unit: item.unit,
+        dosing_max_val: item.dosing_max_val,
+      })))
+    } else {
+      checkDosages([])
     }
-  }, [stackItems, checkInteractions])
+  }, [stackItems, checkInteractions, checkDosages])
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -130,14 +142,52 @@ export function MyStack() {
     return "Dosage not specified"
   }
 
-  // Group items by schedule_block
-  const groupedByTime = stackItems.reduce((acc, item) => {
-    if (!acc[item.schedule_block]) acc[item.schedule_block] = []
-    acc[item.schedule_block].push(item)
-    return acc
-  }, {} as Record<string, typeof stackItems>)
+  // Convert stackItems to TimelineBlock format (same as Dashboard)
+  const timelineBlocks: TimelineBlock[] = (() => {
+    const scheduleBlockConfig: Record<string, { blockId: string; title: string; suggestedTime: string; uiColorHex: string }> = {
+      Morning: { blockId: "morning_routine", title: "Morning", suggestedTime: "08:00", uiColorHex: "#f59e0b" },
+      Lunch: { blockId: "lunch", title: "Lunch", suggestedTime: "12:00", uiColorHex: "#10b981" },
+      "Pre-Workout": { blockId: "pre_workout", title: "Pre-Workout", suggestedTime: "17:00", uiColorHex: "#ef4444" },
+      "Post-Workout": { blockId: "post_workout", title: "Post-Workout", suggestedTime: "18:00", uiColorHex: "#8b5cf6" },
+      Dinner: { blockId: "dinner", title: "Dinner", suggestedTime: "19:00", uiColorHex: "#3b82f6" },
+      Bedtime: { blockId: "bedtime", title: "Bedtime", suggestedTime: "22:00", uiColorHex: "#6366f1" },
+    }
 
-  const timeOrder = ["Morning", "Lunch", "Pre-Workout", "Post-Workout", "Dinner", "Bedtime"]
+    // Group items by schedule_block
+    const groupedByTime = stackItems.reduce((acc, item) => {
+      if (!acc[item.schedule_block]) acc[item.schedule_block] = []
+      acc[item.schedule_block].push(item)
+      return acc
+    }, {} as Record<string, typeof stackItems>)
+
+    // Convert to TimelineBlock format
+    return Object.entries(groupedByTime).map(([scheduleBlock, items]) => {
+      const config = scheduleBlockConfig[scheduleBlock] || {
+        blockId: scheduleBlock.toLowerCase().replace(/\s+/g, '_'),
+        title: scheduleBlock,
+        suggestedTime: "08:00",
+        uiColorHex: "#0ea5e9"
+      }
+
+      return {
+        block_id: config.blockId,
+        title: config.title,
+        subtitle: "",
+        icon_key: "pill",
+        ui_color_hex: config.uiColorHex,
+        suggested_time: config.suggestedTime,
+        items: items.map(item => ({
+          item_id: item.id.toString(),
+          name: item.supplement_name,
+          dosage_display: formatDosage(item),
+          form: "pill",
+          is_completed: false, // Not used in stack view
+          notes: "",
+          critical_instruction: null,
+        }))
+      }
+    })
+  })()
 
   if (authLoading || loading) {
     return (
@@ -292,90 +342,103 @@ export function MyStack() {
         ) : (
           <div className="space-y-6">
             {/* Safety Warnings */}
-            <SafetyWarnings warnings={warnings} />
+            <SafetyWarnings 
+              warnings={warnings} 
+              dosageWarnings={dosageWarnings}
+              onFixDosage={async (supplementId, maxSafeDosage) => {
+                // Find the stack item with this supplement
+                const item = stackItems.find(i => i.supplement_id === supplementId)
+                if (!item) return
+                
+                // Update to max safe dosage
+                const result = await updateStackItem(item.id, { custom_dosage_val: maxSafeDosage })
+                if (result.error) {
+                  alert(result.error)
+                } else {
+                  // Success - the warning should disappear after state updates
+                }
+              }}
+            />
 
-            {timeOrder.map((time) => {
-              const items = groupedByTime[time] || []
-              if (items.length === 0) return null
+            {/* Stack Blocks - Same layout as Dashboard */}
+            <StackBlocks
+              blocks={timelineBlocks}
+              onEdit={(itemId) => {
+                const item = stackItems.find(i => i.id.toString() === itemId)
+                if (item) handleEdit(item)
+              }}
+              onDelete={(itemId) => {
+                const item = stackItems.find(i => i.id.toString() === itemId)
+                if (item) handleDelete(item.id)
+              }}
+              editingId={editingId?.toString() || null}
+            />
 
+            {/* Edit Modal - Show when editing */}
+            {editingId && (() => {
+              const item = stackItems.find(i => i.id === editingId)
+              if (!item) return null
+              
               return (
                 <motion.div
-                  key={time}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="space-y-3"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+                  onClick={handleCancelEdit}
                 >
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-teal-400" />
-                    <h2 className="text-lg font-semibold">{time}</h2>
-                  </div>
-                  {items.map((item) => (
-                    <motion.div
-                      key={item.id}
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      className="rounded-2xl bg-white/5 p-4"
-                    >
-                      {editingId === item.id ? (
-                        <div className="space-y-3">
-                          <select
-                            value={editForm.schedule_block || item.schedule_block}
-                            onChange={(e) => setEditForm({ ...editForm, schedule_block: e.target.value })}
-                            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white focus:border-teal-500 focus:outline-none"
-                          >
-                            {timeOrder.map(time => (
-                              <option key={time} value={time} className="bg-[#0d1f1f]">{time}</option>
-                            ))}
-                          </select>
-                          <input
-                            type="number"
-                            value={editForm.custom_dosage_val ?? item.custom_dosage_val ?? ''}
-                            onChange={(e) => setEditForm({ ...editForm, custom_dosage_val: e.target.value ? parseFloat(e.target.value) : undefined })}
-                            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white placeholder:text-gray-500 focus:border-teal-500 focus:outline-none"
-                            placeholder={`Custom dosage (${item.unit || 'mg'})`}
-                          />
-                          <div className="flex gap-2">
-                            <button
-                              onClick={handleSaveEdit}
-                              className="flex-1 rounded-xl bg-teal-500 py-2 text-sm font-medium"
-                            >
-                              {t("save") || "Save"}
-                            </button>
-                            <button
-                              onClick={handleCancelEdit}
-                              className="flex-1 rounded-xl border border-white/10 bg-white/5 py-2 text-sm font-medium"
-                            >
-                              {t("cancel") || "Cancel"}
-                            </button>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="flex items-center justify-between">
-                          <div className="flex-1">
-                            <h3 className="font-medium">{item.supplement_name}</h3>
-                            <p className="text-sm text-gray-400">{formatDosage(item)}</p>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <button
-                              onClick={() => handleEdit(item)}
-                              className="rounded-lg bg-white/10 p-2 hover:bg-white/15"
-                            >
-                              <Edit2 className="h-4 w-4" />
-                            </button>
-                            <button
-                              onClick={() => handleDelete(item.id)}
-                              className="rounded-lg bg-red-500/20 p-2 text-red-400 hover:bg-red-500/30"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </button>
-                          </div>
-                        </div>
-                      )}
-                    </motion.div>
-                  ))}
+                  <motion.div
+                    initial={{ scale: 0.9, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    onClick={(e) => e.stopPropagation()}
+                    className="w-full max-w-md rounded-2xl border border-white/10 bg-[#0a1a1a] p-6 text-white"
+                  >
+                    <h3 className="mb-4 text-lg font-bold">Edit Supplement</h3>
+                    <div className="space-y-3">
+                      <div>
+                        <label className="mb-1 block text-sm text-gray-400">Supplement</label>
+                        <p className="text-white">{item.supplement_name}</p>
+                      </div>
+                      <div>
+                        <label className="mb-1 block text-sm text-gray-400">Timing</label>
+                        <select
+                          value={editForm.schedule_block || item.schedule_block}
+                          onChange={(e) => setEditForm({ ...editForm, schedule_block: e.target.value })}
+                          className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white focus:border-teal-500 focus:outline-none"
+                        >
+                          {["Morning", "Lunch", "Pre-Workout", "Post-Workout", "Dinner", "Bedtime"].map(time => (
+                            <option key={time} value={time} className="bg-[#0d1f1f]">{time}</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="mb-1 block text-sm text-gray-400">Dosage ({item.unit || 'mg'})</label>
+                        <input
+                          type="number"
+                          value={editForm.custom_dosage_val ?? item.custom_dosage_val ?? ''}
+                          onChange={(e) => setEditForm({ ...editForm, custom_dosage_val: e.target.value ? parseFloat(e.target.value) : undefined })}
+                          className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white placeholder:text-gray-500 focus:border-teal-500 focus:outline-none"
+                          placeholder={`Custom dosage (${item.unit || 'mg'})`}
+                        />
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={handleSaveEdit}
+                          className="flex-1 rounded-xl bg-teal-500 py-2 text-sm font-medium"
+                        >
+                          {t("save") || "Save"}
+                        </button>
+                        <button
+                          onClick={handleCancelEdit}
+                          className="flex-1 rounded-xl border border-white/10 bg-white/5 py-2 text-sm font-medium"
+                        >
+                          {t("cancel") || "Cancel"}
+                        </button>
+                      </div>
+                    </div>
+                  </motion.div>
                 </motion.div>
               )
-            })}
+            })()}
           </div>
         )}
       </div>

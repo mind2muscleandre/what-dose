@@ -40,12 +40,17 @@ export function useProfile(userId: string | null) {
         const today = new Date().toISOString().split('T')[0]
 
         // Get streak from progress metrics
-        const { data: metricsData } = await supabase
+        const { data: metricsData, error: metricsError } = await supabase
           .from('user_progress_metrics')
           .select('streak_days, compliance_percentage')
           .eq('user_id', userId)
           .eq('metric_date', today)
-          .single()
+          .maybeSingle()
+
+        // Ignore 406 errors (Not Acceptable) - can happen with too many requests
+        if (metricsError && metricsError.code !== 'PGRST116' && !metricsError.message?.includes('406')) {
+          console.warn('Error fetching progress metrics:', metricsError)
+        }
 
         // Get supplements count
         const { count: supplementsCount } = await supabase

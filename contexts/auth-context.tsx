@@ -23,23 +23,50 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-      setUser(session?.user ?? null)
-      setLoading(false)
-    })
+    let mounted = true
+
+    // Get initial session with timeout
+    const initAuth = async () => {
+      try {
+        const { data: { session }, error } = await Promise.race([
+          supabase.auth.getSession(),
+          new Promise<{ data: { session: null }, error: null }>((resolve) => 
+            setTimeout(() => resolve({ data: { session: null }, error: null }), 5000)
+          )
+        ]) as any
+
+        if (!mounted) return
+
+        if (error) {
+          console.warn('Auth session error (ignored):', error)
+        }
+
+        setSession(session)
+        setUser(session?.user ?? null)
+        setLoading(false)
+      } catch (err) {
+        if (!mounted) return
+        console.warn('Auth init error (ignored):', err)
+        setLoading(false) // Always set loading to false even on error
+      }
+    }
+
+    initAuth()
 
     // Listen for auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!mounted) return
       setSession(session)
       setUser(session?.user ?? null)
       setLoading(false)
     })
 
-    return () => subscription.unsubscribe()
+    return () => {
+      mounted = false
+      subscription.unsubscribe()
+    }
   }, [])
 
   const signIn = async (email: string, password: string) => {

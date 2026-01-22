@@ -94,9 +94,9 @@ export function useTimelineBlocks(userId: string | null) {
           if (supplementsError) {
             console.warn('Error fetching supplements:', supplementsError)
           } else if (supplementsData) {
-            supplementsMap = new Map(
+          supplementsMap = new Map(
               supplementsData.map(s => [s.id, s])
-            )
+          )
           }
         }
 

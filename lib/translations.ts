@@ -139,6 +139,9 @@ export const translations = {
     continue: "Continue",
     startAnalysis: "Start Analysis",
     analyzing: "Analyzing...",
+    errorSavingStack: "Error saving stack",
+    errorGeneratingStack: "Error generating stack",
+    errorSavingOnboarding: "Error saving onboarding data",
     creatingPlan: "Creating your personalized supplement plan",
     calculatingDoses: "Calculating optimal doses",
     
@@ -635,6 +638,9 @@ export const translations = {
     continue: "Fortsätt",
     startAnalysis: "Starta Analys",
     analyzing: "Analyserar...",
+    errorSavingStack: "Fel vid sparande av stack",
+    errorGeneratingStack: "Fel vid generering av stack",
+    errorSavingOnboarding: "Fel vid sparande av onboarding-data",
     creatingPlan: "Skapar din personliga supplementplan",
     calculatingDoses: "Beräknar optimala doser",
     

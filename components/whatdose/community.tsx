@@ -47,8 +47,10 @@ export function Community() {
 
     try {
       let successCount = 0
+      let skippedCount = 0
       let errorCount = 0
       const errors: string[] = []
+      const skipped: string[] = []
 
       // Clone each supplement from the community stack
       for (const supplement of stack.supplements) {
@@ -69,7 +71,7 @@ export function Community() {
           }
 
           // Parse dosage from string (e.g., "5g" -> 5, "200mg" -> 200)
-          const dosageMatch = supplement.dosage.match(/(\d+(?:\.\d+)?)\s*(mg|g|mcg|IU|ml|tabs|caps)/i)
+          const dosageMatch = supplement.dosage?.match(/(\d+(?:\.\d+)?)\s*(mg|g|mcg|IU|ml|tabs|caps)/i)
           const dosageValue = dosageMatch ? parseFloat(dosageMatch[1]) : null
           const unit = dosageMatch ? dosageMatch[2].toLowerCase() : null
 
@@ -89,26 +91,52 @@ export function Community() {
           const result = await addToStack(supplementData.id, 'Morning', customDosage)
           
           if (result.error) {
-            errorCount++
-            errors.push(`${supplement.name}: ${result.error}`)
+            // Check if it's a duplicate (already in stack)
+            if (result.error.includes('already in your stack') || result.error.includes('23505')) {
+              skippedCount++
+              skipped.push(supplement.name)
+            } else {
+              errorCount++
+              errors.push(`${supplement.name}: ${result.error}`)
+            }
           } else {
             successCount++
           }
         } catch (err) {
-          errorCount++
-          errors.push(`${supplement.name}: ${err instanceof Error ? err.message : 'Unknown error'}`)
+          // Check if it's a duplicate constraint error
+          const errorMessage = err instanceof Error ? err.message : 'Unknown error'
+          if (errorMessage.includes('23505') || errorMessage.includes('duplicate') || errorMessage.includes('unique')) {
+            skippedCount++
+            skipped.push(supplement.name)
+          } else {
+            errorCount++
+            errors.push(`${supplement.name}: ${errorMessage}`)
+          }
         }
       }
 
       // Show results
+      let message = ''
       if (successCount > 0) {
-        const message = errorCount > 0
-          ? `${t("clonedStackPartial") || `Cloned ${successCount} supplement(s). ${errorCount} failed.`}\n\n${errors.join('\n')}`
-          : t("clonedStackSuccess") || `Successfully cloned ${successCount} supplement(s) to your stack!`
-        alert(message)
-        router.push('/stack')
+        message = t("clonedStackSuccess") || `Successfully cloned ${successCount} supplement(s) to your stack!`
+        
+        if (skippedCount > 0) {
+          message += `\n\n${skippedCount} supplement(s) were already in your stack: ${skipped.join(', ')}`
+        }
+        
+        if (errorCount > 0) {
+          message += `\n\n${errorCount} supplement(s) failed: ${errors.join(', ')}`
+        }
+      } else if (skippedCount > 0) {
+        message = t("clonedStackAllSkipped") || `All supplements from this stack are already in your stack: ${skipped.join(', ')}`
       } else {
-        alert(t("clonedStackFailed") || `Failed to clone stack:\n\n${errors.join('\n')}`)
+        message = t("clonedStackFailed") || `Failed to clone stack:\n\n${errors.join('\n')}`
+      }
+      
+      alert(message)
+      
+      if (successCount > 0) {
+        router.push('/stack')
       }
     } catch (err) {
       console.error('Error cloning stack:', err)
@@ -137,8 +165,19 @@ export function Community() {
     try {
       // Format supplements from user_stacks
       const supplements = stackItems.map(item => {
-        const dosage = item.custom_dosage_val || item.dosing_base_val || 0
-        const unit = item.unit || ''
+        // custom_dosage_val is always stored in mg in the database
+        // We need to convert it to the supplement's unit for display
+        let dosage = item.custom_dosage_val || item.dosing_base_val || 0
+        const unit = item.unit || 'mg'
+        
+        // Convert from mg to the supplement's unit
+        if (unit === 'g' && dosage) {
+          dosage = dosage / 1000 // Convert mg to g
+        } else if (unit === 'mcg' && dosage) {
+          dosage = dosage * 1000 // Convert mg to mcg
+        }
+        // If unit is already 'mg', no conversion needed
+        
         return {
           name: item.supplement_name,
           dosage: `${dosage}${unit}`

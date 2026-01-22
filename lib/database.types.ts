@@ -10,6 +10,9 @@ export type SubscriptionTier = 'free' | 'pro' | 'creator'
 export type SubstanceType = 'medicine' | 'supplement' | 'herb' | 'food' | 'enzyme'
 export type ExperimentDesign = 'AB' | 'ABAB' | 'RCT' | 'Crossover'
 export type ExperimentStatus = 'draft' | 'active' | 'completed' | 'paused'
+// Evidence level mapping: Green = A (Strong), Blue = B (Moderate), Red = C (Experimental)
+export type EvidenceLevel = ResearchStatus
+export type ScalingAlgorithm = 'linear_weight' | 'gender_split' | 'fixed'
 
 // Database Tables
 export interface Database {
@@ -26,6 +29,7 @@ export interface Database {
           weight_kg: number | null
           gender: string | null
           selected_goals: string[] | null
+          health_conditions: string[] | null
           username: string | null
           xp_total: number
           current_streak: number
@@ -55,10 +59,49 @@ export interface Database {
           category_ids: number[] | null
           parent_id: number | null
           is_parent: boolean
+          i18n_key: string | null
+          description: string | null
+          benefits: string[] | null
+          scaling_algorithm: ScalingAlgorithm | null
+          scaling_base_dose: number | null
+          scaling_safe_min: number | null
+          scaling_safe_max: number | null
+          scaling_gender_male: number | null
+          scaling_gender_female: number | null
+          contraindications: string[] | null
+          cycling_required: boolean | null
+          cycling_instruction_key: string | null
+          upvotes_count: number
+          downvotes_count: number
+          comments_count: number
           created_at: string
         }
         Insert: Omit<Database['public']['Tables']['supplements']['Row'], 'id' | 'created_at'>
         Update: Partial<Database['public']['Tables']['supplements']['Insert']>
+      }
+      supplement_votes: {
+        Row: {
+          id: number
+          supplement_id: number
+          user_id: string
+          vote_type: 'upvote' | 'downvote'
+          created_at: string
+          updated_at: string
+        }
+        Insert: Omit<Database['public']['Tables']['supplement_votes']['Row'], 'id' | 'created_at' | 'updated_at'>
+        Update: Partial<Database['public']['Tables']['supplement_votes']['Insert']>
+      }
+      supplement_comments: {
+        Row: {
+          id: number
+          supplement_id: number
+          user_id: string
+          content: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: Omit<Database['public']['Tables']['supplement_comments']['Row'], 'id' | 'created_at' | 'updated_at'>
+        Update: Partial<Database['public']['Tables']['supplement_comments']['Insert']>
       }
       substances: {
         Row: {

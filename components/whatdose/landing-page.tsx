@@ -9,6 +9,8 @@ import { useRef } from "react"
 import { DNAProgress } from "./dna-progress"
 import { LanguageToggle } from "./language-toggle"
 import { useTranslation, type Language } from "@/lib/translations"
+import { supabase } from "@/lib/supabase"
+import type { SupplementSearchResult } from "@/lib/database.types"
 
 // Dynamic import with no SSR for better performance - cached after first load
 const DNAHelix3D = dynamic(() => import("./dna-helix-3d").then((mod) => ({ default: mod.DNAHelix3D })), {
@@ -23,6 +25,9 @@ const DNAHelix3D = dynamic(() => import("./dna-helix-3d").then((mod) => ({ defau
 export function LandingPage() {
   const [ctaHovered, setCtaHovered] = useState(false)
   const [searchValue, setSearchValue] = useState("")
+  const [searchResults, setSearchResults] = useState<SupplementSearchResult[]>([])
+  const [searchLoading, setSearchLoading] = useState(false)
+  const [supplementCount, setSupplementCount] = useState<number | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const heroRef = useRef<HTMLElement>(null)
 
@@ -78,6 +83,53 @@ export function LandingPage() {
   useMotionValueEvent(dnaFillProgress, "change", (latest) => {
     setFillProgressValue(latest)
   })
+
+  // Fetch supplement count on mount
+  useEffect(() => {
+    const fetchSupplementCount = async () => {
+      const { count, error } = await supabase
+        .from('supplements')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_parent', true)
+      
+      if (!error && count !== null) {
+        setSupplementCount(count)
+      }
+    }
+    fetchSupplementCount()
+  }, [])
+
+  // Search supplements when user types
+  useEffect(() => {
+    const searchSupplements = async () => {
+      if (searchValue.trim().length < 2) {
+        setSearchResults([])
+        return
+      }
+
+      setSearchLoading(true)
+      try {
+        const { data, error } = await supabase.rpc('search_supplements', {
+          search_term: searchValue.trim()
+        })
+
+        if (error) {
+          console.error('Search error:', error)
+          setSearchResults([])
+        } else {
+          setSearchResults(data || [])
+        }
+      } catch (err) {
+        console.error('Search error:', err)
+        setSearchResults([])
+      } finally {
+        setSearchLoading(false)
+      }
+    }
+
+    const timeoutId = setTimeout(searchSupplements, 300) // Debounce
+    return () => clearTimeout(timeoutId)
+  }, [searchValue])
 
   const testimonials = [
     {
@@ -244,9 +296,9 @@ export function LandingPage() {
 
         {/* 2. OLD WAY VS NEW WAY */}
         <motion.section
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 1, y: 0 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: false, margin: "-100px" }}
           transition={{ duration: 0.6 }}
           className="mb-32 relative z-10"
         >
@@ -255,9 +307,9 @@ export function LandingPage() {
           <div className="grid gap-8 lg:grid-cols-2">
             {/* Old Way */}
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
+              initial={{ opacity: 1, x: 0 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               transition={{ delay: 0.2 }}
               className="rounded-3xl border border-red-500/30 bg-gradient-to-br from-red-950/20 to-gray-900/20 p-8 backdrop-blur-sm"
             >
@@ -269,9 +321,9 @@ export function LandingPage() {
                 {[t("oldWayItem1"), t("oldWayItem2"), t("oldWayItem3"), t("oldWayItem4")].map((item, i) => (
                   <motion.li
                     key={i}
-                    initial={{ opacity: 0, x: -20 }}
+                    initial={{ opacity: 1, x: 0 }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
+                    viewport={{ once: false }}
                     transition={{ delay: 0.3 + i * 0.1 }}
                     className="flex items-start gap-3"
                   >
@@ -284,9 +336,9 @@ export function LandingPage() {
 
             {/* New Way */}
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
+              initial={{ opacity: 1, x: 0 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               transition={{ delay: 0.2 }}
               className="relative overflow-hidden rounded-3xl border border-teal-500/30 bg-gradient-to-br from-teal-950/30 to-cyan-950/20 p-8 backdrop-blur-sm"
             >
@@ -298,9 +350,9 @@ export function LandingPage() {
                 {[t("newWayItem1"), t("newWayItem2"), t("newWayItem3"), t("newWayItem4")].map((item, i) => (
                   <motion.li
                     key={i}
-                    initial={{ opacity: 0, x: 20 }}
+                    initial={{ opacity: 1, x: 0 }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
+                    viewport={{ once: false }}
                     transition={{ delay: 0.3 + i * 0.1 }}
                     className="flex items-start gap-3"
                   >
@@ -324,9 +376,9 @@ export function LandingPage() {
 
         {/* 3. INTERACTIVE FEATURE SHOWCASE */}
         <motion.section
-          initial={{ opacity: 0 }}
+          initial={{ opacity: 1 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
+          viewport={{ once: false }}
           className="mb-32 relative z-10"
         >
           <h2 className="mb-4 text-center text-3xl font-bold lg:text-4xl">{t("interactiveFeatureShowcaseTitle")}</h2>
@@ -335,51 +387,96 @@ export function LandingPage() {
           <div className="grid gap-8 lg:grid-cols-3">
             {/* Feature 1: Database Search */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 1, y: 0 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               transition={{ delay: 0.1 }}
               className="group relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/[0.02] p-8 backdrop-blur-sm transition-all hover:border-teal-500/50"
             >
               <Search className="mb-4 h-10 w-10 text-teal-400" />
               <h3 className="mb-3 text-2xl font-bold">{t("feature1Title")}</h3>
-              <p className="mb-6 text-gray-400">{t("feature1Description")}</p>
+              <p className="mb-6 text-gray-400">
+                {supplementCount !== null 
+                  ? `${Math.max(supplementCount, 550)}+ tillskott i databasen`
+                  : "550+ tillskott i databasen"
+                }
+              </p>
 
               {/* Animated search demo */}
               <div className="relative">
                 <motion.input
-                  initial={{ opacity: 0 }}
+                  initial={{ opacity: 1 }}
                   whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false }}
                   transition={{ delay: 0.5 }}
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
                   placeholder={t("searchPlaceholder")}
                   className="w-full rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-gray-500 focus:border-teal-500/50 focus:outline-none"
                 />
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.8 }}
-                  className="mt-3 rounded-xl border border-green-500/30 bg-green-500/10 p-4"
-                >
-                  <div className="mb-2 flex items-center gap-2">
-                    <div className="h-2 w-2 rounded-full bg-green-500" />
-                    <span className="text-sm font-semibold text-green-400">{t("feature1Status")}</span>
-                  </div>
-                  <p className="text-sm text-gray-300">
-                    <span className="font-bold">{t("feature1Supplement")}</span> • {t("feature1Dose")}
-                  </p>
-                </motion.div>
+                {searchLoading && (
+                  <div className="mt-3 text-center text-xs text-gray-400">Söker...</div>
+                )}
+                {!searchLoading && searchResults.length > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-3 space-y-2 max-h-48 overflow-y-auto"
+                  >
+                    {searchResults.slice(0, 3).map((result) => (
+                      <div
+                        key={result.parent_id}
+                        className="rounded-xl border border-green-500/30 bg-green-500/10 p-3"
+                      >
+                        <div className="mb-1 flex items-center gap-2">
+                          <div className="h-2 w-2 rounded-full bg-green-500" />
+                          <span className="text-xs font-semibold text-green-400">
+                            {result.parent_research_status === "Green" ? "Verifierad" : 
+                             result.parent_research_status === "Blue" ? "Begränsad" : "Låg"}
+                          </span>
+                        </div>
+                        <p className="text-xs text-gray-300">
+                          <span className="font-bold">
+                            {language === "sv" && result.parent_name_sv 
+                              ? result.parent_name_sv 
+                              : result.parent_name_en}
+                          </span>
+                          {result.variants.length > 0 && (
+                            <span className="text-gray-400"> • {result.variants.length} variant{result.variants.length > 1 ? "er" : ""}</span>
+                          )}
+                        </p>
+                      </div>
+                    ))}
+                  </motion.div>
+                )}
+                {!searchLoading && searchValue.length >= 2 && searchResults.length === 0 && (
+                  <div className="mt-3 text-center text-xs text-gray-400">Inga resultat hittades</div>
+                )}
+                {!searchLoading && searchValue.length < 2 && (
+                  <motion.div
+                    initial={{ opacity: 1, y: 0 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: false }}
+                    transition={{ delay: 0.8 }}
+                    className="mt-3 rounded-xl border border-green-500/30 bg-green-500/10 p-4"
+                  >
+                    <div className="mb-2 flex items-center gap-2">
+                      <div className="h-2 w-2 rounded-full bg-green-500" />
+                      <span className="text-sm font-semibold text-green-400">{t("feature1Status")}</span>
+                    </div>
+                    <p className="text-sm text-gray-300">
+                      <span className="font-bold">{t("feature1Supplement")}</span> • {t("feature1Dose")}
+                    </p>
+                  </motion.div>
+                )}
               </div>
             </motion.div>
 
             {/* Feature 2: Interaction Checker */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 1, y: 0 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               transition={{ delay: 0.2 }}
               className="group relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/[0.02] p-8 backdrop-blur-sm transition-all hover:border-purple-500/50"
             >
@@ -388,34 +485,54 @@ export function LandingPage() {
               <p className="mb-6 text-gray-400">{t("feature2Description")}</p>
 
               {/* Collision animation */}
-              <div className="relative h-24">
-                <motion.div
-                  animate={{ x: [0, 60, 60], opacity: [1, 1, 0] }}
-                  transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, repeatDelay: 1 }}
-                  className="absolute left-0 top-8 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-xs font-bold text-white"
-                >
-                  Zn
-                </motion.div>
-                <motion.div
-                  animate={{ x: [120, 60, 60], opacity: [1, 1, 0] }}
-                  transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, repeatDelay: 1 }}
-                  className="absolute right-0 top-8 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-green-600 text-xs font-bold text-white"
-                >
-                  Mg
-                </motion.div>
-                <motion.div
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={{ scale: [0, 1.2, 1], opacity: [0, 1, 1] }}
-                  transition={{
-                    duration: 0.5,
-                    delay: 2,
-                    repeat: Number.POSITIVE_INFINITY,
-                    repeatDelay: 2.5,
-                  }}
-                  className="absolute left-1/2 top-8 flex h-12 w-12 -translate-x-1/2 items-center justify-center rounded-full bg-amber-500/20"
-                >
-                  <AlertTriangle className="h-6 w-6 text-amber-400" />
-                </motion.div>
+              <div className="relative h-24 w-full flex items-center justify-center">
+                <div className="relative w-[240px] h-12 flex items-center justify-center gap-2">
+                  <motion.div
+                    animate={{ 
+                      x: [-120, 0, 0], 
+                      opacity: [1, 1, 1] 
+                    }}
+                    transition={{ 
+                      duration: 2, 
+                      times: [0, 0.5, 1],
+                      repeat: Number.POSITIVE_INFINITY, 
+                      repeatDelay: 1 
+                    }}
+                    className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-xs font-bold text-white"
+                  >
+                    Zn
+                  </motion.div>
+                  <motion.div
+                    animate={{ 
+                      scale: [0, 1.2, 1], 
+                      opacity: [0, 1, 1] 
+                    }}
+                    transition={{
+                      duration: 2,
+                      times: [0, 0.5, 1],
+                      repeat: Number.POSITIVE_INFINITY,
+                      repeatDelay: 1,
+                    }}
+                    className="flex h-12 w-12 items-center justify-center rounded-full bg-amber-500/20"
+                  >
+                    <AlertTriangle className="h-6 w-6 text-amber-400" />
+                  </motion.div>
+                  <motion.div
+                    animate={{ 
+                      x: [120, 0, 0], 
+                      opacity: [1, 1, 1] 
+                    }}
+                    transition={{ 
+                      duration: 2, 
+                      times: [0, 0.5, 1],
+                      repeat: Number.POSITIVE_INFINITY, 
+                      repeatDelay: 1 
+                    }}
+                    className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-green-600 text-xs font-bold text-white"
+                  >
+                    Mg
+                  </motion.div>
+                </div>
               </div>
 
               <motion.div
@@ -436,9 +553,9 @@ export function LandingPage() {
 
             {/* Feature 3: Gamification */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 1, y: 0 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               transition={{ delay: 0.3 }}
               className="group relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-white/[0.02] p-8 backdrop-blur-sm transition-all hover:border-cyan-500/50"
             >
@@ -451,12 +568,12 @@ export function LandingPage() {
                 <DNAProgress progress={70} size={80} />
                 <div>
                   <motion.p
-                    initial={{ opacity: 0 }}
+                    initial={{ opacity: 1 }}
                     whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
+                    viewport={{ once: false }}
                     className="text-4xl font-bold text-teal-400"
                   >
-                    <motion.span initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
+                    <motion.span initial={{ opacity: 1 }} whileInView={{ opacity: 1 }} viewport={{ once: false }}>
                       7
                     </motion.span>
                   </motion.p>
@@ -492,9 +609,9 @@ export function LandingPage() {
 
         {/* 4. SOCIAL PROOF */}
         <motion.section
-          initial={{ opacity: 0 }}
+          initial={{ opacity: 1 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
+          viewport={{ once: false }}
           className="mb-32 relative z-10"
         >
           <h2 className="mb-12 text-center text-3xl font-bold lg:text-4xl">{t("socialProofTitle")}</h2>
@@ -503,9 +620,9 @@ export function LandingPage() {
             {testimonials.map((testimonial, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 1, y: 0 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                viewport={{ once: false }}
                 transition={{ delay: i * 0.1 }}
                 className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm"
               >
@@ -531,9 +648,9 @@ export function LandingPage() {
 
         {/* 5. FINAL CTA */}
         <motion.section
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 1, y: 0 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: false }}
           className="relative z-10 overflow-hidden rounded-3xl border border-teal-500/30 bg-gradient-to-br from-teal-950/50 to-cyan-950/30 p-12 text-center backdrop-blur-sm"
         >
           <motion.div

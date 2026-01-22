@@ -425,7 +425,130 @@ Detta dokument innehåller en komplett checklista för att testa alla nya funkti
 
 ---
 
-## ✅ 13. Edge Cases & Error Scenarios
+## ✅ 13. Supplement Logic System (NEW)
+
+### 13.1 Database Schema Verification
+- [ ] Verifiera att `scaling_algorithm_type` enum finns i databasen
+- [ ] Kontrollera att alla nya kolumner finns i `supplements` tabellen:
+  - [ ] `i18n_key`
+  - [ ] `scaling_algorithm`
+  - [ ] `scaling_base_dose`
+  - [ ] `scaling_safe_min`
+  - [ ] `scaling_safe_max`
+  - [ ] `scaling_gender_male`
+  - [ ] `scaling_gender_female`
+  - [ ] `contraindications`
+  - [ ] `cycling_required`
+  - [ ] `cycling_instruction_key`
+- [ ] Kontrollera att `health_conditions` kolumn finns i `profiles` tabellen
+- [ ] Verifiera att alla index är skapade korrekt
+- [ ] Kör `scripts/verify-supplement-logic.sql` och verifiera att allt är OK
+
+### 13.2 Dosage Calculator - Linear Weight Algorithm
+- [ ] Testa med supplement som använder `linear_weight` (t.ex. Vitamin D3)
+- [ ] Verifiera att dosering beräknas: `base_dose * (user_weight / 75.0)`
+- [ ] Testa med användare som väger 50kg (ska ge lägre dos)
+- [ ] Testa med användare som väger 100kg (ska ge högre dos)
+- [ ] Testa med användare som väger 75kg (ska ge exakt base_dose)
+- [ ] Verifiera att resultatet klampar mellan `safe_min` och `safe_max`
+- [ ] Testa med användare utan vikt (ska fallback till base_dose)
+- [ ] Kontrollera att avrundning fungerar korrekt (IU till 100, mg till 10/50)
+
+### 13.3 Dosage Calculator - Gender Split Algorithm
+- [ ] Testa med supplement som använder `gender_split` (t.ex. Magnesium)
+- [ ] Verifiera att man får `scaling_gender_male` dos för män
+- [ ] Verifiera att kvinna får `scaling_gender_female` dos för kvinnor
+- [ ] Testa med användare utan kön (ska fallback till base_dose)
+- [ ] Testa med användare med 'other' kön (ska fallback till base_dose)
+
+### 13.4 Dosage Calculator - Fixed Algorithm
+- [ ] Testa med supplement som använder `fixed` (t.ex. Ashwagandha)
+- [ ] Verifiera att dosering alltid är `base_dose` oavsett vikt/kön
+- [ ] Testa med olika användare (ska alltid ge samma dos)
+
+### 13.5 Basic Health Stack Generation
+- [ ] Testa med kvinna, 30 år, 65kg
+  - [ ] Verifiera att Basic Health Stack inkluderar:
+    - [ ] Vitamin D3 (linear_weight)
+    - [ ] Omega-3 (linear_weight)
+    - [ ] Magnesium (gender_split)
+    - [ ] Zinc (gender_split)
+    - [ ] Iron (fixed, eftersom kvinna 20-50)
+- [ ] Testa med man, 25 år, 80kg
+  - [ ] Verifiera att Iron INTE ingår (inte kvinna 20-50)
+- [ ] Testa med användare 45 år
+  - [ ] Verifiera att CoQ10 ingår (age 40+)
+  - [ ] Verifiera att Vitamin K2 ingår (age 40+)
+- [ ] Testa med användare 55 år
+  - [ ] Verifiera att Iron INTE ingår (age 50+)
+  - [ ] Verifiera att CoQ10 och K2 fortfarande ingår
+
+### 13.6 Goal Stack Generation
+- [ ] Testa med category 'fitness' och subcategory 'strength'
+- [ ] Verifiera att supplements från rätt kategori hämtas
+- [ ] Testa med olika experience levels (beginner, intermediate, advanced, biohacker)
+- [ ] Verifiera att Red (Experimental) supplements INTE visas för non-biohacker
+- [ ] Verifiera att Red (Experimental) supplements VISAS för biohacker
+- [ ] Testa med olika kategorier (cognitive, longevity, sleep)
+
+### 13.7 Contraindication Filtering
+- [ ] Lägg till 'SSRI' i användarens `health_conditions`
+- [ ] Verifiera att 5-HTP filtreras bort (contraindicated with SSRI)
+- [ ] Verifiera att SAM-e filtreras bort (om det har SSRI i contraindications)
+- [ ] Testa med användare utan health_conditions (ska se alla supplements)
+- [ ] Testa med användare med 'Blood Thinners' i health_conditions
+- [ ] Verifiera att supplements med 'Blood Thinners' i contraindications filtreras bort
+
+### 13.8 Stack Builder Integration
+- [ ] Testa `buildUserStack()` funktionen med komplett profil
+- [ ] Verifiera att både Basic Health Stack och Goal Stack genereras
+- [ ] Kontrollera att duplicat hanteras korrekt (samma supplement i båda stacks)
+- [ ] Verifiera att `saveStackToDatabase()` sparar korrekt
+- [ ] Kontrollera att timeline blocks genereras från stacken
+- [ ] Testa med tom goalCategory (ska bara ge Basic Health Stack)
+
+### 13.9 Translation System
+- [ ] Testa `getSupplementName()` med i18n_key
+- [ ] Verifiera att engelska namn visas för 'en' language
+- [ ] Verifiera att svenska namn visas för 'sv' language
+- [ ] Testa fallback till `name_en`/`name_sv` om i18n_key saknas
+- [ ] Testa `getSupplementEffect()` funktionen
+- [ ] Testa `getWhyDosage()` funktionen
+- [ ] Testa `getSupplementWarning()` för experimental supplements
+- [ ] Testa `getCyclingInstruction()` för supplements som kräver cykling
+
+### 13.10 Data Population
+- [ ] Kör `scripts/populate-example-supplements.sql`
+- [ ] Verifiera att supplements uppdateras korrekt
+- [ ] Kontrollera att i18n_keys sätts korrekt
+- [ ] Verifiera att scaling_algorithm sätts korrekt
+- [ ] Kontrollera att contraindications array sätts korrekt
+- [ ] Testa att uppdatera ett supplement manuellt med SQL
+
+### 13.11 Error Handling
+- [ ] Testa med supplement som saknar `scaling_base_dose` (ska returnera null)
+- [ ] Testa med supplement som saknar `scaling_algorithm` (ska fallback till 'fixed')
+- [ ] Testa med ogiltig `scaling_algorithm` (ska fallback till 'fixed')
+- [ ] Testa med användare som saknar weight (ska hantera gracefully)
+- [ ] Verifiera att felmeddelanden visas om supplement inte hittas
+- [ ] Testa med databasfel (simulera offline)
+
+### 13.12 Integration with Existing System
+- [ ] Verifiera att befintlig `predefined-stacks.ts` fungerar fortfarande
+- [ ] Verifiera att `generateStackFromPredefined()` fungerar fortfarande
+- [ ] Testa att användare kan lägga till supplements manuellt (som tidigare)
+- [ ] Kontrollera att båda systemen kan användas parallellt
+- [ ] Verifiera att onboarding kan använda båda systemen
+
+**Status**: ⏳ Väntar
+**Anteckningar**: 
+```
+[Skriv här vad du hittar under testningen]
+```
+
+---
+
+## ✅ 14. Edge Cases & Error Scenarios
 
 ### 13.1 Empty States
 - [ ] Testa med tom stack (ska visa "empty state" meddelande)
@@ -472,7 +595,7 @@ Detta dokument innehåller en komplett checklista för att testa alla nya funkti
 
 ## ✅ Completion Status
 
-**Total Progress:** ___ / 13 sections completed
+**Total Progress:** ___ / 14 sections completed
 
 **Date Completed:** _______________
 

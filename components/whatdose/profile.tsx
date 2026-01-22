@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
-import { User, Bell, Moon, Shield, HelpCircle, LogOut, ChevronRight, Dna } from "lucide-react"
+import { User, Bell, Shield, HelpCircle, LogOut, ChevronRight, Dna } from "lucide-react"
 import { useTranslation, type Language, type translations } from "@/lib/translations"
 import { DNAConnectModal } from "./dna-connect-modal"
 import { useAuth } from "@/contexts/auth-context"
@@ -12,7 +12,7 @@ import { useProfile } from "@/hooks/use-profile"
 export function Profile() {
   const router = useRouter()
   const { user, signOut, loading: authLoading } = useAuth()
-  const { profile, stats, loading: profileLoading } = useProfile(user?.id || null)
+  const { profile, loading: profileLoading } = useProfile(user?.id || null)
   const [lang, setLang] = useState<Language>("en")
   const { t } = useTranslation(lang)
   const [isDNAModalOpen, setIsDNAModalOpen] = useState(false)
@@ -53,7 +53,6 @@ export function Profile() {
   const settingsItems = [
     { icon: User, labelKey: "editProfile", href: "/profile/edit" },
     { icon: Bell, labelKey: "notifications", href: "/notifications" },
-    { icon: Moon, labelKey: "appearance", href: "/appearance" },
     { icon: Shield, labelKey: "privacy", href: "/privacy" },
     { icon: HelpCircle, labelKey: "helpSupport", href: "/help" },
   ]
@@ -78,21 +77,6 @@ export function Profile() {
                 {profile?.first_name || user?.email?.split('@')[0] || 'User'}
               </h2>
               <p className="text-gray-400">{user?.email || ''}</p>
-            </div>
-          </div>
-
-          <div className="mt-6 grid grid-cols-3 gap-4 text-center">
-            <div>
-              <p className="text-2xl font-bold text-teal-400">{stats.streak_days}</p>
-              <p className="text-xs text-gray-400">{t("daysStreak")}</p>
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-teal-400">{stats.supplements_count}</p>
-              <p className="text-xs text-gray-400">{t("supplements")}</p>
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-teal-400">{Math.round(stats.compliance_percentage)}%</p>
-              <p className="text-xs text-gray-400">{t("compliance")}</p>
             </div>
           </div>
         </motion.div>
