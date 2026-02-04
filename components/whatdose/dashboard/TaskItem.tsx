@@ -48,10 +48,20 @@ export function TaskItem({
         }
         transition-all duration-200
       `}
+      onClick={(e) => {
+        // Allow clicking the whole row to toggle (but not if clicking info button)
+        if (!disabled && (e.target as HTMLElement).closest('button[aria-label*="View details"]') === null) {
+          handleToggle()
+        }
+      }}
+      style={{ cursor: disabled ? 'not-allowed' : 'pointer' }}
     >
       {/* Custom Checkbox */}
       <motion.button
-        onClick={handleToggle}
+        onClick={(e) => {
+          e.stopPropagation()
+          handleToggle()
+        }}
         disabled={disabled}
         className={`
           flex h-6 w-6 shrink-0 items-center justify-center rounded-md

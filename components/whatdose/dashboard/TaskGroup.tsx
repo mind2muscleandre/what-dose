@@ -126,7 +126,7 @@ export function TaskGroup({
                     name={task.name}
                     dose={task.dosage_display}
                     completed={task.is_completed}
-                    disabled={!isActive && !task.is_completed}
+                    disabled={false}
                     onToggle={onToggleItem}
                     onInfoClick={onInfoClick}
                   />
